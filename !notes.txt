@@ -1,0 +1,45 @@
+dotnet ef migrations add AppData -p Persistence/ -s API/ 
+
+
+
+DataComarison - StatusID == 1 or 2
+And 
+UserRole BackOfficeMaker
+InheritParent
+==========
+
+<xml>
+
+    <when>
+
+        <And>            
+
+            <Or>
+                <DataComarison Filed="StatusID" Operatio="Eq" Value="1">                                                       
+                </DataComarison>
+
+                <DataComarison Filed="StatusID" Operatio="In" >  
+                     <values><val>2</val><val>3</val></values>                
+                </DataComarison>
+
+            <Or>
+
+            <UserRole>
+                <in>
+                    <val>BackOfficeMaker</val>
+                    <val>Admin</val>
+                </in>
+            <UserRole/>    
+
+        </And>
+        
+    <when>
+
+    <action>
+        <UpdateFiled>
+            <Filed>StatusID</Filed>
+            <Value>3</Value>
+        </UpdateFiled>
+    </action>
+    
+</xml>

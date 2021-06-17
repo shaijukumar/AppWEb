@@ -1,0 +1,103 @@
+Sub file()
+
+'CSFieldList
+Let CSFieldList = ""
+Let i = 7
+Do While Cells(i, 2) <> ""
+    CSFieldList = CSFieldList + Chr$(10) + Cells(i, 4)
+     i = i + 1
+Loop
+
+'Constants
+Let Class = Cells(1, 2)
+Let Object = Cells(2, 2)
+
+Let templatePath = Cells(2, 4)
+Let appPath = Cells(1, 4)
+Let FolderPath = Cells(2, 6)
+
+'Create Folders if not exits
+FolderPath = appPath & "\" & FolderPath
+
+'Application Folder
+On Error Resume Next
+MkDir appPath
+On Error GoTo 0
+
+'API Folder
+On Error Resume Next
+MkDir appPath & "API"
+On Error GoTo 0
+
+'Model Folder
+On Error Resume Next
+MkDir appPath & "API\" & "Model"
+On Error GoTo 0
+
+'Features Folder
+On Error Resume Next
+MkDir appPath & "API\" & "Features"
+On Error GoTo 0
+
+'Controllers Folder
+On Error Resume Next
+MkDir appPath & "API\" & "Controllers"
+On Error GoTo 0
+
+
+'Featur Folder
+On Error Resume Next
+MkDir appPath & "API\" & "Features\" & Class
+On Error GoTo 0
+
+
+i = 7
+'FilePath = templatePath + Cells(4, i)
+
+'Read template File
+Dim strFilename As String: strFilename = templatePath + Cells(4, i)
+Dim strFileContent As String
+Dim iFile As Integer: iFile = FreeFile
+Open strFilename For Input As #iFile
+fileContent = Input(LOF(iFile), iFile)
+Close #iFile
+
+
+'Update template
+fileContent = Replace(fileContent, "##CSFieldList##", CSFieldList)
+fileContent = Replace(fileContent, "##Class##", Class)
+fileContent = Replace(fileContent, "##Object##", Object)
+
+'Write to application file
+Open appPath & Cells(2, i) For Output As #1
+Print #1, fileContent
+Close #1
+
+
+Cells(20, i) = fileContent
+
+
+'    Dim appPath As String
+'
+'
+'
+'    FolderPath = appPath & "\" & FolderPath
+'
+'    On Error Resume Next
+'    MkDir FolderPath
+'    On Error GoTo 0
+'
+'
+'    For i = 7 To 12
+'        filePath = appPath & "\" & Cells(2, i)
+'        Open filePath For Output As #1
+'
+'        fileContent = Cells(15, i)
+'        Print #1, fileContent
+'        Close #1
+'    Next i
+'
+'    MsgBox ("Done")
+    
+End Sub
+

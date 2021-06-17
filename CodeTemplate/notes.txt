@@ -1,0 +1,32 @@
+##Class##
+##Object##
+##CSValidation##
+##CSFieldAssign##
+##CSEditFieldAssign##"
+
+_Feature_
+_FeatureObj_
+##JSInterfaceFields##
+##JSClassFields##
+##JSFormFields##
+##JSFormValidation##
+##TitleField##
+
+
+app\common\models\_Feature_.ts
+app\common\data\_Feature_Store.ts
+
+D:\Git\B2B\B2bApp\app\common\data\rootStore.ts
+	import _Feature_Store from "./_Feature_Store";	
+	_FeatureObj_Store: _Feature_Store;
+	this._FeatureObj_Store = new _Feature_Store(this);
+	
+Create folder
+		app\screens\_Feature_
+app\screens\_Feature_\_Feature_Listing.tsx	
+app\screens\_Feature_\_Feature_View.tsx
+app\screens\_Feature_\_Feature_Edit.tsx
+
+
+"
+					<FormField maxLength={255} name='Id' placeholder='Id' />
