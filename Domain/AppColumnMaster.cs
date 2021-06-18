@@ -23,6 +23,7 @@ namespace Domain
 		 public const string Float = "3";
 		 public const string Bool = "4";
 		 public const string DateTime = "5";
+		 public const string Attachment = "6";
 	 }
 
 }

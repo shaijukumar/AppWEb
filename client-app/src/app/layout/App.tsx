@@ -44,6 +44,8 @@ import AppFlowList from '../../features/AppFlow/AppFlowList';
 import AppFlowEdit from '../../features/AppFlow/AppFlowEdit';
 import AppApiList from '../../features/AppApi/AppApiList';
 import AppApiEdit from '../../features/AppApi/AppApiEdit';
+import AppAttachmentList from '../../features/AppAttachment/AppAttachmentList';
+import AppAttachmentEdit from '../../features/AppAttachment/AppAttachmentEdit';
 //##FeatureImport##"
 const App = () => {
  
@@ -114,6 +116,8 @@ const App = () => {
         <Route  path={['/AppFlowItemEdit/:id', '/AppFlowItemEdit/']} component={AppFlowEdit} />
         <Route path='/AppApiList' component={AppApiList} />
 								<Route  path={['/AppApiItemEdit/:id', '/AppApiItemEdit/']} component={AppApiEdit} />
+								<Route path='/AppAttachmentList' component={AppAttachmentList} />
+								<Route  path={['/AppAttachmentItemEdit/:id', '/AppAttachmentItemEdit/']} component={AppAttachmentEdit} />
 								{/*##Navigation##*/}
         
       </Container>
@@ -122,6 +126,7 @@ const App = () => {
 }; 
 
 export default observer(App);
+
 
 
 

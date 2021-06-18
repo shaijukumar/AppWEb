@@ -17,6 +17,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Application.AppEngine;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace Application._AppApi
 { 
@@ -37,15 +38,27 @@ namespace Application._AppApi
             public string Parm7 { get; set; }
             public string Parm8 { get; set; }
             public string Parm9 { get; set; }
-            public string Parm10 { get; set; }                 
+            public string Parm10 { get; set; }        
+            public ICollection<ApiAttachment> FileList { get; set; }         
+        }
+
+        public class ApiAttachment
+        {
+            public IFormFile File { get; set; }
+            public string FileName { get; set; }
+            public string Path { get; set; }
+            public string Prop1 { get; set; }
+            public string Prop2 { get; set; }
+            public string Prop3 { get; set; }
+            public string Prop4 { get; set; }
+            public string Prop5 { get; set; } 
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.ActionId).NotEmpty();
-				
+                RuleFor(x => x.ActionId).NotEmpty();				
             }
         }
 

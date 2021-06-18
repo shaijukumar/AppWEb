@@ -7,15 +7,16 @@ using AutoMapper;
 using Persistence;
 using Application.Interfaces;
 using Domain;
-
+using Microsoft.AspNetCore.Http;
 
 namespace Application._AppApi
 {
-    public class Create
+    public class Attachment
     {
         public class Command : IRequest<AppApiDto>
         {
-		    public string Title { get; set; }
+		    public string Title { get; set; }     
+            public IFormFile File { get; set; }       
         }
 
         public class CommandValidator : AbstractValidator<Command>

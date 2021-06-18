@@ -74,6 +74,9 @@ namespace Application.AppEngine
                             else if( col.Type == AppColumnType.Number ){
                                 ap1.SetValue (appData,  Int32.Parse(value), null);
                             }
+                            else if( col.Type == AppColumnType.Attachment ){
+                                
+                            }
                             else{
                                 ap1.SetValue (appData,  value, null);
                             }

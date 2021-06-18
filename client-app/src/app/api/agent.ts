@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from "axios";
+import { ApiAttachment } from "../../features/AppAttachment/AppAttachment";
 import { IUser, IUserFormValues } from "../../features/user/User";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
-axios.interceptors.request.use(
-  
+
+
+axios.interceptors.request.use(  
     (config) => {
       //debugger;
       const token = window.localStorage.getItem("WayoozToken");
@@ -24,10 +26,33 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
 //debugger;
 const requests = {
  
-    get: (url: string) => axios.get(url).then(sleep(100)).then(responseBody) ,
+    get: (url: string) => axios.get(url).then(sleep(100)).then(responseBody) ,   
     post: (url: string, body: {}) => axios.post(url, body).then(sleep(100)).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(sleep(100)).then(responseBody),
-    del: (url: string) => axios.delete(url).then(sleep(100)).then(responseBody) 
+    del: (url: string) => axios.delete(url).then(sleep(100)).then(responseBody),
+
+    download: (url: string) => axios.get(url, {responseType: 'blob'}).then(sleep(100)).then(responseBody) ,  
+    
+    postForm: (url: string, formData : FormData) => {
+
+      //let formData = new FormData();
+
+      // Object.keys(file).forEach((key) => {
+      //   formData.append(key, file[key])
+      // })
+      //formData.append('Files', file);
+      // file.forEach( (f) => { 
+      //   formData.append('FileList', f);
+      // })
+
+      //formData.append('Prop1', "Test Prop One");
+     
+      return axios.post(url, formData, {
+          headers: {'Content-type': 'multipart/form-data'}
+      }).then(responseBody)
+
+  }
+
 };
 
 const User = {

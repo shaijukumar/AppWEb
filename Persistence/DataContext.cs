@@ -32,6 +32,7 @@ namespace Persistence
 		public DbSet<AppAction> AppActions { get; set; }
 		public DbSet<AppFlow> AppFlows { get; set; }
 		public DbSet<AppApi> AppApis { get; set; }
+		public DbSet<AppAttachment> AppAttachments { get; set; }
 		//##ModelDbSet##
  
         protected override void OnModelCreating(ModelBuilder builder)
@@ -62,6 +63,7 @@ namespace Persistence
         }
     }
 }
+
 
 
 
