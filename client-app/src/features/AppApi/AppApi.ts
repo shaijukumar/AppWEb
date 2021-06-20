@@ -33,6 +33,8 @@ export interface ICustomer {
 	CustomerName: string
 	CIF: number
 	StatusId: number
+	InitAttachment?: IAttachmentDetails[];
+	FlowAttachment?: IAttachmentDetails[];
 }
 
 export class Customer implements ICustomer {
@@ -40,7 +42,10 @@ export class Customer implements ICustomer {
 	CustomerName: string = '';
 	CIF: number = 0;
 	StatusId: number = 0;
-  
+	InitAttachment: IAttachmentDetails[] = [];
+	FlowAttachment: IAttachmentDetails[] = [];
+	
+
   constructor(init?: ICustomer) {
     Object.assign(this, init);
   }
@@ -76,6 +81,7 @@ export interface IApiAction {
 	Parm8 : string 
 	Parm9 : string 
 	Parm10 : string 	
+	
 }
 
 export class AppApiAction implements IApiAction {
@@ -92,10 +98,56 @@ export class AppApiAction implements IApiAction {
 	Parm8 : string = '';
 	Parm9 : string = '';
 	Parm10  : string = '';
+	
+
   
   constructor(init?: IApiAction) {
     Object.assign(this, init);
   }
 }
+
+export interface IAttachmentDetails {
+	Action: string
+	FileArrayId?: number
+	Id?: number	
+	FileName: string	
+	Prop1?: string
+	Prop2?: string
+	Prop3?: string
+	Prop4?: string
+	Prop5?: string
+}
+
+export class AttachmentDetails implements IAttachmentDetails {
+	Action: string = '';
+	FileArrayId: number = -1;
+	Id: number = -1;	
+	FileName: string = '';	
+	Prop1: string = '';
+	Prop2: string = '';
+	Prop3: string = '';
+	Prop4: string = '';
+	Prop5: string = '';
+  
+  constructor(init?: IAttachmentDetails) {
+    Object.assign(this, init);
+  }
+}
+
+export interface IAttachment {
+	file: Blob
+	Details : AttachmentDetails
+}
+
+export class Attachment implements IAttachment {
+	file: Blob = new Blob();
+	Details : AttachmentDetails = new AttachmentDetails();
+	  
+  constructor(init?: IAttachment) {
+    Object.assign(this, init);
+  }
+}
+
+
 
 

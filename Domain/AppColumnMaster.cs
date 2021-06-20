@@ -14,18 +14,28 @@ namespace Domain
 		public string Type { get; set; }
 		public string AppDataFiled { get; set; }				
 		public string UserAccess { get; set; }
+		public int ConfigId { get; set; }	
+		public int AttachmentConfig { get; set; }	
+
     }
 
 	 public class AppColumnType
 	 {
- 		public const string Text = "1";
-		 public const string Number = "2";
-		 public const string Float = "3";
-		 public const string Bool = "4";
-		 public const string DateTime = "5";
-		 public const string Attachment = "6";
-	 }
+		public const string Text = "1";
+		public const string Number = "2";
+		public const string Float = "3";
+		public const string Bool = "4";
+		public const string DateTime = "5";
+		public const string Config = "6";
+		public const string Attachment = "7";
+	}
 
+	 public class AppAttachmentConfig
+	 {
+ 		public const string NoDelete = "1";
+		public const string CreaterOnlyDelete = "2";
+
+	}
 }
 
 

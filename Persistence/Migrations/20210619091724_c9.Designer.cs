@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210619091724_c9")]
+    partial class c9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,21 +236,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Attachment1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Attachment2")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Attachment3")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Attachment4")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Attachment5")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("Bool1")
                         .HasColumnType("INTEGER");
 
@@ -277,36 +264,6 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Bool9")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config10")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config2")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config3")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config4")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config5")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config6")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config7")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config8")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Config9")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")

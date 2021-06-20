@@ -25,7 +25,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-		public async Task<Dictionary<string, List<object>>> TakeAction(TakeAction.Command command)
+		public async Task<Dictionary<string, List<object>>> TakeAction([FromForm]TakeAction.Command command)
         {
             return await Mediator.Send(command);
         }

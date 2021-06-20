@@ -18,10 +18,12 @@ namespace Application._AppColumnMaster
         public class Command : IRequest<AppColumnMasterDto>
         {
 
-		public int TableID { get; set; }
-		public string Title { get; set; }
-		public string Type { get; set; }
-		public string UserAccess { get; set; }
+            public int TableID { get; set; }
+            public string Title { get; set; }
+            public string Type { get; set; }
+            public string UserAccess { get; set; }
+            public int ConfigId { get; set; }	
+		    public int AttachmentConfig { get; set; }	
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -74,6 +76,14 @@ namespace Application._AppColumnMaster
                         colCount =15;
                         colText = "DateTime";
                         break;
+                    case "6": //Config
+                        colCount =10;
+                        colText = "Config";
+                        break;
+                    case "7": //DateTime
+                        colCount =5;
+                        colText = "Attachment";
+                        break;
                 }
 
                 //Get all columns used
@@ -100,7 +110,9 @@ namespace Application._AppColumnMaster
 					Title  = request.Title,
 					Type  = request.Type,
 					UserAccess  = request.UserAccess,
-                    AppDataFiled = newColText                
+                    AppDataFiled = newColText,
+                    ConfigId  = request.ConfigId,
+                    AttachmentConfig = request.AttachmentConfig                 
                 };
 
                 _context.AppColumnMasters.Add(appColumnMaster);

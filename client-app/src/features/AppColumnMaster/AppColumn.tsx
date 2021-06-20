@@ -7,8 +7,10 @@ import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppColumnMaster } from './AppColumnMaster';
 import { AppColumnMasterContext } from './AppColumnMasterStore';
 import { observer } from 'mobx-react-lite';
-import { ColumnDataType, SystemConstant } from '../../app/common/SystemConstants';
+import { ColumnAttachmentType, ColumnDataType, SystemConstant } from '../../app/common/SystemConstants';
 import { Autocomplete } from '@material-ui/lab';
+import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
+import { AppConfigType } from '../AppConfigType/AppConfigType';
 
 
 
@@ -17,16 +19,26 @@ type CustomProps = {  initVal : AppColumnMaster, parentRefresh : any } ;
 const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {   
 
   const AppColumnMasterStore = useContext(AppColumnMasterContext);
+  const AppConfigTypeStore = useContext(AppConfigTypeContext);
 
   const [item, setItem] = useState(initVal);
   const [loading, setLoading] = useState(false);
 
   const [type, setType] = useState(initVal.Type);
+  const [configId, setConfigId] = useState(initVal.ConfigId);
+  const [attachmentConfig, setAttachmentConfig] = useState(initVal.AttachmentConfig);
+
+  useEffect(() => {
+    AppConfigTypeStore.getList();
+  });
   
   const onItemSubmit = (values: any) => { 
     debugger;      
     setLoading(true);
     values.Type = type;
+    values.ConfigId = configId
+    values.AttachmentConfig = attachmentConfig
+
     AppColumnMasterStore.editItem(values).then((val) => {
       debugger;
       parentRefresh();
@@ -71,16 +83,46 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
                 //debugger;                     
               }}
             />
+            { type == '6' &&
+            <Autocomplete                
+              value={ AppConfigTypeStore.itemList.find( u => u.Id == item.ConfigId ) } 
+              id="ConfigId"              
+              options={AppConfigTypeStore.itemList}
+              getOptionLabel={(option:AppConfigType) => option.Title }                
+              style={{ width: 300, paddingTop: 20, paddingBottom : 20 }}
+              renderInput={(params:any) => <TextField {...params} label="Config Type" variant="outlined" />}
 
+              onChange={(event:any, newValue:any) => {   
+                setConfigId(Number(newValue.Id));         
+                //debugger;                     
+              }}
+            />
+            }
 
-            <MyCustomTxt   
+            { type == '7' &&
+            <Autocomplete                
+              value={ ColumnAttachmentType.find( u => u.Id == item.AttachmentConfig.toString() ) } 
+              id="AttachmentConfig"              
+              options={ColumnAttachmentType}
+              getOptionLabel={(option:SystemConstant) => option.value }                
+              style={{ width: 300, paddingTop: 20, paddingBottom : 20 }}
+              renderInput={(params:any) => <TextField {...params} label="Attachment Type" variant="outlined" />}
+
+              onChange={(event:any, newValue:any) => {   
+                setAttachmentConfig( Number(newValue.Id));         
+                //debugger;                     
+              }}
+            />
+            }
+
+            {/* <MyCustomTxt   
                 name="UserAccess"                         
                 type="text"                
                 autoFocus={true}
                 required={false}   
                 multiline={true}                             
                 label="User Access"                                                                     
-            />
+            /> */}
                            
               <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                 <Button

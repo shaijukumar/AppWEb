@@ -7,7 +7,7 @@ import { ApiResult, AppApi, AppApiAction, Customer, IApiAction, IApiResult, IApp
 const IAppApiAPI = "/AppApi";
 
 const DBFun = {
-  Execute: (action: IApiAction) => agent.requests.post(IAppApiAPI, action),  
+  Execute: (action: FormData) => agent.requests.postForm(IAppApiAPI, action),  
   ActionList: (FlowId: number, Id: number) =>  agent.requests.get(`${IAppApiAPI}/${FlowId}?ItemId=${Id}`),
   
 
@@ -57,7 +57,9 @@ export default class AppApiStoreImpl {
       }
   }
 
-  ExecuteAction = async (action: IApiAction) => {
+  //ExecuteAction = async (action: IApiAction) => {
+   ExecuteAction = async (action: FormData) => {
+    
     this.loading = true;
     try {        
       debugger;
@@ -113,22 +115,22 @@ export default class AppApiStoreImpl {
   // }
  
   getList = async () => {        
-    this.loading = true;
-    try {       
+    // this.loading = true;
+    // try {       
       
-      let action: AppApiAction = new AppApiAction()
-      action.ActionId = 8; 
-      this.apiResult = await DBFun.Execute(action);
-      this.itemList = this.apiResult.Result1;
+    //   let action: AppApiAction = new AppApiAction()
+    //   action.ActionId = 8; 
+    //   this.apiResult = await DBFun.Execute(action);
+    //   this.itemList = this.apiResult.Result1;
       
-      //this.itemList = await DBFun.list();       
-      this.loading = false;                   
-    } catch (error) {
-      runInAction( () => {
-        this.loading = false;            
-        throw error;
-      });
-    }
+    //   //this.itemList = await DBFun.list();       
+    //   this.loading = false;                   
+    // } catch (error) {
+    //   runInAction( () => {
+    //     this.loading = false;            
+    //     throw error;
+    //   });
+    // }
   }
 
   

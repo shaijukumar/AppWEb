@@ -11,5 +11,7 @@ namespace Application._AppColumnMaster
 		public string Type { get; set; }
 		public string UserAccess { get; set; }
 		public string AppDataFiled { get; set; }
+		public int ConfigId { get; set; }	
+		public int AttachmentConfig { get; set; }	
     }
 }

@@ -4,10 +4,20 @@ export class SystemConstant {
 	descriptyion: string = '';
 }
 
-export const ColumnDataType : SystemConstant[] = [  
+export const ColumnDataType : SystemConstant[] = 
+[  
     {Id : "1", value : 'Text', descriptyion : 'Text'}, 
     {Id : "2", value : 'Number', descriptyion : 'Number'},
     {Id : "3", value : 'Float', descriptyion : 'Float'},
-    {Id : "3", value : 'Bool', descriptyion : 'Bool'}, 
-    {Id : "3", value : 'DateTime', descriptyion : 'DateTime'},   ] 
+    {Id : "4", value : 'Bool', descriptyion : 'Bool'}, 
+    {Id : "5", value : 'DateTime', descriptyion : 'DateTime'}, 
+    {Id : "6", value : 'Config', descriptyion : 'Config'},
+    {Id : "7", value : 'Attachment', descriptyion : 'Attachment'},
+]
 
+export const ColumnAttachmentType : SystemConstant[] = 
+[  
+    {Id : "1", value : 'Create Edit Delete', descriptyion : 'Create/Edit/Delete'}, 
+    {Id : "2", value : 'NoDelete', descriptyion : 'NoDelete'}, 
+    {Id : "3", value : 'CreaterOnlyDelete', descriptyion : 'CreaterOnlyDelete'},
+]

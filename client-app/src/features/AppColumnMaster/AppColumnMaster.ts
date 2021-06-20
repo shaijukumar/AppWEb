@@ -4,7 +4,10 @@ export interface IAppColumnMaster {
 	Title: string
 	Type: string
 	UserAccess: string
-	AppDataFiled: string
+	AppDataFiled: string 
+	ConfigId: number
+	AttachmentConfig: number
+
 }
 
 export class AppColumnMaster implements IAppColumnMaster {
@@ -14,6 +17,8 @@ export class AppColumnMaster implements IAppColumnMaster {
 	Type: string = '';
 	UserAccess: string = '';
 	AppDataFiled: string = '';
+	ConfigId: number= 0;
+	AttachmentConfig: number= 0;
   
   constructor(init?: IAppColumnMaster) {
     Object.assign(this, init);

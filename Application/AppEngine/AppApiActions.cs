@@ -15,7 +15,7 @@ namespace Application.AppEngine
         {            
             //AppData appData = new AppData(); 
             var res = new  AppApiDto();
-            res.Id = request.ActionId;
+            res.Id = request.ActionId; //Int32.Parse( request.ActionId);
              Dictionary<string, List<object>> result = new Dictionary<string, List<object> >();
 
             #region Parse Action 
@@ -60,7 +60,7 @@ namespace Application.AppEngine
                 //Update date if no data, only status change
                 if(udateStatus){
                     result = await AppApiDataAction.Execute( "updateStatus", appAction, appData, null, _context, request, currentUserId );
-                }                                    
+                }
             } 
 
             #endregion Parse Action 

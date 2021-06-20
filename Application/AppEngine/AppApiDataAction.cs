@@ -14,8 +14,22 @@ using Persistence;
 
 namespace Application.AppEngine
 {
+    
     public class AppApiDataAction
     {
+        public class AttachmentJson
+        {
+            public string Action { get; set; }
+            public int FileArrayId { get; set; }
+            public int Id { get; set; }
+            public string FileName { get; set; }
+            public string Prop1 { get; set; }
+            public string Prop2 { get; set; }
+            public string Prop3 { get; set; }
+            public string Prop4 { get; set; }
+            public string Prop5 { get; set; }    
+        }
+
         public static async Task<Dictionary<string, List<object>>> Execute(string DataSource, AppAction appAction, AppData appData, XmlNode actionNode, DataContext _context, TakeAction.Command request, string currentUserId)
         {
             #region init variables
@@ -76,11 +90,14 @@ namespace Application.AppEngine
                             }
                             else if( col.Type == AppColumnType.Attachment ){
                                 
+                                List<AttachmentJson> attach = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
+                                foreach(var a in attach){
+                                    string s= a.FileName;
+                                }
                             }
                             else{
                                 ap1.SetValue (appData,  value, null);
-                            }
-                            
+                            }                            
                         }
                                                                                                                        
                     }

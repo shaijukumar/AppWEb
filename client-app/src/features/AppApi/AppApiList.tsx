@@ -20,9 +20,10 @@ const AppApiList: React.FC = () => {
       setLoading(true);
       let act: AppApiAction = new AppApiAction()
       act.ActionId = 8;      
-      AppApiStore.ExecuteAction(act).then( (res) => {     
-        setLoading(false);              
-      });      
+
+      // AppApiStore.ExecuteAction(act).then( (res) => {     
+      //   setLoading(false);              
+      // });      
     }, [AppApiStore.ExecuteAction])       
 
     if(loading){

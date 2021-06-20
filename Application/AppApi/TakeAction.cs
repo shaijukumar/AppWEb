@@ -39,7 +39,7 @@ namespace Application._AppApi
             public string Parm8 { get; set; }
             public string Parm9 { get; set; }
             public string Parm10 { get; set; }        
-            public ICollection<ApiAttachment> FileList { get; set; }         
+            public ICollection<IFormFile> FileList { get; set; }         
         }
 
         public class ApiAttachment

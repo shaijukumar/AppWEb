@@ -19,11 +19,13 @@ namespace Application._AppColumnMaster
         public class Command : IRequest<AppColumnMasterDto>
         {            
             
-		public int Id { get; set; }
-		public int TableID { get; set; }
-		public string Title { get; set; }
-		public string Type { get; set; }
-		public string UserAccess { get; set; }
+            public int Id { get; set; }
+            public int TableID { get; set; }
+            public string Title { get; set; }
+            public string Type { get; set; }
+            public string UserAccess { get; set; }
+            public int ConfigId { get; set; }	
+		    public int AttachmentConfig { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -68,9 +70,10 @@ namespace Application._AppColumnMaster
 				appColumnMaster.Title  = request.Title ?? appColumnMaster.Title;
 				appColumnMaster.Type  = request.Type ?? appColumnMaster.Type;
 				appColumnMaster.UserAccess  = request.UserAccess ?? appColumnMaster.UserAccess;
+
+                appColumnMaster.ConfigId  = request.ConfigId; 
+                appColumnMaster.AttachmentConfig  = request.AttachmentConfig; 
 				
-				
-				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /
 				var success = await _context.SaveChangesAsync() > 0;                   
 				//if (success) return Unit.Value;
 				if (success)
