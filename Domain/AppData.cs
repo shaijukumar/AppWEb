@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -96,10 +97,9 @@ namespace Domain
         public int Config9 { get; set; }
         public int Config10 { get; set; }
         public int Attachment1 { get; set; }
-        public int Attachment2 { get; set; }
+        public int Attachment2 { get; set; }        
         public int Attachment3 { get; set; }
         public int Attachment4 { get; set; }
         public int Attachment5 { get; set; }
-
     }
 }

@@ -123,7 +123,7 @@ const AppApiEdit: React.FC = () => {
 
     act.Parm1 = JSON.stringify(values );
     act.ItemId = values.Id; 
-return;
+//return;
 
     AppApiStore.ExecuteAction(formData).then( (res) => {      
       debugger;

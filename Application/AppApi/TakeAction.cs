@@ -128,12 +128,23 @@ namespace Application._AppApi
                }
                                                  
                 if( appAction.ActionType == "Query" )
-                {
-                  res.Result =  await  ApiQuery.ExecuteQuery( appAction, appData, _context, request);                   
+                {          
+                    try{
+                        res.Result =  await  ApiQuery.ExecuteQuery( appAction, appData, _context, request); 
+                    } 
+                    catch(Exception ex){
+                        throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
+                    }                                        
                 }
                 else  if( appAction.ActionType == "Action" )
                 {
-                   res.Result = await AppApiActions.ExecuteAction( appAction, appData, _context, request, _userAccessor.GetCurrentUsername()  );                    
+                    try{
+                        res.Result = await AppApiActions.ExecuteAction( appAction, appData, _context, request, _userAccessor.GetCurrentUsername()  );
+                    } 
+                    catch(Exception ex){
+                        throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
+                    }  
+                                       
                 }
 
                 return res.Result;                             

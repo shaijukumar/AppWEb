@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -28,6 +29,9 @@ namespace Application.AppEngine
             public string Prop3 { get; set; }
             public string Prop4 { get; set; }
             public string Prop5 { get; set; }    
+            public int AppDataColumn { get; set; }
+            
+            
         }
 
         public static async Task<Dictionary<string, List<object>>> Execute(string DataSource, AppAction appAction, AppData appData, XmlNode actionNode, DataContext _context, TakeAction.Command request, string currentUserId)
@@ -36,6 +40,7 @@ namespace Application.AppEngine
 
             //string result = string.Empty;            
             List<object> actionResult = new List<object>(); 
+            List<AttachmentJson> attachments = new List<AttachmentJson>();
             
             #endregion init variables
 
@@ -81,6 +86,9 @@ namespace Application.AppEngine
                         }
                         else{
                             var col = appColumns.FindLast( x => x.Title == key );
+                            if(col == null){
+                                  throw new Exception("invalid column " + key);
+                            }
                             PropertyInfo ap1 = appDataType.GetProperty(col.AppDataFiled);
                             if(  col.Type == AppColumnType.Float ){
                                 ap1.SetValue (appData,  float.Parse(value), null);
@@ -89,17 +97,18 @@ namespace Application.AppEngine
                                 ap1.SetValue (appData,  Int32.Parse(value), null);
                             }
                             else if( col.Type == AppColumnType.Attachment ){
-                                
-                                List<AttachmentJson> attach = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
-                                foreach(var a in attach){
-                                    string s= a.FileName;
-                                }
+                                if(!string.IsNullOrEmpty(value)){
+                                    List<AttachmentJson> att = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
+                                    foreach( var a in att){
+                                        a.AppDataColumn = col.Id;
+                                    }
+                                    attachments.AddRange(att);   
+                                }                                                             
                             }
                             else{
                                 ap1.SetValue (appData,  value, null);
                             }                            
-                        }
-                                                                                                                       
+                        }                                                                                                                       
                     }
                     appDataInPut = jObject.ToObject<AppData>();
                 }
@@ -165,6 +174,49 @@ namespace Application.AppEngine
             }
 
             #endregion Create/Update
+
+            # region Add/Delete Attachment
+            
+            foreach(var a in attachments){
+                
+                if(a.Action == "Create"){
+                    foreach(var file in request.FileList){
+                        if(file.FileName == a.FileName){     
+
+                            var rootPath = @"C:\Attachments";
+                            var path = Path.Combine( rootPath, appData.TableId.ToString(), appData.Id.ToString(), a.AppDataColumn.ToString());
+                                                        
+                            if(!Directory.Exists(path)){
+                                Directory.CreateDirectory(path);
+                            }
+
+                            path = Path.Combine(path, file.FileName);
+
+                            using (var fileStream = new FileStream(path,FileMode.Create))
+                            {
+                                await file.CopyToAsync(fileStream);                     
+                            }
+
+                            var appAttachment = new AppAttachment
+                            {
+                                AppDataId  = appData.Id,
+                                AppDataColumn = a.AppDataColumn,
+                                FileName  = file.FileName,
+                                Path  = Path.GetRelativePath(path,rootPath),
+                                Prop1  = a.Prop1,
+                                Prop2  = a.Prop2,
+                                Prop3  = a.Prop3,
+                                Prop4  = a.Prop4,
+                                Prop5  = a.Prop5                  
+                            };
+                            _context.AppAttachments.Add(appAttachment);
+                            var success = await _context.SaveChangesAsync() > 0;                            
+                        }
+                    }
+                }
+            }
+
+            # endregion Add/Delete Attachment
                        
             Dictionary<string, List<object>> result = new Dictionary<string, List<object> >();
             result.Add("Result"+ (result.Count+1).ToString(), actionResult );

@@ -39,6 +39,16 @@ namespace Persistence
         {            
               base.OnModelCreating(builder); 
 
+            //   builder.Entity<AppData>()
+            //     .HasMany(u => u.Attachment1)
+            //     .WithMany(t => t.)
+            //     .Map(x =>
+            //     {
+            //         x.MapLeftKey("UserId");
+            //         x.MapRightKey("TownId");
+            //         x.ToTable("TownResidents");
+            //     });
+
 
             //   builder.Entity<AppAction>()
             //     .HasOne(p => p.FromStatusList)
