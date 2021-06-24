@@ -118,6 +118,17 @@ export interface IAttachmentDetails {
 	Prop5?: string
 }
 
+// AppDataColumn: 8
+// AppDataId: 38
+// FileName: "0-EIB B.JPG"
+// Id: 64
+// Path: "..\\..\\..\\.."
+// Prop1: "Desc 1"
+// Prop2: ""
+// Prop3: ""
+// Prop4: ""
+// Prop5: ""
+
 export class AttachmentDetails implements IAttachmentDetails {
 	Action: string = '';
 	FileArrayId: number = -1;
@@ -128,7 +139,7 @@ export class AttachmentDetails implements IAttachmentDetails {
 	Prop3: string = '';
 	Prop4: string = '';
 	Prop5: string = '';
-  
+
   constructor(init?: IAttachmentDetails) {
     Object.assign(this, init);
   }

@@ -6,8 +6,9 @@ import { ApiResult, AppApi, AppApiAction, Customer, IApiAction, IApiResult, IApp
 
 const IAppApiAPI = "/AppApi";
 
-const DBFun = {
-  Execute: (action: FormData) => agent.requests.postForm(IAppApiAPI, action),  
+const DBFun = { 
+  Execute: (action: FormData) => agent.requests.postForm(`${IAppApiAPI}/TakeAction`, action),  
+  ExecuteQuery: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Query`, action),  
   ActionList: (FlowId: number, Id: number) =>  agent.requests.get(`${IAppApiAPI}/${FlowId}?ItemId=${Id}`),
   
 
@@ -57,8 +58,25 @@ export default class AppApiStoreImpl {
       }
   }
 
-  //ExecuteAction = async (action: IApiAction) => {
-   ExecuteAction = async (action: FormData) => {
+  ExecuteQuery = async (action: IApiAction) => {
+    this.loading = true;
+    try {        
+      debugger;
+      let itm = new ApiResult();
+      itm = await DBFun.ExecuteQuery(action);  
+      this.apiResult = itm;
+      return itm;
+      //this.apiResult = await DBFun.Execute(action);                 
+      //return this.apiResult;   
+    } catch (error) {
+      runInAction( () => {   
+
+      });        
+      throw error;
+    }
+  }
+
+  ExecuteAction = async (action: FormData) => {
     
     this.loading = true;
     try {        

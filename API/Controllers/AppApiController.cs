@@ -23,9 +23,16 @@ namespace API.Controllers
             return await Mediator.Send(new ActionList.Query { FlowId = id, ItemId = ItemId });
         }
 
+        
 
-        [HttpPost]
+        [HttpPost("TakeAction")]
 		public async Task<Dictionary<string, List<object>>> TakeAction([FromForm]TakeAction.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("Query")]
+		public async Task<Dictionary<string, List<object>>> Query(TakeAction.Command command)
         {
             return await Mediator.Send(command);
         }

@@ -63,6 +63,12 @@ const AppApiEdit: React.FC = () => {
         }
         else{                 
           setItem(res.Result1[0] as any);
+
+          res.Result1[0].InitAttachment?.forEach( x => {
+            attachFileList.push( new Attachment( {file:  new Blob(), Details : x as any } ))
+          });
+          
+          setFileList(attachFileList);
         }  
         setLoading(false);
       });
@@ -153,7 +159,6 @@ const AppApiEdit: React.FC = () => {
   const onFileChange = (event:any) => { 
     debugger;
     
-
     for(var i=0;i<event.target.files.length;i++){
 
       var f =  event.target.files[i] as any;    
@@ -164,12 +169,8 @@ const AppApiEdit: React.FC = () => {
         });
       
       setFileList(currentArray => [...currentArray, attch]);
-
-
-      event.target.value = null;
-
-      // }                  
-    } 
+      event.target.value = null;                        
+    }
     //setFileList(attachFileList);
 
   }

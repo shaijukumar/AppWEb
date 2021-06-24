@@ -112,10 +112,17 @@ namespace Application.AppEngine
                 //row = new Dictionary<string, object>();
                 row.Add("StatusId", dataRow.StatusId.ToString() );
 
-                foreach(AppColumnMaster col in colList){                  
-                     row.Add(col.Title,
-                            dataRow.GetType().GetRuntimeProperty(col.AppDataFiled)?.GetValue(dataRow) );  
-                                            
+                foreach(AppColumnMaster col in colList){  
+                    if(col.Type == AppColumnType.Attachment){
+                        var appAttachments = await _context.AppAttachments
+                            .Where( a => a.AppDataId ==  dataRow.Id && a.AppDataColumn == col.Id)
+                            .ToListAsync();
+                         row.Add(col.Title, appAttachments);
+                    } 
+                    else{
+                         row.Add(col.Title,
+                            dataRow.GetType().GetRuntimeProperty(col.AppDataFiled)?.GetValue(dataRow) ); 
+                    }
                 } 
 
                 # region oldcode 

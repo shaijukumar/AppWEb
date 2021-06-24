@@ -18,7 +18,7 @@ namespace Application._AppAttachment
         {
             public int Id { get; set; }
         }
-
+ 
         public class Handler : IRequestHandler<Query, FileContentResult>
         {
             private readonly DataContext _context;
@@ -28,7 +28,7 @@ namespace Application._AppAttachment
                 _mapper = mapper;
                 _context = context;
             }
-
+ 
             public async Task<FileContentResult> Handle(Query request, CancellationToken cancellationToken)
             {
                 var appAttachment = await _context.AppAttachments
@@ -44,20 +44,8 @@ namespace Application._AppAttachment
                 if (System.IO.File.Exists(path)) {
                     file = System.IO.File.ReadAllBytes(path);
                 }
-                //var file = System.IO.File.ReadAllBytes(path);
-
-                //using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                //return File(stream, GetContentType(path), Path.GetFileName(path))
-
-                //FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                //var fileq = fs.Read(); //System.IO.File.ReadAllBytes(path);
-
-                
+                                
                 return new FileContentResult(file, "application/octet-stream");
-
-                //var toReturn = _mapper.Map <AppAttachment, FileContentResult>(appAttachment); 
-
-                //return toReturn;
             }
     }
 }
