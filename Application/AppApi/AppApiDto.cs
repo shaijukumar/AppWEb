@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Application._AppApi
 {
@@ -7,6 +8,7 @@ namespace Application._AppApi
     {
       public int Id { get; set; }      
       public Dictionary<string, List<object>> Result { get; set; }
-     
+      public FileContentResult file { get; set; }
+                       
     }
 }

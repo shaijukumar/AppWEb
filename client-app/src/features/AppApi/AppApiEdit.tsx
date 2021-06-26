@@ -80,7 +80,6 @@ const AppApiEdit: React.FC = () => {
   }, [id, AppApiStore.ExecuteAction , AppApiStore.getActions]);
 
 
-
   const onItemSubmit = (values: any) => {    
     
     
@@ -175,6 +174,28 @@ const AppApiEdit: React.FC = () => {
 
   }
 
+  const download = (id:number, fileName:string) => { 
+    let act: AppApiAction = new AppApiAction()
+    act.ActionId = 15;  
+    act.ItemId = Number(id);
+    act.Parm1 = id.toString();
+
+    AppApiStore.FileDownload(act).then( (fileSteam) => { 
+      debugger;
+      const downloadUrl = window.URL.createObjectURL(new Blob([fileSteam]));
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', fileName); //any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      debugger;
+    });
+   
+  }
+
+
   if(loading){
     return <LinearProgress color="secondary"  className="loaderStyle" /> 
   }
@@ -184,7 +205,8 @@ const AppApiEdit: React.FC = () => {
     <Container component="main" maxWidth="xs">        
       {error && <div  style={{ color:'red' , fontWeight:'bold', padding:5 , border: '1px solid green', margin:10 }} >{error}</div>}     
     
-      
+      {/* <a href="#" onClick={ () => { download(65, "")} } >Test download</a>  */}
+
       <Formik
           initialValues={item}
 
@@ -220,7 +242,9 @@ const AppApiEdit: React.FC = () => {
               &&  attachFileList.map( (rr, index) => ( 
               
               <tr key={index}>
-                <td>{rr.Details.FileName}</td>
+                <td>
+                  <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> 
+                </td>
                 <td>
                   <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { 
                     debugger;  

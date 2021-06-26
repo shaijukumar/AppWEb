@@ -23,7 +23,7 @@ namespace API.Controllers
             return await Mediator.Send(new ActionList.Query { FlowId = id, ItemId = ItemId });
         }
 
-        
+              
 
         [HttpPost("TakeAction")]
 		public async Task<Dictionary<string, List<object>>> TakeAction([FromForm]TakeAction.Command command)
@@ -37,6 +37,12 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("Attachment")]
+		public async Task<ActionResult> Attachment(DownloadAction.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+ 
         // [HttpPut("{id}")]
 		// public async Task<ActionResult<AppApiDto>> Edit(Guid id, Edit.Command command)
         // {

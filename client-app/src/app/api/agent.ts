@@ -32,6 +32,7 @@ const requests = {
     del: (url: string) => axios.delete(url).then(sleep(100)).then(responseBody),
 
     download: (url: string) => axios.get(url, {responseType: 'blob'}).then(sleep(100)).then(responseBody) ,  
+    downloadPost: (url: string, body: {}) => axios.post(url, body, {responseType: 'blob'}).then(sleep(100)).then(responseBody) ,
     
     postForm: (url: string, formData : FormData) => {
 

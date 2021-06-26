@@ -43,19 +43,19 @@ namespace Application._AppApi
 
             public async Task<AppApiDto> Handle(Command request, CancellationToken cancellationToken)
             {                                                   
-                var AppApi = new AppApi
-                {
-					Title  = request.Title                  
-                };
+                // var AppApi = new AppApi
+                // {
+				// 	Title  = request.Title                  
+                // };
 
-                _context.AppApis.Add(AppApi);
-                var success = await _context.SaveChangesAsync() > 0;
+                // _context.AppApis.Add(AppApi);
+                // var success = await _context.SaveChangesAsync() > 0;
 
-                if (success)
-                {
-                    var toReturn = _mapper.Map <AppApi, AppApiDto>(AppApi);
-                    return toReturn;
-                }                
+                // if (success)
+                // {
+                //     var toReturn = _mapper.Map <AppApi, AppApiDto>(AppApi);
+                //     return toReturn;
+                // }                
 
                 throw new Exception("Problem saving changes");
 }

@@ -18,6 +18,8 @@ using Newtonsoft.Json;
 using Application.AppEngine;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Application._AppApi
 { 
@@ -54,6 +56,13 @@ namespace Application._AppApi
             public string Prop5 { get; set; } 
         }
 
+        public class ApiDetails
+        {
+            public AppAction appAction { get; set; }
+            public AppData appData { get; set; }
+           
+        }
+
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
@@ -77,69 +86,39 @@ namespace Application._AppApi
 
             public async Task<Dictionary<string, List<object>>> Handle(Command request, CancellationToken cancellationToken)
             {
+                # region get apiDetails and check security
+
+                ApiDetails apiDetails = new ApiDetails();
+                try{
+                    apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() ); 
+                } 
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
+                } 
+
+                # endregion get apiDetails and check security
+
                 
-                # region Get action details from db
-
-                var appAction = await _context.AppActions
-                    .Where(x => x.Id == request.ActionId  ).FirstOrDefaultAsync();
-
-                if (appAction == null )
-                    throw new RestException(HttpStatusCode.NotFound, new { Error = "invalid Action" });
-
-                # endregion Get action details from db
-
-                # region init variables
-                
-                AppData appData = new AppData();
+                # region init variables   
+                             
                 var res = new  AppApiDto();
                 res.Id = request.ActionId;
 
-                # endregion init variables
-
-                # region check FromStatus 
-
-                if( appAction.ActionType == "Action" )
-                {
-                    if(request.ItemId != 0){
-                        appData = await _context.AppDatas
-                            .Where(x => x.Id ==  request.ItemId ).FirstOrDefaultAsync(); 
-
-                        if( appData == null ){
-                            throw new RestException(HttpStatusCode.OK, new { Error = "Invalid ItemId" });
-                        }    
-
-                        // if( appAction.FromStatusId !=0 && appData.StatusId != appAction.FromStatusId ){
-                        //     throw new RestException(HttpStatusCode.OK, new { Error = "Invalid from status" });
-
-                        if( appAction.FromStatusList.Count == 0 && !appAction.FromStatusList.Any( s => s.Id ==  appData.StatusId)  ){
-                            throw new RestException(HttpStatusCode.OK, new { Error = "Invalid from status" });
-                     }                    
-                    }
-                    else if(!appAction.InitStatus){
-                        throw new RestException(HttpStatusCode.OK, new { Error = "Invalid from status" });
-                    }
-                }                
-
-                # endregion check FromStatus
-
-               //Execute
-               if (!await ApiAppWhen.Execute(appAction, _context, _userAccessor.GetCurrentUsername() )){
-                   throw new RestException(HttpStatusCode.OK, new { Error = "Unauthorized" });
-               }
-                                                 
-                if( appAction.ActionType == "Query" )
+                # endregion init variables                                
+                                                                
+                if( apiDetails.appAction.ActionType == "Query" )
                 {          
                     try{
-                        res.Result =  await  ApiQuery.ExecuteQuery( appAction, appData, _context, request); 
+                        res.Result =  await  ApiQuery.ExecuteQuery( apiDetails.appAction, apiDetails.appData, _context, request); 
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
                     }                                        
                 }
-                else  if( appAction.ActionType == "Action" )
+                else  if( apiDetails.appAction.ActionType == "Action" )
                 {
                     try{
-                        res.Result = await AppApiActions.ExecuteAction( appAction, appData, _context, request, _userAccessor.GetCurrentUsername()  );
+                        res.Result = await AppApiActions.ExecuteAction( apiDetails.appAction, apiDetails.appData, _context, request, _userAccessor.GetCurrentUsername()  );
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });

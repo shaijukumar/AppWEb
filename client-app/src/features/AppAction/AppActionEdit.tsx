@@ -36,7 +36,7 @@ const AppActionEdit: React.FC = () => {
   const [fromStatusList, setFromStatusList] = useState<AppStatusList[]>();
   
 
-  const ActionTypeList = [{Id: "Action", Title: 'Action'}, {Id: "Query", Title: 'Query'}];
+  const ActionTypeList = [{Id: "Action", Title: 'Action'}, {Id: "Query", Title: 'Query'}, {Id: "FileDownload", Title: 'FileDownload'}];
   
   useEffect(() => {
    

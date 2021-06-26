@@ -9,6 +9,8 @@ const IAppApiAPI = "/AppApi";
 const DBFun = { 
   Execute: (action: FormData) => agent.requests.postForm(`${IAppApiAPI}/TakeAction`, action),  
   ExecuteQuery: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Query`, action),  
+  //FileDownload: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Attachment`, action),
+  FileDownload: (action: IApiAction) => agent.requests.downloadPost(`${IAppApiAPI}/Attachment`, action),
   ActionList: (FlowId: number, Id: number) =>  agent.requests.get(`${IAppApiAPI}/${FlowId}?ItemId=${Id}`),
   
 
@@ -56,6 +58,24 @@ export default class AppApiStoreImpl {
         console.log(error);
         this.loading = false;
       }
+  }
+
+  FileDownload = async (action: IApiAction) => {
+    this.loading = true;
+    try {        
+      debugger;
+      //let itm = new ApiResult();
+      var itm = await DBFun.FileDownload(action);  
+      //this.apiResult = itm;
+      return itm;
+      //this.apiResult = await DBFun.Execute(action);                 
+      //return this.apiResult;   
+    } catch (error) {
+      runInAction( () => {   
+
+      });        
+      throw error;
+    }
   }
 
   ExecuteQuery = async (action: IApiAction) => {

@@ -93,7 +93,7 @@ namespace Application.AppEngine
                             if(  col.Type == AppColumnType.Float ){
                                 ap1.SetValue (appData,  float.Parse(value), null);
                             }
-                            else if( col.Type == AppColumnType.Number ){
+                            else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
                                 ap1.SetValue (appData,  Int32.Parse(value), null);
                             }
                             else if( col.Type == AppColumnType.Attachment ){
@@ -202,7 +202,7 @@ namespace Application.AppEngine
                                 AppDataId  = appData.Id,
                                 AppDataColumn = a.AppDataColumn,
                                 FileName  = file.FileName,
-                                Path  = Path.GetRelativePath(path,rootPath),
+                                Path  = Path.GetRelativePath(rootPath, path),
                                 Prop1  = a.Prop1,
                                 Prop2  = a.Prop2,
                                 Prop3  = a.Prop3,
