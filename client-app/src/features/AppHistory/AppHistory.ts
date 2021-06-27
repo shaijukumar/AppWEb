@@ -3,7 +3,7 @@ export interface IAppHistory {
 	Action: string
 	FromStage: number
 	ToStage: number
-	ActionBy: number
+	ActionBy: string
 	DateTime: Date
 	Comment: string
 	Details1: string
@@ -18,7 +18,7 @@ export class AppHistory implements IAppHistory {
 	Action: string = '';
 	FromStage: number = 0;
 	ToStage: number = 0;
-	ActionBy: number = 0;
+	ActionBy: string = '';
 	DateTime: Date = new Date() ;
 	Comment: string = '';
 	Details1: string = '';

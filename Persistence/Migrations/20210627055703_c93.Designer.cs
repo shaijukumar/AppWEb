@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210627055703_c93")]
+    partial class c93
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -538,11 +540,11 @@ namespace Persistence.Migrations
                     b.Property<string>("Action")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ActionBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AppDataId")
+                    b.Property<int>("ActionBy")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("AppDataId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Comment")
                         .HasColumnType("TEXT");

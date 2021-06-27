@@ -20,7 +20,6 @@ const AppApiList: React.FC = () => {
       setLoading(true);
       let act: AppApiAction = new AppApiAction()
       act.ActionId = 8;      
-
       AppApiStore.ExecuteQuery(act).then( (res) => {     
         setLoading(false);              
       });      
@@ -56,6 +55,7 @@ const AppApiList: React.FC = () => {
               <TableBody>
                 {AppApiStore.apiResult.Result1.map((row) => (
                   <TableRow key={row.Id} >
+                     <TableCell align="left">{row.Id}</TableCell> 
                     <TableCell component="th" scope="row"  >
                       <NavLink to={"/AppApiItemEdit/" + row.Id } >{row.CustomerName}</NavLink> 
                     </TableCell>
@@ -63,6 +63,37 @@ const AppApiList: React.FC = () => {
                     {/* <TableCell align="left">{row.CustomerName}</TableCell>   */}
                     <TableCell align="left">{row.CIF}</TableCell> 
                     <TableCell align="left">{ AppStatusListStore.itemList.find( s => s.Id == row.StatusId )?.Title }</TableCell>         
+
+                    <TableCell align="right" >
+                      <DeleteOutlinedIcon onClick={ () => { 
+                        debugger;
+                          setLoading(true);
+                          let act: AppApiAction = new AppApiAction()
+                          act.ActionId = 13;
+                          act.ItemId = row.Id;
+                          AppApiStore.ExecuteQuery(act).then( (res) => { 
+                            debugger;
+                            let act: AppApiAction = new AppApiAction();
+                            act.ActionId = 8; 
+                            AppApiStore.ExecuteQuery(act).then( (res) => {
+                              setLoading(false);  
+                            });
+                          });
+
+                          // setLoading(true);
+                          // let act: AppApiAction = new AppApiAction()
+                          // act.ActionId = 13;
+                          // act.Parm1 = row.Id.toString();
+                          // AppApiStore.ExecuteQuery(act).then( (res) => {                                    
+                          //     let act: AppApiAction = new AppApiAction()
+                          //     act.ActionId = 8;      
+                          //     AppApiStore.ExecuteQuery(act).then( (res) => {     
+                          //     setLoading(false);              
+                          //   }); 
+                          // }); 
+                         }}  />
+                    </TableCell>
+
                   </TableRow>
                 ))}
               </TableBody>

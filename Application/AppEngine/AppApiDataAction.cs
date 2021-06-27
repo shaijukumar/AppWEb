@@ -66,6 +66,26 @@ namespace Application.AppEngine
 
                 #endregion get columns fron db
 
+                # region Required/Optional Columns from action
+
+                    Dictionary<string, int> reqCol = new Dictionary<string, int>();
+                    foreach (XmlNode columnNode in actionNode.ChildNodes)
+                    {
+                        if (columnNode.Name.ToLower() == "col")
+                        {                                
+                            if(columnNode.Attributes["req"] != null && columnNode.Attributes["req"].Value == "true")
+                            {
+                                reqCol[columnNode.InnerText] = 1;
+                            }
+                            else
+                            {
+                                reqCol[columnNode.InnerText] = -1;
+                            }
+                        }                  
+                    }
+
+                # endregion column from action
+
 
                 #region parse data input                
                 
@@ -80,41 +100,64 @@ namespace Application.AppEngine
                         string key = ((System.Collections.Generic.KeyValuePair<string, Newtonsoft.Json.Linq.JToken>)obj).Key.ToString();
                         string value = ((System.Collections.Generic.KeyValuePair<string, Newtonsoft.Json.Linq.JToken>)obj).Value.ToString();
 
-                        if( key == "Id" || key == "StatusId"){
+                         if( key == "Id" ){
                             PropertyInfo ap1 = appDataType.GetProperty(key);
                             ap1.SetValue (appData, Int32.Parse(value), null);                            
                         }
-                        else{
-                            var col = appColumns.FindLast( x => x.Title == key );
-                            if(col == null){
-                                  throw new Exception("invalid column " + key);
+
+                        ///add only if rows are in AppData Required/Optional Columns action xml
+                        if(reqCol.ContainsKey(key))
+                        {
+                            reqCol[key]++;
+                                            
+                            if( key == "Id" || key == "StatusId"){
+                                PropertyInfo ap1 = appDataType.GetProperty(key);
+                                ap1.SetValue (appData, Int32.Parse(value), null);                            
                             }
-                            PropertyInfo ap1 = appDataType.GetProperty(col.AppDataFiled);
-                            if(  col.Type == AppColumnType.Float ){
-                                ap1.SetValue (appData,  float.Parse(value), null);
-                            }
-                            else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
-                                ap1.SetValue (appData,  Int32.Parse(value), null);
-                            }
-                            else if( col.Type == AppColumnType.Attachment ){
-                                if(!string.IsNullOrEmpty(value)){
-                                    List<AttachmentJson> att = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
-                                    foreach( var a in att){
-                                        a.AppDataColumn = col.Id;
-                                    }
-                                    attachments.AddRange(att);   
-                                }                                                             
-                            }
-                            else{
-                                ap1.SetValue (appData,  value, null);
-                            }                            
-                        }                                                                                                                       
+                            else
+                            {                                
+                                var col = appColumns.FindLast( x => x.Title == key );
+                                if(col == null){
+                                    throw new Exception("invalid column " + key);
+                                }
+                                PropertyInfo ap1 = appDataType.GetProperty(col.AppDataFiled);
+                                if(  col.Type == AppColumnType.Float ){
+                                    ap1.SetValue (appData,  float.Parse(value), null);
+                                }
+                                else if( col.Type == AppColumnType.LongNumber ){
+                                    ap1.SetValue (appData,  Int64.Parse(value), null);
+                                }
+                                else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
+                                    ap1.SetValue (appData,  Int32.Parse(value), null);
+                                }
+                                else if( col.Type == AppColumnType.Attachment ){
+                                    if(!string.IsNullOrEmpty(value)){
+                                        List<AttachmentJson> att = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
+                                        foreach( var a in att){
+                                            a.AppDataColumn = col.Id;
+                                        }
+                                        attachments.AddRange(att);   
+                                    }                                                             
+                                }
+                                else{
+                                    ap1.SetValue (appData,  value, null);
+                                }                            
+                            }                                                                                                                       
+                        }
                     }
                     appDataInPut = jObject.ToObject<AppData>();
                 }
                 catch(Exception ex){
                     throw new Exception("invalid Parm" + ex.Message );
                 }
+                
+                //Check all required columns added
+                if ( reqCol.Any(v => v.Value == 1))
+                {                           
+                     throw new Exception("Values for following fields are required : " 
+                        + string.Join(", ", reqCol.Where(v => v.Value == 1).Select(x => x.Key).ToArray()) );                        
+                }
+               
 
                 #endregion parse data input
 

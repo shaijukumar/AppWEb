@@ -28,6 +28,7 @@ namespace Domain
 		public const string DateTime = "5";
 		public const string Config = "6";
 		public const string Attachment = "7";
+		public const string LongNumber = "8";
 	}
 
 	 public class AppAttachmentConfig

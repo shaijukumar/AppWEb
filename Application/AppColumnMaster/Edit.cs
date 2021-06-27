@@ -59,17 +59,20 @@ namespace Application._AppColumnMaster
 
             public async Task<AppColumnMasterDto> Handle(Command request, CancellationToken cancellationToken)
             {
-                //var test = request.test;
-
                 var appColumnMaster = await _context.AppColumnMasters
                     .FindAsync(request.Id);
                 if (appColumnMaster == null)
                     throw new RestException(HttpStatusCode.NotFound, new { AppColumnMaster = "Not found" });
 
+                if( request.Type != appColumnMaster.Type)
+                {
+                    appColumnMaster.AppDataFiled = await Create.GetNewColText( _context, request.Type, request.TableID);
+                }
+
 				appColumnMaster.TableID  = request.TableID; // ?? appColumnMaster.TableID;
 				appColumnMaster.Title  = request.Title ?? appColumnMaster.Title;
 				appColumnMaster.Type  = request.Type ?? appColumnMaster.Type;
-				appColumnMaster.UserAccess  = request.UserAccess ?? appColumnMaster.UserAccess;
+				appColumnMaster.UserAccess  = request.UserAccess ?? appColumnMaster.UserAccess; 
 
                 appColumnMaster.ConfigId  = request.ConfigId; 
                 appColumnMaster.AttachmentConfig  = request.AttachmentConfig; 
@@ -81,7 +84,6 @@ namespace Application._AppColumnMaster
 					var toReturn = _mapper.Map<AppColumnMaster, AppColumnMasterDto>(appColumnMaster);
 					return toReturn;
 				}
-
 
                 throw new Exception("Problem saving changes");
             }

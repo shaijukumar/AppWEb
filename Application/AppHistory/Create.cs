@@ -19,7 +19,7 @@ namespace Application._AppHistory
 		public string Action { get; set; }
 		public int FromStage { get; set; }
 		public int ToStage { get; set; }
-		public int ActionBy { get; set; }
+		public string ActionBy { get; set; }
 		public DateTime DateTime { get; set; }
 		public string Comment { get; set; }
 		public string Details1 { get; set; }

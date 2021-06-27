@@ -56,11 +56,11 @@ namespace Domain
         public float Float3 { get; set; }
         public float Float4 { get; set; }
         public float Float5 { get; set; }
-        public float Float6 { get; set; }
-        public float Float7 { get; set; }
-        public float Float8 { get; set; }
-        public float Float9 { get; set; }
-        public float Float10 { get; set; }
+        public long Long1 { get; set; }
+        public long Long2 { get; set; }
+        public long Long3 { get; set; }
+        public long Long4 { get; set; }
+        public long Long5 { get; set; }
         public bool Bool1 { get; set; }
         public bool Bool2 { get; set; }
         public bool Bool3 { get; set; }

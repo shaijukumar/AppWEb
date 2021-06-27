@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, LinearProgress } from '@material-ui/core';
+import { Button, ButtonGroup, Container, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,  } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -25,8 +25,8 @@ const AppApiEdit: React.FC = () => {
   const [item, setItem] = useState(new Customer());
   const [loading, setLoading] = useState(true);
   const [attachFileList, setFileList] =useState<Attachment[]>([]);
-  //const [fileDetails, setFileDetails] = useState<AttachmentDetails[]>([]);
-  
+  const [ActionComment, SetActionComment] = useState("");
+   
   useEffect(() => {
     //debugger;     
     AppStatusListStore.getList();
@@ -56,7 +56,7 @@ const AppApiEdit: React.FC = () => {
       formData.append('Parm1',  id );
 
       AppApiStore.ExecuteAction(formData).then( (res) => {      
-        debugger;
+        //debugger;
         if((res as any).errors){          
           setError((res as any).errors.Error);         
           return;
@@ -126,12 +126,14 @@ const AppApiEdit: React.FC = () => {
     formData.append('Parm1', JSON.stringify(values) );
     formData.append('ItemId',  values.Id );
 
+    formData.append('Parm2',  ActionComment );
+
     act.Parm1 = JSON.stringify(values );
     act.ItemId = values.Id; 
 //return;
 
     AppApiStore.ExecuteAction(formData).then( (res) => {      
-      debugger;
+      //debugger;
 
       if((res as any).errors){
         setError((res as any).errors.Error);
@@ -156,7 +158,7 @@ const AppApiEdit: React.FC = () => {
   }
 
   const onFileChange = (event:any) => { 
-    debugger;
+    //debugger;
     
     for(var i=0;i<event.target.files.length;i++){
 
@@ -202,7 +204,7 @@ const AppApiEdit: React.FC = () => {
   
   return (
     
-    <Container component="main" maxWidth="xs">        
+    <Container component="main" maxWidth="lg">        
       {error && <div  style={{ color:'red' , fontWeight:'bold', padding:5 , border: '1px solid green', margin:10 }} >{error}</div>}     
     
       {/* <a href="#" onClick={ () => { download(65, "")} } >Test download</a>  */}
@@ -231,8 +233,102 @@ const AppApiEdit: React.FC = () => {
               required={true}                                
               label="CIF"                                                                     
             />
+            {item.StatusId == 4 && 
+            <MyCustomTxt   
+              name="ApprovalComment"                         
+              type="text"                
+              required={item.StatusId == 4 ? true : false}                                
+              label="Approval Comment"                                                                     
+            />
+            }
+            {item.StatusId != 4 && 
+              <div>Approval Comment : {item.ApprovalComment} </div>
+            }
 
-            <table >
+            ActionComment: {ActionComment}
+            
+             <TextField 
+              id="ActionComment"
+              value={ActionComment} 
+              placeholder="ActionComment"            
+              type="text"                                     
+              variant="outlined"
+              margin="normal"                                        
+              fullWidth   
+              label="Action Comment"  
+              multiline={false}
+              onChange={ (event) => { 
+                debugger;
+                SetActionComment(event.target.value);
+              } }  
+             />
+
+            
+
+  <TableContainer component={Paper}>
+    <Table aria-label="simple table">
+      <TableHead>
+        <TableRow>       
+          <TableCell align="left">File Name</TableCell>
+          <TableCell align="left">Comment</TableCell>     
+          <TableCell align="left"></TableCell>   
+        </TableRow>      
+      </TableHead>
+      <TableBody>
+      { attachFileList && attachFileList.map( (rr, index) => (
+          <TableRow>       
+            <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
+            <TableCell align="left">
+              <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
+            </TableCell>     
+            <TableCell align="left"><a href="#">Delete</a></TableCell>      
+          </TableRow>
+          ))
+      } 
+      <TableRow>             
+        <TableCell align="left" colSpan={3}><input type="file" multiple={false} onChange={onFileChange} /></TableCell>  
+      </TableRow>      
+      </TableBody>
+    </Table>
+  </TableContainer>
+
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>   
+              <TableCell align="left">Date Time</TableCell>     
+                <TableCell align="left">Action By</TableCell>
+                <TableCell align="left">Action</TableCell>
+                <TableCell align="left">From Status</TableCell>     
+                <TableCell align="left">To Status</TableCell> 
+                <TableCell align="left">Comment</TableCell>
+              </TableRow>      
+            </TableHead>
+            <TableBody>
+            { item.AppHistory.map( (hist, index) => (
+                <TableRow> 
+                  <TableCell align="left">{hist.DateTime}</TableCell>
+                  <TableCell align="left">{hist.ActionBy}</TableCell>
+                  <TableCell align="left">{hist.FromStage}</TableCell>     
+                  <TableCell align="left">{hist.ToStage}</TableCell> 
+                  <TableCell align="left">{hist.Comment}</TableCell>      
+                  {/* <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
+                  <TableCell align="left">
+                    <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
+                  </TableCell>     
+                  <TableCell align="left"><a href="#">Delete</a></TableCell>       */}
+                </TableRow>
+                ))
+            }      
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+  
+
+
+
+            {/* <table >
               <tr>
                 <td>File Name</td>
                 <td>Prop1</td>
@@ -262,7 +358,7 @@ const AppApiEdit: React.FC = () => {
               </td>
             </tr>
 
-            </table>
+            </table> */}
 
             {/* <input type="file" multiple={true} onChange={onFileChange} />
 
@@ -301,15 +397,16 @@ const AppApiEdit: React.FC = () => {
                     }}
                   >
                     Delete
-                  </Button>
+                  </Button> 
                 } */}
                 <Button onClick={ () => { history.push('/AppApilist');  }}>Back</Button>          
               </ButtonGroup>
 
           </Form>
         </Formik>
-    
-   
+
+        
+       
     </Container>
   );
 };

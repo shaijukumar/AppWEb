@@ -10,11 +10,75 @@ using Domain;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Application.Errors;
+using System.Net;
 
 namespace Application._AppColumnMaster
-{
+{    
     public class Create
     {
+        public static async Task<string> GetNewColText (DataContext _context, string RequestType, int TableID)
+            {
+            string newColText = string.Empty;
+
+            int colCount = 0;
+            string colText = string.Empty;                
+            switch(RequestType){
+                case "1"://Txt
+                    colCount = 25;
+                    colText = "Txt";
+                    break; 
+                case "2"://Num
+                    colCount = 10;
+                    colText = "Num";
+                    break;
+                case "3"://Float
+                    colCount = 5;
+                    colText = "Float";
+                    break;
+                case "4"://Bool
+                    colCount = 10;
+                    colText = "Bool";
+                    break;
+                case "5": //DateTime
+                    colCount =15;
+                    colText = "DateTime";
+                    break;
+                case "6": //Config
+                    colCount =10;
+                    colText = "Config";
+                    break;
+                case "7": //Attachment
+                    colCount =5;
+                    colText = "Attachment";
+                    break;
+                case "8": //LongNumber
+                    colCount =5;
+                    colText = "Long";
+                    break;
+            }
+
+            //Get all columns used
+            var colList = await _context.AppColumnMasters
+                .Where(x => x.TableID == TableID && x.Type == RequestType ).ToListAsync();
+
+            //get new column                
+            for(int ci = 1;ci<=colCount;ci++){
+                var col = colList.Find( x => x.AppDataFiled == colText + ci.ToString() );
+                if(col == null){
+                    newColText = colText + ci.ToString();
+                    break;
+                }
+            }
+
+            if( string.IsNullOrEmpty(newColText) ){
+                throw new RestException(HttpStatusCode.OK, new { Error = "Column limit exceed of type "  + colText });
+                //throw new Exception("Column limit exceed of type " + colText);
+            }
+
+            return newColText;
+        }
+
         public class Command : IRequest<AppColumnMasterDto>
         {
 
@@ -51,66 +115,21 @@ namespace Application._AppColumnMaster
 
             }
 
+             
+
             public async Task<AppColumnMasterDto> Handle(Command request, CancellationToken cancellationToken)
             {                       
-                int colCount = 0;
-                string colText = string.Empty;                
-                switch(request.Type){
-                    case "1"://Txt
-                        colCount = 25;
-                        colText = "Txt";
-                        break; 
-                    case "2"://Num
-                        colCount = 10;
-                        colText = "Num";
-                        break;
-                    case "3"://Float
-                        colCount = 10;
-                        colText = "Float";
-                        break;
-                    case "4"://Bool
-                        colCount = 10;
-                        colText = "Bool";
-                        break;
-                    case "5": //DateTime
-                        colCount =15;
-                        colText = "DateTime";
-                        break;
-                    case "6": //Config
-                        colCount =10;
-                        colText = "Config";
-                        break;
-                    case "7": //DateTime
-                        colCount =5;
-                        colText = "Attachment";
-                        break;
-                }
+                                
+                string newColText = await GetNewColText ( _context, request.Type, request.TableID);
 
-                //Get all columns used
-                var colList = await _context.AppColumnMasters
-                    .Where(x => x.TableID == request.TableID && x.Type == request.Type ).ToListAsync();
-
-                //get new column
-                string newColText = string.Empty;
-                for(int ci = 1;ci<=colCount;ci++){
-                    var col = colList.Find( x => x.AppDataFiled == colText + ci.ToString() );
-                    if(col == null){
-                        newColText = colText + ci.ToString();
-                        break;
-                    }
-                }
                 
-                if( string.IsNullOrEmpty(newColText) ){
-                    throw new Exception("Column limit exceed of type " + colText);
-                }
-
                 var appColumnMaster = new AppColumnMaster
                 {
 					TableID  = request.TableID,
 					Title  = request.Title,
 					Type  = request.Type,
 					UserAccess  = request.UserAccess,
-                    AppDataFiled = newColText,
+                    AppDataFiled = newColText, 
                     ConfigId  = request.ConfigId,
                     AttachmentConfig = request.AttachmentConfig                 
                 };
@@ -125,7 +144,7 @@ namespace Application._AppColumnMaster
                 }                
 
                 throw new Exception("Problem saving changes");
-}
+            }
         }
     }
 }

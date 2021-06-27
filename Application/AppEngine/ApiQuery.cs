@@ -23,27 +23,13 @@ namespace Application.AppEngine
         {
             List<object> tableData = new List<object>();
             var row = new Dictionary<string, object>();
-           # region olcode
-            //    if(request.ReturnFlow.ToLower() == "create"){
-                
-            //         var appActions = await _context.AppActions
-            //             .Where(x => x.FlowId == request.ActionId && x.InitStatus == true ).ToListAsync();
-            //         row.Add("FlowActionList", appActions );   
-
-            //         tableData.Add(row);
-
-            //         Dictionary<string, List<object>> result1 = new Dictionary<string, List<object> >();
-
-            //         result1.Add("Result" + (result1.Count+1).ToString() , tableData );                                   
-
-            //         return result1; //JsonConvert.SerializeObject(result);
-            //     }
-
-            # endregion olcode
-
+          
             #region init variables
 
-            string SqlSelct = " * ";              
+            string SqlSelct = " * ";    
+            bool retAttach = false;
+            bool retHist = false;
+
             string SqlWhere = string.Empty;
 
             #endregion init variables
@@ -73,11 +59,35 @@ namespace Application.AppEngine
 
                 #endregion Load XML
 
+                try
+                {
+                    XmlNode selectNode = xmlDoc.SelectSingleNode("/ActionList/Select");
+
+                    try{
+                        if (selectNode.Attributes["history"] != null && selectNode.Attributes["history"].Value == "true" )
+                        {
+                            retAttach = true;
+                        }
+                    }catch{ }
+
+                    try{
+                        if (selectNode.Attributes["attachment"] != null && selectNode.Attributes["attachment"].Value == "true")
+                        {
+                            retHist = true;
+                        }
+                    }catch{ }
+                }
+                catch{ }
+               
+
                 //  ExecuteAction   
                 XmlNodeList qryNode = xmlDoc.GetElementsByTagName("Where");
                 SqlWhere = GetSqlFromAction(qryNode.Item(0).FirstChild, colList, request);          
             
-            }    
+            }
+
+            
+
 
             #endregion Parse Action 
              
@@ -125,16 +135,14 @@ namespace Application.AppEngine
                     }
                 } 
 
-                # region oldcode 
-                // if(request.ReturnFlow.ToLower() == "update"){
-                //     var appActions = await _context.AppActions
-                //         .Where(x => x.FlowId == request.ActionId && x.FromStatusId == dataRow.StatusId ).ToListAsync();
-                //         // x.FromStatusList.FirstOrDefault( s => s.Id ==  appData.StatusId ).Id == appData.StatusId 
-
-                //     row.Add("FlowActionList", appActions );   
-                // }
-                # endregion oldcode 
-
+                if(retHist){
+                    var appAttach = await _context.AppHistorys
+                        .Where(x => x.AppDataId ==  dataRow.Id ).ToListAsync(); 
+                    if(appAttach != null){
+                       row.Add("AppHistory", appAttach);
+                    }
+                }
+               
                 tableData.Add(row);
             }
 

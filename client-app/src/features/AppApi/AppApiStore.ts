@@ -100,7 +100,7 @@ export default class AppApiStoreImpl {
     
     this.loading = true;
     try {        
-      debugger;
+      //debugger;
       let itm = new ApiResult();
       itm = await DBFun.Execute(action);  
       this.apiResult = itm;

@@ -48,8 +48,26 @@ namespace Application.AppEngine
                            result = await AppApiDataAction.Execute( "InPutParm", appAction, appData, actionNode, _context, request, currentUserId );
                            udateStatus = false;
                         }
+                        else if( actionNode.Name == "AddHistory")
+                        {
+                            string ActParm = AppParm.GetAttributeValue( actionNode, "Action", true ) ;
+                            string CmdParm = AppParm.GetAttributeValue( actionNode, "CommentParm", true ) ;
+                            string CmdVal  = AppParm.GetRequestParmValue( request, CmdParm);
 
-                        if( actionNode.Name == "DeleteItem")
+                             var appHistory = new AppHistory{                                
+                                AppDataId = appData.Id,
+                                Action  = ActParm,
+                                FromStage  = appData.StatusId,
+                                ToStage  = appAction.ToStatusId,
+                                ActionBy  = currentUserId,
+                                DateTime  = DateTime.Now,
+                                Comment = CmdVal
+                             };                             
+                            _context.AppHistorys.Add(appHistory);
+                            var success = await _context.SaveChangesAsync() > 0;
+
+                        }
+                        else if( actionNode.Name == "DeleteItem")
                         {
                            result = await AppApiDelteAction.Execute( appAction, appData, actionNode, _context, request );
                            udateStatus = false;
