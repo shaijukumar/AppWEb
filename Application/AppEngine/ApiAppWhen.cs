@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using AppAction;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -36,7 +37,7 @@ namespace Application.AppEngine
                  return true;
              }             
          }
-
+ 
          public static async  Task<bool> ExecuteWhen(XmlNode whenNode, DataContext _context, string CurrentUserId)
          {
             bool result = false;           
@@ -49,26 +50,30 @@ namespace Application.AppEngine
                 bool res2 = await ExecuteWhen(whenNode.ChildNodes[1], _context, CurrentUserId);
                 return res;
             }
-            else if (itemName == "datacomarison")
-            {
-                bool res = false;
-
-                return res;
+            else{
+               return await WhenActions.ExecuteWhenAction(whenNode, _context, CurrentUserId);
             }
-            else if (itemName == "userroles")
-            {
-                # region userroles
+            
+            // if (itemName == "datacomarison")
+            // {
+            //     bool res = false;
 
-                int role = int.Parse(whenNode.InnerText) ;
+            //     return res;
+            // }
+            // else if (itemName == "userroles")
+            // {
+            //     # region userroles
 
-                var res = await _context.AppUserRoles
-                    .Where( x => x.UserId == CurrentUserId && x.AppUserRoleMasterId ==  role ).CountAsync();
+            //     int role = int.Parse(whenNode.InnerText) ;
 
-                return await _context.AppUserRoles
-                    .Where( x => x.UserId == CurrentUserId && x.AppUserRoleMasterId ==  role ).CountAsync() > 0;                    
+            //     var res = await _context.AppUserRoles
+            //         .Where( x => x.UserId == CurrentUserId && x.AppUserRoleMasterId ==  role ).CountAsync();
 
-                # endregion userroles
-            }
+            //     return await _context.AppUserRoles
+            //         .Where( x => x.UserId == CurrentUserId && x.AppUserRoleMasterId ==  role ).CountAsync() > 0;                    
+
+            //     # endregion userroles
+            // }
 
              return result;
 
