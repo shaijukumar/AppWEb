@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Persistence;
 
-namespace AppAction.When
+namespace AppWebCustom.When
 {
     public class datacomarison
     {
@@ -13,7 +13,7 @@ namespace AppAction.When
                                                              
             try{
                
-                await Task.Delay(3000);
+                await Task.Delay(100);
             }
             catch(Exception ex){
                  throw new Exception( $" datacomarison {ex.Message }" );

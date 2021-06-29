@@ -46,7 +46,7 @@ const AppApiList: React.FC = () => {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  {/* <TableCell align="left">ID</TableCell>                   */}
+                  <TableCell align="left">ID</TableCell>                  
                   <TableCell align="left">CustomerName</TableCell>
                   <TableCell align="left">CIF</TableCell>
                   <TableCell align="left">Status</TableCell>

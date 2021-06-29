@@ -6,12 +6,12 @@ using Application._AppApi;
 using Domain;
 using Newtonsoft.Json.Linq;
 using Persistence;
-
+using AppWebCustom;
 namespace Application.AppEngine
 {
     public class AppApiActions
     { 
-        public static async Task<Dictionary<string, List<object>>> ExecuteAction(AppAction appAction, AppData appData, DataContext _context, TakeAction.Command request, string currentUserId  )
+        public static async Task<Dictionary<string, List<object>>> ExecuteAction(AppAction appAction, AppData appData, DataContext _context, ActionCommand request, string currentUserId  )
         {            
             //AppData appData = new AppData(); 
             var res = new  AppApiDto();
@@ -39,46 +39,51 @@ namespace Application.AppEngine
                 bool udateStatus = true;
                 XmlNodeList actionListNode = xmlDoc.GetElementsByTagName("ActionList");
                 if(actionListNode.Count > 0)
-                {
+                { 
                     //Foreach actions in ActionList
                     foreach (XmlNode actionNode in actionListNode.Item(0).ChildNodes)
                     {
-                        if( actionNode.Name == "AppData")
-                        {
-                           result = await AppApiDataAction.Execute( "InPutParm", appAction, appData, actionNode, _context, request, currentUserId );
-                           udateStatus = false;
-                        }
-                        else if( actionNode.Name == "AddHistory")
-                        {
-                            string ActParm = AppParm.GetAttributeValue( actionNode, "Action", true ) ;
-                            string CmdParm = AppParm.GetAttributeValue( actionNode, "CommentParm", false ) ;
-                            string CmdVal  = AppParm.GetRequestParmValue( request, CmdParm, false);
+                        var r = await CustomActions.Execute(appAction, appData, actionNode, _context, request, currentUserId );
 
-                             var appHistory = new AppHistory{                                
-                                AppDataId = appData.Id,
-                                Action  = ActParm,
-                                FromStage  = appData.StatusId,
-                                ToStage  = appAction.ToStatusId,
-                                ActionBy  = currentUserId,
-                                DateTime  = DateTime.Now,
-                                Comment = CmdVal
-                             };                             
-                            _context.AppHistorys.Add(appHistory);
-                            var success = await _context.SaveChangesAsync() > 0;
+                        // if( actionNode.Name == "AppData")
+                        // {
+                        //    result = await AppApiDataAction.Execute( "InPutParm", appAction, appData, actionNode, _context, request, currentUserId );
+                        //    udateStatus = false;
+                        // }
+                        // else 
+                        
+                        // if( actionNode.Name == "AddHistory")
+                        // {
+                        //     string ActParm = AppParm.GetAttributeValue( actionNode, "Action", true ) ;
+                        //     string CmdParm = AppParm.GetAttributeValue( actionNode, "CommentParm", false ) ;
+                        //     string CmdVal  = AppParm.GetRequestParmValue( request, CmdParm, false);
 
-                        }
-                        else if( actionNode.Name == "DeleteItem")
-                        {
-                           result = await AppApiDelteAction.Execute( appAction, appData, actionNode, _context, request );
-                           udateStatus = false;
-                        }
+                        //      var appHistory = new AppHistory{                                
+                        //         AppDataId = appData.Id,
+                        //         Action  = ActParm,
+                        //         FromStage  = appData.StatusId,
+                        //         ToStage  = appAction.ToStatusId,
+                        //         ActionBy  = currentUserId,
+                        //         DateTime  = DateTime.Now,
+                        //         Comment = CmdVal
+                        //      };                             
+                        //     _context.AppHistorys.Add(appHistory);
+                        //     var success = await _context.SaveChangesAsync() > 0;
+
+                        // }
+                        // else
+                        //  if( actionNode.Name == "DeleteItem")
+                        // {
+                        //    result = await AppApiDelteAction.Execute( appAction, appData, actionNode, _context, request );
+                        //    udateStatus = false;
+                        // }
                     }
                 }
 
                 //Update date if no data, only status change
-                if(udateStatus){
-                    result = await AppApiDataAction.Execute( "updateStatus", appAction, appData, null, _context, request, currentUserId );
-                }
+                // if(udateStatus){
+                //     result = await AppApiDataAction.Execute( "updateStatus", appAction, appData, null, _context, request, currentUserId );
+                // }
             } 
 
             #endregion Parse Action 

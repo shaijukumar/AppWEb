@@ -20,29 +20,30 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using AppWebCustom;
 
 namespace Application._AppApi
 { 
     public class TakeAction
     {
-        public class Command : IRequest<Dictionary<string, List<object>>>
-        {
-		    public int ActionId { get; set; }
-            public int ItemId { get; set; }  
-            public string RequestType { get; set; }                          
-            public string ReturnFlow { get; set; }                    
-            public string Parm1 { get; set; }
-            public string Parm2 { get; set; }
-            public string Parm3 { get; set; }
-            public string Parm4 { get; set; }
-            public string Parm5 { get; set; }
-            public string Parm6 { get; set; }            
-            public string Parm7 { get; set; }
-            public string Parm8 { get; set; }
-            public string Parm9 { get; set; }
-            public string Parm10 { get; set; }        
-            public ICollection<IFormFile> FileList { get; set; }         
-        }
+        // public class Command : IRequest<Dictionary<string, List<object>>>
+        // {
+		//     public int ActionId { get; set; }
+        //     public int ItemId { get; set; }  
+        //     public string RequestType { get; set; }                          
+        //     public string ReturnFlow { get; set; }                    
+        //     public string Parm1 { get; set; }
+        //     public string Parm2 { get; set; }
+        //     public string Parm3 { get; set; }
+        //     public string Parm4 { get; set; }
+        //     public string Parm5 { get; set; }
+        //     public string Parm6 { get; set; }            
+        //     public string Parm7 { get; set; }
+        //     public string Parm8 { get; set; }
+        //     public string Parm9 { get; set; }
+        //     public string Parm10 { get; set; }        
+        //     public ICollection<IFormFile> FileList { get; set; }         
+        // }
 
         public class ApiAttachment
         {
@@ -63,7 +64,7 @@ namespace Application._AppApi
            
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        public class CommandValidator : AbstractValidator<ActionCommand>
         {
             public CommandValidator()
             {
@@ -71,7 +72,7 @@ namespace Application._AppApi
             }
         }
 
-        public class Handler : IRequestHandler<Command, Dictionary<string, List<object>>>
+        public class Handler : IRequestHandler<ActionCommand, Dictionary<string, List<object>>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -84,7 +85,7 @@ namespace Application._AppApi
 
             }
 
-            public async Task<Dictionary<string, List<object>>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Dictionary<string, List<object>>> Handle(ActionCommand request, CancellationToken cancellationToken)
             {
                 # region get apiDetails and check security
 

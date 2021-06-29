@@ -40,9 +40,7 @@ namespace Application._AppAction
                     appAction.WhenXml = await XmlUpdate.UpdateXml(appAction.WhenXml, _context, false );
                     appAction.ActionXml = await XmlUpdate.UpdateXml(appAction.ActionXml, _context, false );
                 }
-                catch(Exception ex){
-
-                }
+                catch{}
 
                 var toReturn = _mapper.Map <AppAction, AppActionDto>(appAction); 
 

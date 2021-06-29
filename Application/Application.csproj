@@ -2,7 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
-    <ProjectReference Include="..\AppAction\AppAction.csproj" />
+    <ProjectReference Include="..\AppWebCustom\AppWebCustom.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />

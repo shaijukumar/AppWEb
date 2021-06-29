@@ -65,9 +65,7 @@ namespace Application._AppAction
                     request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );
                     request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, true );
                 }
-                catch(Exception ex){
-
-                }
+                catch{}
 
                 var appAction = await _context.AppActions
                     .FindAsync(request.Id);

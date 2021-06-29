@@ -5,6 +5,7 @@ using Application._AppApi;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AppWebCustom;
 
 namespace API.Controllers
 {
@@ -26,13 +27,13 @@ namespace API.Controllers
               
 
         [HttpPost("TakeAction")]
-		public async Task<Dictionary<string, List<object>>> TakeAction([FromForm]TakeAction.Command command)
+		public async Task<Dictionary<string, List<object>>> TakeAction([FromForm]ActionCommand command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPost("Query")]
-		public async Task<Dictionary<string, List<object>>> Query(TakeAction.Command command)
+		public async Task<Dictionary<string, List<object>>> Query(ActionCommand command)
         {
             return await Mediator.Send(command);
         }

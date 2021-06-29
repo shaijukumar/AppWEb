@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using AppAction;
+using AppWebCustom;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -52,31 +52,7 @@ namespace Application.AppEngine
             }
             else{
                return await WhenActions.ExecuteWhenAction(whenNode, _context, CurrentUserId);
-            }
-            
-            // if (itemName == "datacomarison")
-            // {
-            //     bool res = false;
-
-            //     return res;
-            // }
-            // else if (itemName == "userroles")
-            // {
-            //     # region userroles
-
-            //     int role = int.Parse(whenNode.InnerText) ;
-
-            //     var res = await _context.AppUserRoles
-            //         .Where( x => x.UserId == CurrentUserId && x.AppUserRoleMasterId ==  role ).CountAsync();
-
-            //     return await _context.AppUserRoles
-            //         .Where( x => x.UserId == CurrentUserId && x.AppUserRoleMasterId ==  role ).CountAsync() > 0;                    
-
-            //     # endregion userroles
-            // }
-
-            // return result;
-
+            }                       
          }
 
 

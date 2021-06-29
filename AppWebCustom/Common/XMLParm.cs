@@ -1,11 +1,10 @@
 using System;
 using System.Reflection;
 using System.Xml;
-using Application._AppApi;
-using AppWebCustom;
-namespace Application.AppEngine
+
+namespace AppWebCustom.Common
 {
-    public class AppParm
+    public class XMLParm
     {
         public static string GetRequestParmValue( ActionCommand request, string ParmName, bool ThrowException=true )
         {   

@@ -42,7 +42,8 @@ namespace Application._AppApi
             }
 
             public async Task<AppApiDto> Handle(Command request, CancellationToken cancellationToken)
-            {                                                   
+            {                
+                await Task.Delay(100);                                   
                 // var AppApi = new AppApi
                 // {
 				// 	Title  = request.Title                  

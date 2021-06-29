@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
 
-namespace AppAction.When
+namespace AppWebCustom.When
 {
     public class userroles
     {

@@ -14,12 +14,13 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Persistence;
+using AppWebCustom;
 
 namespace Application.AppEngine
 {
     public class ApiQuery
     {
-        public static async Task<Dictionary<string, List<object>>> ExecuteQuery(AppAction appAction, AppData appData, DataContext _context, TakeAction.Command request )
+        public static async Task<Dictionary<string, List<object>>> ExecuteQuery(AppAction appAction, AppData appData, DataContext _context, ActionCommand request )
         {
             List<object> tableData = new List<object>();
             var row = new Dictionary<string, object>();
@@ -77,18 +78,14 @@ namespace Application.AppEngine
                         }
                     }catch{ }
                 }
-                catch{ }
-               
+                catch{ }               
 
                 //  ExecuteAction   
                 XmlNodeList qryNode = xmlDoc.GetElementsByTagName("Where");
                 SqlWhere = GetSqlFromAction(qryNode.Item(0).FirstChild, colList, request);          
             
             }
-
             
-
-
             #endregion Parse Action 
              
             #region Update where
@@ -157,7 +154,7 @@ namespace Application.AppEngine
         }
     
     
-        public static string GetSqlFromAction(XmlNode item, List<AppColumnMaster> colList, TakeAction.Command request)
+        public static string GetSqlFromAction(XmlNode item, List<AppColumnMaster> colList, ActionCommand request)
         {
             string result = string.Empty;
 
