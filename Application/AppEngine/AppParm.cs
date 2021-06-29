@@ -7,15 +7,23 @@ namespace Application.AppEngine
 {
     public class AppParm
     {
-        public static string GetRequestParmValue( TakeAction.Command request, string ParmName)
+        public static string GetRequestParmValue( TakeAction.Command request, string ParmName, bool ThrowException=true )
         {   
-            string paremVal = string.Empty;            
+            string paremVal = string.Empty;  
+
+            try{          
             Type type = request.GetType();            
             PropertyInfo prop = type.GetProperty(ParmName); 
 
             if(prop != null )
             {
                 paremVal = prop.GetValue(request).ToString();                                                          
+            }
+            }
+            catch(Exception ex){
+                if(ThrowException){
+                    throw new Exception( $"Invalid attribure value {ParmName}. {ex.Message} ");
+                }
             }
 
             return paremVal;

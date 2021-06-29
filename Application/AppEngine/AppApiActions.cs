@@ -51,8 +51,8 @@ namespace Application.AppEngine
                         else if( actionNode.Name == "AddHistory")
                         {
                             string ActParm = AppParm.GetAttributeValue( actionNode, "Action", true ) ;
-                            string CmdParm = AppParm.GetAttributeValue( actionNode, "CommentParm", true ) ;
-                            string CmdVal  = AppParm.GetRequestParmValue( request, CmdParm);
+                            string CmdParm = AppParm.GetAttributeValue( actionNode, "CommentParm", false ) ;
+                            string CmdVal  = AppParm.GetRequestParmValue( request, CmdParm, false);
 
                              var appHistory = new AppHistory{                                
                                 AppDataId = appData.Id,

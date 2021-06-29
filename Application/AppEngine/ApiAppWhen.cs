@@ -40,7 +40,7 @@ namespace Application.AppEngine
  
          public static async  Task<bool> ExecuteWhen(XmlNode whenNode, DataContext _context, string CurrentUserId)
          {
-            bool result = false;           
+            //bool result = false;           
 
             string itemName = whenNode.Name.ToLower();
             if (itemName == "and" || itemName == "or" )
@@ -75,7 +75,7 @@ namespace Application.AppEngine
             //     # endregion userroles
             // }
 
-             return result;
+            // return result;
 
          }
 

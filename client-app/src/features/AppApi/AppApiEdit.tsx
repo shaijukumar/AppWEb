@@ -8,6 +8,7 @@ import { AppApiAction, AttachmentDetails, Customer, Attachment, ICustomer } from
 import { AppApiContext } from './AppApiStore';
 import { observer } from 'mobx-react-lite';
 import { AppStatusListContext } from '../AppStatusList/AppStatusListStore';
+import moment from 'moment';
  
 interface DetailParms {
   id: string;
@@ -26,10 +27,11 @@ const AppApiEdit: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [attachFileList, setFileList] =useState<Attachment[]>([]);
   const [ActionComment, SetActionComment] = useState("");
+  
    
   useEffect(() => {
     //debugger;     
-    AppStatusListStore.getList();
+    AppStatusListStore.getStatusList(1);
 
 
     var IdVal =0;
@@ -307,16 +309,12 @@ const AppApiEdit: React.FC = () => {
             <TableBody>
             { item.AppHistory.map( (hist, index) => (
                 <TableRow> 
-                  <TableCell align="left">{hist.DateTime}</TableCell>
+                  <TableCell align="left"> {  moment(hist.DateTime).format("DD-MMM-YYYY")  }</TableCell>
                   <TableCell align="left">{hist.ActionBy}</TableCell>
-                  <TableCell align="left">{hist.FromStage}</TableCell>     
-                  <TableCell align="left">{hist.ToStage}</TableCell> 
+                  <TableCell align="left">{hist.Action}</TableCell>
+                  <TableCell align="left">{ AppStatusListStore.AppStatusList.find( s => s.Id == hist.FromStage )?.Title } {hist.FromStage}</TableCell>     
+                  <TableCell align="left">{ AppStatusListStore.AppStatusList.find( s => s.Id == hist.ToStage )?.Title } {hist.ToStage}</TableCell> 
                   <TableCell align="left">{hist.Comment}</TableCell>      
-                  {/* <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
-                  <TableCell align="left">
-                    <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
-                  </TableCell>     
-                  <TableCell align="left"><a href="#">Delete</a></TableCell>       */}
                 </TableRow>
                 ))
             }      
