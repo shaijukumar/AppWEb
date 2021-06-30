@@ -10,8 +10,7 @@ import {createBrowserHistory} from 'history';
 
 export const history = createBrowserHistory();
 
-ReactDOM.render(
-  
+ReactDOM.render(  
     <Router history={history} >
       <ScrollToTop>
         <App />

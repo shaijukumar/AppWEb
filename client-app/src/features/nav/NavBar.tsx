@@ -9,7 +9,6 @@ import { UserStoreContext } from '../user/UserStore';
 import { observer } from 'mobx-react-lite';
 
 
-
 const useStyles = makeStyles((theme) => ({
   '@global': {
     ul: {
@@ -85,14 +84,8 @@ const NavBar: React.FC = () => {
               <NavLink to="/" className={classes.toolbarTitle} >              
                   Wayooz           
               </NavLink>       
-
-              { userStore.user.DisplayName && 
-
-            
-
+              { userStore.user.DisplayName &&             
             <nav>
-
-
               <NavLink to="/todolist" className="appBarNavLink">
                 Todo
               </NavLink>
@@ -133,23 +126,12 @@ const NavBar: React.FC = () => {
                     <MenuItem onClick={ () => navigateToPath('/AppConfigList')}>Config List</MenuItem>
 
                     <MenuItem onClick={ () => navigateToPath('/AppFlowList')}>Flow List</MenuItem>
-                    <MenuItem onClick={ () => navigateToPath('/AppActionList')}>Action List</MenuItem>
-                    
-
+                    <MenuItem onClick={ () => navigateToPath('/AppActionList')}>Action List</MenuItem>                    
                   </Menu>  
-              </span>  
- 
-              
-                                                          
-            </nav>
-            
-            
-            
-} 
-          </Toolbar>
-
-          
-
+              </span>                                                                           
+            </nav>                                    
+          } 
+          </Toolbar>          
         </AppBar>
             
     </React.Fragment>

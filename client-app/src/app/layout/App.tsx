@@ -1,10 +1,12 @@
-import { LinearProgress } from '@material-ui/core';
+import { AppBar, Badge, Drawer, IconButton, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { observer } from 'mobx-react-lite';
 import React, { useState, useEffect, useContext } from 'react';
-import { Route } from 'react-router-dom';
-import { Container } from 'semantic-ui-react';
+import { Link, NavLink, Route } from 'react-router-dom';
+import { Container, Divider, List } from 'semantic-ui-react';
 import HomePage from '../../features/home/HomePage';
-import NavBar from '../../features/nav/NavBar';
 import ToDoEdit from '../../features/ToDo/ToDoEdit';
 import ToDoList from '../../features/ToDo/ToDoList';
 import Login from '../../features/user/Login';
@@ -46,9 +48,116 @@ import AppApiList from '../../features/AppApi/AppApiList';
 import AppApiEdit from '../../features/AppApi/AppApiEdit';
 import AppAttachmentList from '../../features/AppAttachment/AppAttachmentList';
 import AppAttachmentEdit from '../../features/AppAttachment/AppAttachmentEdit';
+import clsx from 'clsx';
+import { mainListItems, secondaryListItems } from '../../features/nav/listItems';
+import AppNavigationList from '../../features/AppNavigation/AppNavigationList';
+import AppNavigationEdit from '../../features/AppNavigation/AppNavigationEdit';
 //##FeatureImport##"
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: 36,
+  },
+  menuButtonHidden: {
+    display: 'none',
+  },
+  title: {
+    flexGrow: 1,
+  },
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerPaperClose: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: theme.spacing(7),
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9),
+    },
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: 240,
+  },
+}));
+
+
+
+
 const App = () => {
  
+  // function Copyright() {
+  //   return (
+      
+  //   );
+  // }
+
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+
+
   const userStore = useContext(UserStoreContext);
   const PageTagStore = useContext(PageTagContext);
   const  [loader, setLoader ] = useState(true)
@@ -68,64 +177,122 @@ const App = () => {
   if(loader){
     return <LinearProgress color="secondary"  className="loaderStyle" />     
   }
+
+ 
   return (
        
-    <>            
-      <NavBar/>
-      <Container style={{ marginTop: '7em' }}>
-        <Route exact path='/login' component={Login} />
-        <Route exact path='/userlist' component={UserList} />
-        <Route exact path={['/useredit/:id', '/useredit/']} component={UserEdit} />
+    <div className={classes.root}> 
+      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Dashboard
+          </Typography>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
 
-        <Route exact path='/' component={HomePage} />
-        <Route exact path='/todolist' component={ToDoList} />
-        <Route exact path={['/todoedit/:id', '/todoedit/']} component={ToDoEdit} />
-        <Route path='/PageTagList' component={PageTagList} />
-        <Route path={['/PageTagItemEdit/:id', '/PageTagItemEdit/']} component={PageTagEdit} />
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        }}
+        open={open}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>{mainListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>
+      </Drawer>
 
-        <Route path='/SitePageList' component={SitePageList} />
-        <Route path={['/SitePageItemEdit/:id', '/SitePageItemEdit/']} component={SitePageEdit} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container style={{ marginTop: '0em' }}>
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/userlist' component={UserList} />
+          <Route exact path={['/useredit/:id', '/useredit/']} component={UserEdit} />
 
-				<Route path='/PageCategoryList' component={PageCategoryList} />
-        <Route  path={['/PageCategoryItemEdit/:id', '/PageCategoryItemEdit/']} component={PageCategoryEdit} />        
-        <Route path='/AppUserRoleList' component={AppUserRoleList} />
-        <Route  path={['/AppUserRoleItemEdit/:id', '/AppUserRoleItemEdit/']} component={AppUserRoleEdit} />
-        <Route path='/AppUserAccessList' component={AppUserAccessList} />
-        <Route  path={['/AppUserAccessItemEdit/:id', '/AppUserAccessItemEdit/']} component={AppUserAccessEdit} />
-        <Route path='/AppTableMasterList' component={AppTableMasterList} />
-        <Route  path={['/AppTableMasterItemEdit/:id', '/AppTableMasterItemEdit/']} component={AppTableMasterEdit} />
-        <Route path='/AppColumnMasterList' component={AppColumnMasterList} />
-        <Route  path={['/AppColumnMasterItemEdit/:id', '/AppColumnMasterItemEdit/']} component={AppColumnMasterEdit} />
-        <Route path='/AppUserRoleMasterList' component={AppUserRoleMasterList} />
-        <Route  path={['/AppUserRoleMasterItemEdit/:id', '/AppUserRoleMasterItemEdit/']} component={AppUserRoleMasterEdit} />
-        <Route path='/AppDataList' component={AppDataList} />
-        <Route  path={['/AppDataItemEdit/:id', '/AppDataItemEdit/']} component={AppDataEdit} />
-        <Route path='/AppStatusListList' component={AppStatusListList} />
-        <Route  path={['/AppStatusListItemEdit/:id', '/AppStatusListItemEdit/']} component={AppStatusListEdit} />
-        <Route path='/AppHistoryList' component={AppHistoryList} />
-        <Route  path={['/AppHistoryItemEdit/:id', '/AppHistoryItemEdit/']} component={AppHistoryEdit} />
-        <Route path='/AppConfigTypeList' component={AppConfigTypeList} />
-        <Route  path={['/AppConfigTypeItemEdit/:id', '/AppConfigTypeItemEdit/']} component={AppConfigTypeEdit} />
+          <Route exact path='/' component={HomePage} />
+          <Route exact path='/todolist' component={ToDoList} />
+          <Route exact path={['/todoedit/:id', '/todoedit/']} component={ToDoEdit} />
+          <Route path='/PageTagList' component={PageTagList} />
+          <Route path={['/PageTagItemEdit/:id', '/PageTagItemEdit/']} component={PageTagEdit} />
 
-        <Route path='/AppConfigList' component={AppConfigList} />
-        <Route  path={['/AppConfigItemEdit/:id', '/AppConfigItemEdit/']} component={AppConfigEdit} />
+          <Route path='/SitePageList' component={SitePageList} />
+          <Route path={['/SitePageItemEdit/:id', '/SitePageItemEdit/']} component={SitePageEdit} />
 
-        <Route path='/AppActionList' component={AppActionList} />
-        <Route  path={['/AppActionItemEdit/:id', '/AppActionItemEdit/']} component={AppActionEdit} />
-        <Route path='/AppFlowList' component={AppFlowList} />
-        <Route  path={['/AppFlowItemEdit/:id', '/AppFlowItemEdit/']} component={AppFlowEdit} />
-        <Route path='/AppApiList' component={AppApiList} />
-								<Route  path={['/AppApiItemEdit/:id', '/AppApiItemEdit/']} component={AppApiEdit} />
-								<Route path='/AppAttachmentList' component={AppAttachmentList} />
-								<Route  path={['/AppAttachmentItemEdit/:id', '/AppAttachmentItemEdit/']} component={AppAttachmentEdit} />
-								{/*##Navigation##*/}
-        
-      </Container>
-    </>
+          <Route path='/PageCategoryList' component={PageCategoryList} />
+          <Route  path={['/PageCategoryItemEdit/:id', '/PageCategoryItemEdit/']} component={PageCategoryEdit} />        
+          <Route path='/AppUserRoleList' component={AppUserRoleList} />
+          <Route  path={['/AppUserRoleItemEdit/:id', '/AppUserRoleItemEdit/']} component={AppUserRoleEdit} />
+          <Route path='/AppUserAccessList' component={AppUserAccessList} />
+          <Route  path={['/AppUserAccessItemEdit/:id', '/AppUserAccessItemEdit/']} component={AppUserAccessEdit} />
+          <Route path='/AppTableMasterList' component={AppTableMasterList} />
+          <Route  path={['/AppTableMasterItemEdit/:id', '/AppTableMasterItemEdit/']} component={AppTableMasterEdit} />
+          <Route path='/AppColumnMasterList' component={AppColumnMasterList} />
+          <Route  path={['/AppColumnMasterItemEdit/:id', '/AppColumnMasterItemEdit/']} component={AppColumnMasterEdit} />
+          <Route path='/AppUserRoleMasterList' component={AppUserRoleMasterList} />
+          <Route  path={['/AppUserRoleMasterItemEdit/:id', '/AppUserRoleMasterItemEdit/']} component={AppUserRoleMasterEdit} />
+          <Route path='/AppDataList' component={AppDataList} />
+          <Route  path={['/AppDataItemEdit/:id', '/AppDataItemEdit/']} component={AppDataEdit} />
+          <Route path='/AppStatusListList' component={AppStatusListList} />
+          <Route  path={['/AppStatusListItemEdit/:id', '/AppStatusListItemEdit/']} component={AppStatusListEdit} />
+          <Route path='/AppHistoryList' component={AppHistoryList} />
+          <Route  path={['/AppHistoryItemEdit/:id', '/AppHistoryItemEdit/']} component={AppHistoryEdit} />
+          <Route path='/AppConfigTypeList' component={AppConfigTypeList} />
+          <Route  path={['/AppConfigTypeItemEdit/:id', '/AppConfigTypeItemEdit/']} component={AppConfigTypeEdit} />
+
+          <Route path='/AppConfigList' component={AppConfigList} />
+          <Route  path={['/AppConfigItemEdit/:id', '/AppConfigItemEdit/']} component={AppConfigEdit} />
+
+          <Route path='/AppActionList' component={AppActionList} />
+          <Route  path={['/AppActionItemEdit/:id', '/AppActionItemEdit/']} component={AppActionEdit} />
+          <Route path='/AppFlowList' component={AppFlowList} />
+          <Route  path={['/AppFlowItemEdit/:id', '/AppFlowItemEdit/']} component={AppFlowEdit} />
+          <Route path='/AppApiList' component={AppApiList} />
+          <Route  path={['/AppApiItemEdit/:id', '/AppApiItemEdit/']} component={AppApiEdit} />
+          <Route path='/AppAttachmentList' component={AppAttachmentList} />
+          <Route  path={['/AppAttachmentItemEdit/:id', '/AppAttachmentItemEdit/']} component={AppAttachmentEdit} />
+          <Route path='/AppNavigationList' component={AppNavigationList} />
+          <Route  path={['/AppNavigationItemEdit/:id', '/AppNavigationItemEdit/']} component={AppNavigationEdit} />
+          {/*##Navigation##*/}
+          
+          <div>
+            <Typography variant="body2" color="textSecondary" align="center">              
+              {'Copyright © '}Appweb {new Date().getFullYear()} {'.'}
+            </Typography>
+          </div>
+        </Container>
+      </main>
+      
+                       
+      {/* <NavBar/> */}
+      
+
+      
+    </div>
   );
 }; 
 
 export default observer(App);
+
 
 
 
