@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, LinearProgress, List, ListItem, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Link } from '@material-ui/core';
+import { Button, ButtonGroup, Container, LinearProgress, List, ListItem, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Link, AppBar, Tabs, Tab, Box, Typography } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import AppColumn from '../AppColumnMaster/AppColumn';
 import { AppColumnMaster } from '../AppColumnMaster/AppColumnMaster';
 import { ColumnDataType } from '../../app/common/SystemConstants';
+import { TabPanel } from '@material-ui/lab';
 
 interface DetailParms {
   id: string;
@@ -28,6 +29,14 @@ const AppTableMasterEdit: React.FC = () => {
 
   const [open, setOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(new AppColumnMaster());
+
+  const [tabValue, setTabValue] = useState(0);
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setTabValue(newValue);
+  };
+ 
+ 
+  
   
   
   useEffect(() => {
@@ -95,14 +104,14 @@ const AppTableMasterEdit: React.FC = () => {
                 label="Title"                                                                     
             />
 
-            <MyCustomTxt   
+            {/* <MyCustomTxt   
                 name="UserAccess"                         
                 type="text"                
                 autoFocus={true}
                 required={false}   
                 multiline={true}                             
                 label="User Access"                                                                     
-            />
+            /> */}
                            
               <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                 <Button
@@ -138,11 +147,21 @@ const AppTableMasterEdit: React.FC = () => {
 
         <List>
           <ListItem divider>
-            <h5>Column List</h5>  
+            {/* <h5>Column List</h5>   */}
+              
+            <div>
+              <AppBar position="static">
+                <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
+                  <Tab label="Column List" />
+                  <Tab label="Actions" />                  
+                </Tabs>
+              </AppBar>                           
+          </div>
+      
           </ListItem>
           
-          
-          <ListItem divider>
+          <div hidden={tabValue != 0}>
+          <ListItem divider hidden={true}  >
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
                 <TableHead>
@@ -182,30 +201,19 @@ const AppTableMasterEdit: React.FC = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </ListItem>
-          
-          
-
+          </ListItem>                    
+          </div>
+     
       </List> 
 
-      
       <Dialog onClose={() => {}} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">Column</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <AppColumn initVal={selectedColumn} parentRefresh={RefreshColumns} />
           </DialogContentText>
-        </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={ () => { setOpen(false) }} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={ () => { setOpen(false) }} color="primary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions> */}        
+        </DialogContent>           
       </Dialog>      
-
     </Container>
 
 
