@@ -32,8 +32,9 @@ namespace AppWebCustom.Action
             
         }
 
-        public static async Task<bool>  Execute(AppAction appAction, AppData appData, XmlNode actionNode, DataContext _context, ActionCommand request, string currentUserId)
+        public static async Task<bool>  Execute(ApiDetails ad, XmlNode actionNode, DataContext _context, ActionCommand request, string currentUserId)
         {
+            
             #region init variables
             
                 List<object> actionResult = new List<object>(); 
@@ -55,9 +56,11 @@ namespace AppWebCustom.Action
 
             #region get columns fron db
 
-                var appColumns = await _context.AppColumnMasters
-                    .Where(x => x.TableID == appAction.TableId  ).ToListAsync();
-
+                if(ad.appColumns == null){
+                    ad.appColumns = await _context.AppColumnMasters
+                        .Where(x => x.TableID == ad.appAction.TableId  ).ToListAsync();
+                }
+                 
             #endregion get columns fron db
 
             # region Required/Optional Columns from action
@@ -82,9 +85,9 @@ namespace AppWebCustom.Action
             
             #region set Modified info
                                
-                appData.ModifiedBy = currentUserId;
-                appData.ModifiedOn = DateTime.Now;
-                appData.StatusId = appAction.ToStatusId;
+                ad.appData.ModifiedBy = currentUserId;
+                ad.appData.ModifiedOn = DateTime.Now;
+                ad.appData.StatusId = ad.appAction.ToStatusId;
 
             #endregion set Modified info
 
@@ -92,7 +95,7 @@ namespace AppWebCustom.Action
                 
                 var appDataInPut = new AppData();
 
-                Type appDataType = appData.GetType();
+                Type appDataType = ad.appData.GetType();
                  
                 try
                 {
@@ -103,7 +106,7 @@ namespace AppWebCustom.Action
 
                         if( key == "Id" ){
                             PropertyInfo ap1 = appDataType.GetProperty(key);
-                            ap1.SetValue (appData, Int32.Parse(value), null);                            
+                            ap1.SetValue (ad.appData, Int32.Parse(value), null);                            
                         }
                         else  if(reqCol.ContainsKey(key)) ///add only if rows are in AppData Required/Optional Columns action xml
                         {
@@ -111,23 +114,23 @@ namespace AppWebCustom.Action
                                             
                             if( key == "StatusId"){
                                 PropertyInfo ap1 = appDataType.GetProperty(key);
-                                ap1.SetValue (appData, Int32.Parse(value), null);                            
+                                ap1.SetValue (ad.appData, Int32.Parse(value), null);                            
                             }
                             else
                             {                                
-                                var col = appColumns.FindLast( x => x.Title == key );
+                                var col = ad.appColumns.FindLast( x => x.Title == key );
                                 if(col == null){
                                     throw new Exception("invalid column " + key);
                                 }
                                 PropertyInfo ap1 = appDataType.GetProperty(col.AppDataFiled);
                                 if(  col.Type == AppColumnType.Float ){
-                                    ap1.SetValue (appData,  float.Parse(value), null);
+                                    ap1.SetValue (ad.appData,  float.Parse(value), null);
                                 }
                                 else if( col.Type == AppColumnType.LongNumber ){
-                                    ap1.SetValue (appData,  Int64.Parse(value), null);
+                                    ap1.SetValue (ad.appData,  Int64.Parse(value), null);
                                 }
                                 else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
-                                    ap1.SetValue (appData,  Int32.Parse(value), null);
+                                    ap1.SetValue (ad.appData,  Int32.Parse(value), null);
                                 }
                                 else if( col.Type == AppColumnType.Attachment ){
                                     if(!string.IsNullOrEmpty(value)){
@@ -139,7 +142,7 @@ namespace AppWebCustom.Action
                                     }                                                             
                                 }
                                 else{
-                                    ap1.SetValue (appData,  value, null);
+                                    ap1.SetValue (ad.appData,  value, null);
                                 }                            
                             }                                                                                                                       
                         }
@@ -159,24 +162,22 @@ namespace AppWebCustom.Action
                
 
             #endregion parse data input
-
             
-
             #region Create/Update   
 
-            if( string.IsNullOrEmpty(appData.Id.ToString()) || appData.Id == 0 )
+            if( string.IsNullOrEmpty(ad.appData.Id.ToString()) || ad.appData.Id == 0 )
             {
                 #region Create 
 
-                appData.TableId = appAction.TableId;               
-                appData.CreatedBy = currentUserId;                                               
-                appData.CreatedOn = DateTime.Now;                                    
+                ad.appData.TableId = ad.appAction.TableId;               
+                ad.appData.CreatedBy = currentUserId;                                               
+                ad.appData.CreatedOn = DateTime.Now;                                    
 
-                _context.AppDatas.Add(appData);
+                _context.AppDatas.Add(ad.appData);
                 //var success = await _context.SaveChangesAsync() > 0;
                 await _context.SaveChangesAsync();
                 
-                actionResult.Add(appData);
+                actionResult.Add(ad.appData);
 
                 //result = JsonConvert.SerializeObject(appData);  
 
@@ -187,7 +188,7 @@ namespace AppWebCustom.Action
                 #region  Update
                 
                 var success = await _context.SaveChangesAsync() > 0; 
-                actionResult.Add(appData);
+                actionResult.Add(ad.appData);
                     
                 #endregion Update                                   
             }
@@ -203,7 +204,7 @@ namespace AppWebCustom.Action
                         if(file.FileName == a.FileName){     
 
                             var rootPath = @"C:\Attachments";
-                            var path = Path.Combine( rootPath, appData.TableId.ToString(), appData.Id.ToString(), a.AppDataColumn.ToString());
+                            var path = Path.Combine( rootPath, ad.appData.TableId.ToString(), ad.appData.Id.ToString(), a.AppDataColumn.ToString());
                                                         
                             if(!Directory.Exists(path)){
                                 Directory.CreateDirectory(path);
@@ -218,7 +219,7 @@ namespace AppWebCustom.Action
 
                             var appAttachment = new AppAttachment
                             {
-                                AppDataId  = appData.Id,
+                                AppDataId  = ad.appData.Id,
                                 AppDataColumn = a.AppDataColumn,
                                 FileName  = file.FileName,
                                 Path  = Path.GetRelativePath(rootPath, path),

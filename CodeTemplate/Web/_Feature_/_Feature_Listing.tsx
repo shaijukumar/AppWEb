@@ -4,19 +4,35 @@ import { observer } from 'mobx-react-lite';
 import { _Feature_Context } from './_Feature_Store';
 import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
- 
+import MaterialTable from 'material-table';
+
 const _Feature_List: React.FC = () => {
 
   const _Feature_Store = useContext(_Feature_Context);     
   
     useEffect(() => {       
       _Feature_Store.getList();                  
-    }, [_Feature_Store, _Feature_Store.getList])       
+    }, [_Feature_Store, _Feature_Store.getList])   
+    
+    
+    const TableColumns = [
+      {
+        title: "Id",
+        field: "Id",
+      },
+      {
+        title: "Action",
+        field: "Action",
+        render : (values: I_Feature_) => { return <NavLink to={"/_Feature_ItemEdit/" + values.Id } >{values.Action}</NavLink> }
+        //render : (values: IAppAction) => { return <NavLink to={"/AppNavigationItemEdit/" + values.Id } >{values.Title}</NavLink> }
+        //lookup: { "Resubmit": 'Resubmit', "Approve": 'Approve', "New Request" : "New Request", "Reject" : "Reject"},
+      },      
+    ];
 
     if(_Feature_Store.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
     }
-
+ 
     return (
       <List>
         <ListItem divider>
@@ -27,8 +43,19 @@ const _Feature_List: React.FC = () => {
           <Button onClick={ () => { _Feature_Store.getList(); }}>Refresh</Button>          
         </ButtonGroup>
         </ListItem>
-        
-        <ListItem divider>
+
+        <div className={"tabcontainers1"}>
+          <div className={"tabcontainers2"} >        
+            <MaterialTable                       
+              title="Left Navigation List"
+              data={AppActionStore.itemList}
+              columns={TableColumns}
+              options={{ search: true, paging: true, filtering: true, exportButton: true, pageSize:100 }}            
+            />
+          </div>
+        </div>
+         
+        {/* <ListItem divider>
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
@@ -54,7 +81,7 @@ const _Feature_List: React.FC = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        </ListItem>
+        </ListItem> */}
 
       </List>        
      

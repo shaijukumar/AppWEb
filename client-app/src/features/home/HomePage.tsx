@@ -20,12 +20,13 @@ function HomePage() {
     }, [])
 
     return (
-        <div>
+        <div >
            
-           <TestABCD/>
-
-            <h6>{userStore.user.DisplayName} </h6>
-            <Button
+           
+            <br/><br/>
+            <h6>Welcome {userStore.user.DisplayName} </h6>
+            <br/><br/><br/><br/>
+            {/* <Button
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -36,7 +37,7 @@ function HomePage() {
                 }}               
               >
                 Sign In
-              </Button> 
+              </Button>  */}
 
                          
         </div> 

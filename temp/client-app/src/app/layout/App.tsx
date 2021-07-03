@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from "react"
 import { Fragment } from 'react'
-import { Container } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
-
+import Container from '@material-ui/core/Container';
 import NavBar from "../../features/NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import { Route, withRouter, RouteComponentProps, Switch } from "react-router-dom";

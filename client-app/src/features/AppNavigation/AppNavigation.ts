@@ -4,6 +4,7 @@ export interface IAppNavigation {
 	Path: string
 	Icon: string
 	Access: number
+	Selected: boolean 
 }
 
 export class AppNavigation implements IAppNavigation {
@@ -12,6 +13,7 @@ export class AppNavigation implements IAppNavigation {
 	Path: string = '';
 	Icon: string = '';
 	Access: number = 0;
+	Selected: boolean = false;
   
   constructor(init?: IAppNavigation) {
     Object.assign(this, init);

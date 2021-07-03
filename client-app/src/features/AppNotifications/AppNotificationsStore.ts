@@ -2,25 +2,25 @@
 import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { AppNavigation, IAppNavigation } from "./AppNavigation";
+import { AppNotifications, IAppNotifications } from "./AppNotifications";
 
-const IAppNavigationAPI = "/AppNavigation";
+const IAppNotificationsAPI = "/AppNotifications";
 
 const DBFun = {
-  list: (): Promise<IAppNavigation[]> => agent.requests.get(IAppNavigationAPI),
-  details: (Id: number) => agent.requests.get(`${IAppNavigationAPI}/${Id}`),
-  create: (item: IAppNavigation) => agent.requests.post(IAppNavigationAPI, item),
-  update: (item: IAppNavigation) =>
-    agent.requests.put(`${IAppNavigationAPI}/${item.Id}`, item),
-  delete: (Id: number) => agent.requests.del(`${IAppNavigationAPI}/${Id}`),
+  list: (): Promise<IAppNotifications[]> => agent.requests.get(IAppNotificationsAPI),
+  details: (Id: number) => agent.requests.get(`${IAppNotificationsAPI}/${Id}`),
+  create: (item: IAppNotifications) => agent.requests.post(IAppNotificationsAPI, item),
+  update: (item: IAppNotifications) =>
+    agent.requests.put(`${IAppNotificationsAPI}/${item.Id}`, item),
+  delete: (Id: number) => agent.requests.del(`${IAppNotificationsAPI}/${Id}`),
 };
 
-export default class AppNavigationStoreImpl {
+export default class AppNotificationsStoreImpl {
 
   loading = false;
   updating = false;
-  itemList: IAppNavigation[] = [];
-  item: AppNavigation = new AppNavigation()
+  itemList: IAppNotifications[] = [];
+  item: AppNotifications = new AppNotifications()
 
   constructor() {
     makeObservable(this, {
@@ -32,18 +32,6 @@ export default class AppNavigationStoreImpl {
          loadItem: action,
          editItem: action
     });
-  }
-
-  
-  setSelected = async (path: string) => {     
-    for(var i=0;i<this.itemList.length;i++){
-      if(this.itemList[i].Path == path){
-        this.itemList[i].Selected = true;
-      }
-      else{
-        this.itemList[i].Selected = false;
-      }
-    }
   }
 
   getList = async () => {        
@@ -73,10 +61,10 @@ export default class AppNavigationStoreImpl {
       }
   }
 
- editItem = async (item: IAppNavigation) => {    
+ editItem = async (item: IAppNotifications) => {    
     this.loading = true;
     try {        
-      let itm = new  AppNavigation();
+      let itm = new  AppNotifications();
       if (item.Id) {
         itm = await DBFun.update(item);
       } else {
@@ -108,5 +96,5 @@ export default class AppNavigationStoreImpl {
   };  
 }
 
-export const AppNavigationContext = createContext(new AppNavigationStoreImpl());
+export const AppNotificationsContext = createContext(new AppNotificationsStoreImpl());
 

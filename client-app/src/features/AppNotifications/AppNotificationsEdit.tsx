@@ -4,43 +4,43 @@ import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
-import { _Feature_ } from './_Feature_';
-import { _Feature_Context } from './_Feature_Store';
+import { AppNotifications } from './AppNotifications';
+import { AppNotificationsContext } from './AppNotificationsStore';
 import { observer } from 'mobx-react-lite';
- 
+
 interface DetailParms {
   id: string;
-} 
-const _Feature_Edit: React.FC = () => {
+}
+const AppNotificationsEdit: React.FC = () => {
 
   const { id } = useParams<DetailParms>();
-  const _Feature_Store = useContext(_Feature_Context);
+  const AppNotificationsStore = useContext(AppNotificationsContext);
  
   let history = useHistory();
-  const [item, setItem] = useState(new _Feature_());
+  const [item, setItem] = useState(new AppNotifications());
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
 
-    _Feature_Store.loadItem(Number(id));
+    AppNotificationsStore.loadItem(Number(id));
     if (id) {
-      _Feature_Store.loadItem(Number(id)).then((val) => {
+      AppNotificationsStore.loadItem(Number(id)).then((val) => {
         setItem(val as any);     
         setLoading(false);   
       });
     } else {
-      setItem(new _Feature_()); 
+      setItem(new AppNotifications()); 
       setLoading(false);     
     }
     
-  }, [id, _Feature_Store, _Feature_Store.loadItem]);
+  }, [id, AppNotificationsStore, AppNotificationsStore.loadItem]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);
-    _Feature_Store.editItem(values).then((val) => {
-	  history.push('/_Feature_list');
+    AppNotificationsStore.editItem(values).then((val) => {
+	  history.push('/AppNotificationslist');
       //debugger;
-      //setItem(new _Feature_(val));
+      //setItem(new AppNotifications(val));
       //setLoading(false);
     });
   };
@@ -85,15 +85,15 @@ const _Feature_Edit: React.FC = () => {
                     variant="contained"
                     color="primary"                    
                     onClick={ () => {
-                      _Feature_Store.deleteItem(Number(item.Id)).then( () => {
-                        history.push('/_Feature_list');
+                      AppNotificationsStore.deleteItem(Number(item.Id)).then( () => {
+                        history.push('/AppNotificationslist');
                       })
                     }}
                   >
                     Delete
                   </Button>
                 }
-                <Button onClick={ () => { history.push('/_Feature_list');  }}>Back</Button>          
+                <Button onClick={ () => { history.push('/AppNotificationslist');  }}>Back</Button>          
               </ButtonGroup>
 
           </Form>
@@ -102,4 +102,5 @@ const _Feature_Edit: React.FC = () => {
   );
 };
 
-export default observer(_Feature_Edit);
+export default observer(AppNotificationsEdit);
+

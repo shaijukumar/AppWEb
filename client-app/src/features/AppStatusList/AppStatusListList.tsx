@@ -5,7 +5,6 @@ import { AppStatusListContext } from './AppStatusListStore';
 import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { AppTableMasterContext } from '../AppTableMaster/AppTableMasterStore';
-import { Item } from 'semantic-ui-react';
  
 const AppStatusListList: React.FC = () => {
 

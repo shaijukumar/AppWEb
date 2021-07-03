@@ -25,26 +25,7 @@ using AppWebCustom;
 namespace Application._AppApi
 { 
     public class TakeAction
-    {
-        // public class Command : IRequest<Dictionary<string, List<object>>>
-        // {
-		//     public int ActionId { get; set; }
-        //     public int ItemId { get; set; }  
-        //     public string RequestType { get; set; }                          
-        //     public string ReturnFlow { get; set; }                    
-        //     public string Parm1 { get; set; }
-        //     public string Parm2 { get; set; }
-        //     public string Parm3 { get; set; }
-        //     public string Parm4 { get; set; }
-        //     public string Parm5 { get; set; }
-        //     public string Parm6 { get; set; }            
-        //     public string Parm7 { get; set; }
-        //     public string Parm8 { get; set; }
-        //     public string Parm9 { get; set; }
-        //     public string Parm10 { get; set; }        
-        //     public ICollection<IFormFile> FileList { get; set; }         
-        // }
-
+    {        
         public class ApiAttachment
         {
             public IFormFile File { get; set; }
@@ -55,14 +36,7 @@ namespace Application._AppApi
             public string Prop3 { get; set; }
             public string Prop4 { get; set; }
             public string Prop5 { get; set; } 
-        }
-
-        public class ApiDetails
-        {
-            public AppAction appAction { get; set; }
-            public AppData appData { get; set; }
-           
-        }
+        }        
 
         public class CommandValidator : AbstractValidator<ActionCommand>
         {
@@ -89,14 +63,15 @@ namespace Application._AppApi
             {
                 # region get apiDetails and check security
 
-                ApiDetails apiDetails = new ApiDetails();
+                ApiDetails apiDetails = new ApiDetails(); //request
+
                 try{
-                    apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() ); 
+                    apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() );                     
                 } 
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
                 } 
-
+              
                 # endregion get apiDetails and check security
 
                 
@@ -119,7 +94,7 @@ namespace Application._AppApi
                 else  if( apiDetails.appAction.ActionType == "Action" )
                 {
                     try{
-                        res.Result = await AppApiActions.ExecuteAction( apiDetails.appAction, apiDetails.appData, _context, request, _userAccessor.GetCurrentUsername()  );
+                        res.Result = await AppApiActions.ExecuteAction(apiDetails, _context, request, _userAccessor.GetCurrentUsername()  );
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });

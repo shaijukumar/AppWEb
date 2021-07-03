@@ -8,13 +8,13 @@ const I_Feature_API = "/_Feature_";
 
 const DBFun = {
   list: (): Promise<I_Feature_[]> => agent.requests.get(I_Feature_API),
-  details: (Id: string) => agent.requests.get(`${I_Feature_API}/${Id}`),
+  details: (Id: number) => agent.requests.get(`${I_Feature_API}/${Id}`),
   create: (item: I_Feature_) => agent.requests.post(I_Feature_API, item),
   update: (item: I_Feature_) =>
     agent.requests.put(`${I_Feature_API}/${item.Id}`, item),
-  delete: (Id: string) => agent.requests.del(`${I_Feature_API}/${Id}`),
+  delete: (Id: number) => agent.requests.del(`${I_Feature_API}/${Id}`),
 };
-
+ 
 export default class _Feature_StoreImpl {
 
   loading = false;
@@ -47,7 +47,7 @@ export default class _Feature_StoreImpl {
     }
   }
 
-  loadItem = async (id: string) => {
+  loadItem = async (id: number) => {
     this.loading = true;
     try {
       this.itemList = await DBFun.list(); 
@@ -80,7 +80,7 @@ export default class _Feature_StoreImpl {
     }
   };
 
-  deleteItem = async (id: string) => {
+  deleteItem = async (id: number) => {
     this.updating = true;
     this.loading = true;
     try {

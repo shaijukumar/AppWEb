@@ -18,6 +18,7 @@ namespace Application._AppApi
 {
     public class DownloadAction
     {
+        // public class ActionCommand : IRequest<Dictionary<string, List<object>>>
        public class Command : IRequest<FileContentResult>
         {
 		    public int ActionId { get; set; }
@@ -59,12 +60,11 @@ namespace Application._AppApi
             }
              
             public async Task<FileContentResult> Handle(Command request, CancellationToken cancellationToken)
-            {
-
-                
+            {                
                 # region get apiDetails and check security
 
                     ApiDetails apiDetails = new ApiDetails();
+                    
                     try{
                         apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() ); 
                     } 

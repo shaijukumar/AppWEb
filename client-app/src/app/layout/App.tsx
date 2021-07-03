@@ -1,11 +1,10 @@
-import { AppBar, Badge, Drawer, IconButton, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Badge, Container, Drawer, IconButton, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { observer } from 'mobx-react-lite';
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, NavLink, Route } from 'react-router-dom';
-import { Container, Divider, List } from 'semantic-ui-react';
 import HomePage from '../../features/home/HomePage';
 import ToDoEdit from '../../features/ToDo/ToDoEdit';
 import ToDoList from '../../features/ToDo/ToDoList';
@@ -52,6 +51,9 @@ import clsx from 'clsx';
 import { mainListItems, secondaryListItems } from '../../features/nav/listItems';
 import AppNavigationList from '../../features/AppNavigation/AppNavigationList';
 import AppNavigationEdit from '../../features/AppNavigation/AppNavigationEdit';
+import AppLeftNavBar from '../../features/nav/AppLeftNavBar';
+import AppNotificationsMasterList from '../../features/AppNotificationsMaster/AppNotificationsMasterList';
+import AppNotificationsMasterEdit from '../../features/AppNotificationsMaster/AppNotificationsMasterEdit';
 //##FeatureImport##"
 
 const drawerWidth = 240;
@@ -136,16 +138,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-
 const App = () => {
  
-  // function Copyright() {
-  //   return (
-      
-  //   );
-  // }
-
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -162,8 +156,7 @@ const App = () => {
   const PageTagStore = useContext(PageTagContext);
   const  [loader, setLoader ] = useState(true)
   
-  useEffect(() => {
-     
+  useEffect(() => {     
     userStore.getCurrentUser().then( () => {
       PageTagStore.getList().then( () => {
         setLoader(false);
@@ -178,6 +171,7 @@ const App = () => {
     return <LinearProgress color="secondary"  className="loaderStyle" />     
   }
 
+  
  
   return (
        
@@ -216,10 +210,13 @@ const App = () => {
             <ChevronLeftIcon />
           </IconButton>
         </div>
-        <Divider />
+        {/* <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <List>{secondaryListItems}</List> */}
+
+        <AppLeftNavBar/>
+
       </Drawer>
 
       <main className={classes.content}>
@@ -271,7 +268,9 @@ const App = () => {
           <Route path='/AppAttachmentList' component={AppAttachmentList} />
           <Route  path={['/AppAttachmentItemEdit/:id', '/AppAttachmentItemEdit/']} component={AppAttachmentEdit} />
           <Route path='/AppNavigationList' component={AppNavigationList} />
-          <Route  path={['/AppNavigationItemEdit/:id', '/AppNavigationItemEdit/']} component={AppNavigationEdit} />
+          <Route  path={['/AppNavigationItemEdit/:id', '/AppNavigationItemEdit/']} component={AppNavigationEdit} />          
+          <Route path='/AppNotificationsMasterList' component={AppNotificationsMasterList} />
+          <Route  path={['/AppNotificationsMasterItemEdit/:id', '/AppNotificationsMasterItemEdit/']} component={AppNotificationsMasterEdit} />
           {/*##Navigation##*/}
           
           <div>
@@ -280,18 +279,15 @@ const App = () => {
             </Typography>
           </div>
         </Container>
-      </main>
-      
-                       
-      {/* <NavBar/> */}
-      
-
-      
+      </main>                             
+      {/* <NavBar/> */}            
     </div>
   );
 }; 
 
 export default observer(App);
+
+
 
 
 

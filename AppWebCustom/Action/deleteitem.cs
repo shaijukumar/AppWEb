@@ -9,16 +9,16 @@ namespace AppWebCustom.Action
 {
     public class deleteitem
     {
-        public static async Task<bool>  Execute(AppAction appAction, AppData appData, XmlNode actionNode, DataContext _context, ActionCommand request, string currentUserId)
+        public static async Task<bool> Execute(ApiDetails ad, XmlNode actionNode, DataContext _context, ActionCommand request, string currentUserId)
         {
             try{               
                 string InPutParm = XMLParm.GetAttributeValue( actionNode, "IdParm", true ) ;
                 string IdParm  = XMLParm.GetRequestParmValue( request, InPutParm);
                 
-                if (appData == null)
+                if (ad.appData == null)
                     throw new Exception("AppData Not found for ID " + IdParm);            
 
-                _context.Remove(appData);
+                _context.Remove(ad.appData);
 
                 return await _context.SaveChangesAsync() > 0;
 

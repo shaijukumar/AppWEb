@@ -6,7 +6,7 @@ using Application.Errors;
 using Application.Interfaces;
 using MediatR;
 using Persistence;
-namespace Application._##Class##
+namespace Application._AppNotificationsMaster
 {
     public class Delete
     {
@@ -27,14 +27,14 @@ namespace Application._##Class##
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var ##Object## = await _context.##Class##s
+                var appNotificationsMaster = await _context.AppNotificationsMasters
                     .FindAsync(request.Id);
-                if (##Object## == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { ##Class## = "Not found" });
+                if (appNotificationsMaster == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { AppNotificationsMaster = "Not found" });
 
                 var CurrentUsername = _userAccessor.GetCurrentUsername();
 
-                _context.Remove(##Object##);
+                _context.Remove(appNotificationsMaster);
 				var success = await _context.SaveChangesAsync() > 0;
 				if (success) return Unit.Value;
 

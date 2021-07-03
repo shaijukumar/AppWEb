@@ -1,37 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application._##Class##;
+using Application._AppNotificationsMaster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class ##Class##Controller : BaseController
+    public class AppNotificationsMasterController : BaseController
     {
 
         [HttpGet]
-		public async Task<ActionResult<List<##Class##Dto>>> List()
+		public async Task<ActionResult<List<AppNotificationsMasterDto>>> List()
         {
             return await Mediator.Send(new List.Query());
         }
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<##Class##Dto>> Details(int id)
+		public async Task<ActionResult<AppNotificationsMasterDto>> Details(int id)
         {
             return await Mediator.Send(new Details.Query { Id = id });
         }
 
 
         [HttpPost]
-		public async Task<ActionResult<##Class##Dto>> Create(Create.Command command)
+		public async Task<ActionResult<AppNotificationsMasterDto>> Create(Create.Command command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPut("{id}")]
-		public async Task<ActionResult<##Class##Dto>> Edit(int id, Edit.Command command)
+		public async Task<ActionResult<AppNotificationsMasterDto>> Edit(int id, Edit.Command command)
         {
             command.Id = id;
             return await Mediator.Send(command);

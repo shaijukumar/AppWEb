@@ -5,19 +5,21 @@ import { AppNavigationContext } from './AppNavigationStore';
 import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import MaterialTable from 'material-table';
+import { IAppNavigation } from './AppNavigation';
  
 const AppNavigationList: React.FC = () => {
 
   const AppNavigationStore = useContext(AppNavigationContext);     
   
     useEffect(() => {       
+      AppNavigationStore.setSelected('/AppNavigationlist');
       AppNavigationStore.getList();                  
-    }, [AppNavigationStore, AppNavigationStore.getList])       
+    }, [AppNavigationStore, AppNavigationStore.getList, AppNavigationStore.setSelected])       
 
     if(AppNavigationStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
     }
-
+ 
     const TableColumns = [
       {
         title: "Id",
@@ -26,6 +28,7 @@ const AppNavigationList: React.FC = () => {
       {
         title: "Title",
         field: "Title",
+        render : (values: IAppNavigation) => { return <NavLink to={"/AppNavigationItemEdit/" + values.Id } >{values.Title}</NavLink> }
         //lookup: { "Resubmit": 'Resubmit', "Approve": 'Approve', "New Request" : "New Request", "Reject" : "Reject"},
       },
       {
@@ -61,7 +64,7 @@ const AppNavigationList: React.FC = () => {
         <div className={"tabcontainers1"}>
           <div className={"tabcontainers2"} >        
             <MaterialTable                       
-              title="App History"
+              title="Left Navigation List"
               data={AppNavigationStore.itemList}
               columns={TableColumns}
               options={{ search: true, paging: true, filtering: true, exportButton: true, pageSize:100 }}            

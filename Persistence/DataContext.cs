@@ -33,7 +33,9 @@ namespace Persistence
 		public DbSet<AppFlow> AppFlows { get; set; }
 		public DbSet<AppApi> AppApis { get; set; }
 		public DbSet<AppAttachment> AppAttachments { get; set; }
-		public DbSet<AppNavigation> AppNavigations { get; set; }
+		public DbSet<AppNavigation> AppNavigations { get; set; }		
+		public DbSet<AppNotificationsMaster> AppNotificationsMasters { get; set; }
+        public DbSet<AppNotifications> AppNotificationss { get; set; }
 		//##ModelDbSet##
  
         protected override void OnModelCreating(ModelBuilder builder)
@@ -74,6 +76,8 @@ namespace Persistence
         }
     }
 }
+
+
 
 
 

@@ -8,16 +8,16 @@ using MediatR;
 using Persistence;
 using Domain;
 
-namespace Application._##Class##
+namespace Application._AppNotifications
 {
     public class Details
     {
-        public class Query : IRequest<##Class##Dto>
+        public class Query : IRequest<AppNotificationsDto>
         {
             public int Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, ##Class##Dto>
+        public class Handler : IRequestHandler<Query, AppNotificationsDto>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -27,15 +27,15 @@ namespace Application._##Class##
                 _context = context;
             }
 
-            public async Task<##Class##Dto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<AppNotificationsDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var ##Object## = await _context.##Class##s
+                var appNotifications = await _context.AppNotificationss
                     .FindAsync(request.Id);
 
-                if (##Object## == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { ##Class## = "Not found" });
+                if (appNotifications == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { AppNotifications = "Not found" });
 
-                var toReturn = _mapper.Map <##Class##, ##Class##Dto>(##Object##); 
+                var toReturn = _mapper.Map <AppNotifications, AppNotificationsDto>(appNotifications); 
 
                 return toReturn;
             }
