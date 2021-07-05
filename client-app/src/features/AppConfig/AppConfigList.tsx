@@ -1,19 +1,59 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AppConfigContext } from './AppConfigStore';
 import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
+import { IAppConfig } from './AppConfig';
+import MaterialTable from 'material-table';
+import { IAppConfigType } from '../AppConfigType/AppConfigType';
  
 const AppConfigList: React.FC = () => {
 
   const AppConfigTypeStore = useContext(AppConfigTypeContext);
   const AppConfigStore = useContext(AppConfigContext);  
+  const [types, setTypes] = useState<string[]>([]); 
 
+  const TableColumns = [
+    {
+      title: "Order",
+      field: "Order",          
+      defaultSort: "asc",
+      filtering: false,
+    },
+    {
+      title: "Title",
+      field: "Title",
+      render : (values: IAppConfig) => { return <NavLink to={"/AppConfigItemEdit/" + values.Id } >{values.Title}</NavLink> },
+    },
+    {
+      title: "Type",
+      field: "ConfigTypeId", 
+      render : (values: IAppConfig) => { return AppConfigTypeStore.itemList.find( u => u.Id == values.ConfigTypeId )?.Title },
+      lookup: types, 
+    },
+    {
+      title: "Id",
+      field: "Id", 
+      render : (values: IAppConfig) => { return <DeleteOutlinedIcon onClick={ () => { AppConfigStore.deleteItem(values.Id).then( () => {   AppConfigStore.getList(); })}}  /> },      
+      filtering: false,
+    },
+  ];
+
+   
   
     useEffect(() => {       
-      AppConfigTypeStore.getList();
+      
+      AppConfigTypeStore.getList().then( (res : any) => {
+        res.map( (row:IAppConfigType) => {
+          types[ row.Id  ] =  row.Title;        
+        });
+
+        //var v = res.map( (row:IAppConfigType) => { types[ row.Id  ] =  row.Title; });
+        setTypes(types);
+      });
+
       AppConfigStore.getList();                        
     }, [AppConfigStore, AppConfigStore.getList, AppConfigTypeStore.getList])       
 
@@ -33,33 +73,18 @@ const AppConfigList: React.FC = () => {
         </ListItem>
         
         <ListItem divider>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Order</TableCell>
-                  <TableCell align="left">Title</TableCell>
-                  <TableCell align="left">Type</TableCell>                  
-                  <TableCell align="left">Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {AppConfigStore.itemList.map((row) => (
-                  <TableRow key={row.Id} >
-                    <TableCell align="left">{ row.Order }</TableCell>
-                    <TableCell component="th" scope="row"  >
-                      <NavLink to={"/AppConfigItemEdit/" + row.Id } >{row.Title}</NavLink> 
-                    </TableCell>
-                                             
-                    <TableCell align="left">{ AppConfigTypeStore.itemList.find( u => u.Id == row.Type )?.Title }</TableCell>  
-                    <TableCell align="left" >
-                      <DeleteOutlinedIcon onClick={ () => { AppConfigStore.deleteItem(row.Id).then( () => {   AppConfigStore.getList(); })}}  />
-                    </TableCell>            
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <div className={"tabcontainers1"}>
+            <div className={"tabcontainers2"} >     
+              {TableColumns.length>0     &&   
+              <MaterialTable                    
+                title="Application Configration"
+                data={AppConfigStore.itemList}
+                columns={TableColumns as any}
+                options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:100,  tableLayout: "auto"}}            
+              />
+            }
+            </div>
+          </div>
         </ListItem>
       </List>             
     );

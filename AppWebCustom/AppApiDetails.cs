@@ -16,5 +16,12 @@ public class ApiDetails
     public AppAction appAction { get; set; }
     public AppData appData { get; set; }
     public List<AppColumnMaster> appColumns{ get; set; }
+
+    public ApiDetails(int ActionId , int ItemId, DataContext _context, string CurrentUserId){
+       this.ActionId = ActionId;
+       this.ItemId = ItemId;
+       this._context = _context;
+       this.CurrentUserId = CurrentUserId;
+    }
         
 }

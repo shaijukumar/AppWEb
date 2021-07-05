@@ -5,6 +5,7 @@ import { _Feature_Context } from './_Feature_Store';
 import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import MaterialTable from 'material-table';
+import { _Feature_ } from './_Feature_';
 
 const _Feature_List: React.FC = () => {
 
@@ -23,7 +24,7 @@ const _Feature_List: React.FC = () => {
       {
         title: "Action",
         field: "Action",
-        render : (values: I_Feature_) => { return <NavLink to={"/_Feature_ItemEdit/" + values.Id } >{values.Action}</NavLink> }
+        //render : (values: I_Feature_) => { return <NavLink to={"/_Feature_ItemEdit/" + values.Id } >{values.Action}</NavLink> }
         //render : (values: IAppAction) => { return <NavLink to={"/AppNavigationItemEdit/" + values.Id } >{values.Title}</NavLink> }
         //lookup: { "Resubmit": 'Resubmit', "Approve": 'Approve', "New Request" : "New Request", "Reject" : "Reject"},
       },      
@@ -48,7 +49,7 @@ const _Feature_List: React.FC = () => {
           <div className={"tabcontainers2"} >        
             <MaterialTable                       
               title="Left Navigation List"
-              data={AppActionStore.itemList}
+              data={_Feature_Store.itemList}
               columns={TableColumns}
               options={{ search: true, paging: true, filtering: true, exportButton: true, pageSize:100 }}            
             />

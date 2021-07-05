@@ -15,7 +15,7 @@ namespace Application.AppEngine
     {
          public static async Task<ApiDetails> Execute( int ActionId, int ItemId, DataContext _context, string CurrentUserId)
          {     
-             ApiDetails apiDetails = new ApiDetails();
+             ApiDetails apiDetails = new ApiDetails(ActionId, ItemId, _context, CurrentUserId );
              apiDetails.appData = new AppData();
 
              # region Get action details from db

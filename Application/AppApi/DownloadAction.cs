@@ -63,7 +63,7 @@ namespace Application._AppApi
             {                
                 # region get apiDetails and check security
 
-                    ApiDetails apiDetails = new ApiDetails();
+                    ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername());
                     
                     try{
                         apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() ); 

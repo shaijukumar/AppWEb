@@ -12,6 +12,7 @@ namespace Domain
 		public string Title { get; set; }
 		public int Order { get; set; }				
 		public int Type { get; set; }
+		public virtual AppConfigType ConfigType { get; set; } 
 		public string Det1 { get; set; }
 		public string Det2 { get; set; }
 		public string Det3 { get; set; }

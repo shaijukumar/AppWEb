@@ -55,7 +55,7 @@ const ConfigType: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
                       <NavLink to={"/AppConfigItemEdit/" + row.Id } >{row.Title}</NavLink> 
                     </TableCell>
                                              
-                    <TableCell align="left">{ AppConfigTypeStore.itemList.find( u => u.Id == row.Type )?.Title }</TableCell>  
+                    <TableCell align="left">{ AppConfigTypeStore.itemList.find( u => u.Id == row.ConfigTypeId )?.Title }</TableCell>  
                     <TableCell align="left" >
                       <DeleteOutlinedIcon onClick={ () => { AppConfigStore.deleteItem(row.Id).then( () => {   AppConfigStore.getList(); })}}  />
                     </TableCell>            

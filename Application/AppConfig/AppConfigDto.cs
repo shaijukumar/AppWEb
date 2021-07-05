@@ -9,10 +9,11 @@ namespace Application._AppConfig
 		public string Title { get; set; }
 		public int Order { get; set; }	
 		public int Type { get; set; }
+		public int ConfigTypeId { get; set; }
 		public string Det1 { get; set; }
 		public string Det2 { get; set; }
 		public string Det3 { get; set; }
 		public string Det4 { get; set; }
-		public string Det5 { get; set; }
+		public string Det5 { get; set; }						
     }
 }

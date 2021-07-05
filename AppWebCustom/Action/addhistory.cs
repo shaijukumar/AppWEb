@@ -27,6 +27,8 @@ namespace AppWebCustom.Action
                 };                             
                 _context.AppHistorys.Add(appHistory);
                 var success = await _context.SaveChangesAsync() > 0;
+
+                
             }
             catch(Exception ex){
                  throw new Exception( $" addhistory {ex.Message }" );

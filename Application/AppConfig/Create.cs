@@ -7,7 +7,8 @@ using AutoMapper;
 using Persistence;
 using Application.Interfaces;
 using Domain;
-
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application._AppConfig
 {
@@ -50,7 +51,10 @@ namespace Application._AppConfig
             }
 
             public async Task<AppConfigDto> Handle(Command request, CancellationToken cancellationToken)
-            {                                                   
+            {                          
+
+                
+
                 var appConfig = new AppConfig
                 {
 					Title  = request.Title,
@@ -62,6 +66,10 @@ namespace Application._AppConfig
 					Det4  = request.Det4,
 					Det5  = request.Det5                  
                 };
+                
+                appConfig.ConfigType = await _context.AppConfigTypes
+                    .Where(x => x.Id == request.Type ).FirstOrDefaultAsync();
+
 
                 _context.AppConfigs.Add(appConfig);
                 var success = await _context.SaveChangesAsync() > 0;

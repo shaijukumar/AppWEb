@@ -18,8 +18,8 @@ namespace Application._AppNotifications
 
 		public int NotificationsMasterId { get; set; }
 		public string UserId { get; set; }
-		public DateTime NextReminderTime { get; set; }
-		public int NoOfReminders { get; set; }
+		// public DateTime NextReminderTime { get; set; }
+		// public int NoOfReminders { get; set; }
 		public bool ReadStatus { get; set; }
         }
 
@@ -29,8 +29,8 @@ namespace Application._AppNotifications
             {
                 RuleFor(x => x.NotificationsMasterId).NotEmpty();
 				RuleFor(x => x.UserId).NotEmpty();
-				RuleFor(x => x.NextReminderTime).NotEmpty();
-				RuleFor(x => x.NoOfReminders).NotEmpty();
+				// RuleFor(x => x.NextReminderTime).NotEmpty();
+				// RuleFor(x => x.NoOfReminders).NotEmpty();
 				
             }
         }
@@ -54,8 +54,8 @@ namespace Application._AppNotifications
                 {
 					NotificationsMasterId  = request.NotificationsMasterId,
 					UserId  = request.UserId,
-					NextReminderTime  = request.NextReminderTime,
-					NoOfReminders  = request.NoOfReminders,
+					// NextReminderTime  = request.NextReminderTime,
+					// NoOfReminders  = request.NoOfReminders,
 					ReadStatus  = request.ReadStatus                  
                 };
 

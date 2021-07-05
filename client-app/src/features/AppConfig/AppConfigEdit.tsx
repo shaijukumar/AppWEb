@@ -33,7 +33,7 @@ const AppConfigEdit: React.FC = () => {
     if (id) {
       AppConfigStore.loadItem(Number(id)).then((val) => {
         setItem(val as any); 
-        var ty = val!.Type;
+        var ty = val!.ConfigTypeId;
         setType(ty);    
         setLoading(false);   
       });

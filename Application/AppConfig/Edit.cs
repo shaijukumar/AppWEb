@@ -9,8 +9,8 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using Domain;
-
-
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application._AppConfig
 {
@@ -82,6 +82,9 @@ namespace Application._AppConfig
 				appConfig.Det3  = request.Det3 ?? appConfig.Det3;
 				appConfig.Det4  = request.Det4 ?? appConfig.Det4;
 				appConfig.Det5  = request.Det5 ?? appConfig.Det5;
+
+                appConfig.ConfigType = await _context.AppConfigTypes
+                    .Where(x => x.Id == request.Type ).FirstOrDefaultAsync();
 				
 				
 				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /

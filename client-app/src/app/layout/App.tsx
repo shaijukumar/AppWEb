@@ -54,6 +54,9 @@ import AppNavigationEdit from '../../features/AppNavigation/AppNavigationEdit';
 import AppLeftNavBar from '../../features/nav/AppLeftNavBar';
 import AppNotificationsMasterList from '../../features/AppNotificationsMaster/AppNotificationsMasterList';
 import AppNotificationsMasterEdit from '../../features/AppNotificationsMaster/AppNotificationsMasterEdit';
+import AppNitificationTemplateList from '../../features/AppNitificationTemplate/AppNitificationTemplateList';
+import AppNitificationTemplateEdit from '../../features/AppNitificationTemplate/AppNitificationTemplateEdit';
+import AdminPage from '../../features/AdminPage/AdminPage';
 //##FeatureImport##"
 
 const drawerWidth = 240;
@@ -271,6 +274,11 @@ const App = () => {
           <Route  path={['/AppNavigationItemEdit/:id', '/AppNavigationItemEdit/']} component={AppNavigationEdit} />          
           <Route path='/AppNotificationsMasterList' component={AppNotificationsMasterList} />
           <Route  path={['/AppNotificationsMasterItemEdit/:id', '/AppNotificationsMasterItemEdit/']} component={AppNotificationsMasterEdit} />
+          <Route path='/AppNitificationTemplateList' component={AppNitificationTemplateList} />
+          <Route  path={['/AppNitificationTemplateItemEdit/:id', '/AppNitificationTemplateItemEdit/']} component={AppNitificationTemplateEdit} />
+
+          <Route path='/AppAdminPage' component={AdminPage} />
+          
           {/*##Navigation##*/}
           
           <div>
@@ -286,6 +294,7 @@ const App = () => {
 }; 
 
 export default observer(App);
+
 
 
 

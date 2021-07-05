@@ -12,15 +12,16 @@ using Domain;
 
 
 
-namespace Application._AppConfigType
+namespace Application._AppNitificationTemplate
 {
     public class Edit
     {
-        public class Command : IRequest<AppConfigTypeDto>
+        public class Command : IRequest<AppNitificationTemplateDto>
         {            
             
 		public int Id { get; set; }
 		public string Title { get; set; }
+		public string Template { get; set; }
 		public string Description { get; set; }
         }
 
@@ -29,6 +30,7 @@ namespace Application._AppConfigType
             public CommandValidator()
             {
                 RuleFor(x => x.Title).NotEmpty();
+			    RuleFor(x => x.Template).NotEmpty();
 				
             }
 
@@ -38,7 +40,7 @@ namespace Application._AppConfigType
             }
         }
 
-        public class Handler : IRequestHandler<Command, AppConfigTypeDto>
+        public class Handler : IRequestHandler<Command, AppNitificationTemplateDto>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -50,19 +52,18 @@ namespace Application._AppConfigType
                 _userAccessor = userAccessor;
             }
 
-            public async Task<AppConfigTypeDto> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<AppNitificationTemplateDto> Handle(Command request, CancellationToken cancellationToken)
             {
                 //var test = request.test;
 
-                var appConfigType = await _context.AppConfigTypes
+                var appNitificationTemplate = await _context.AppNitificationTemplates
                     .FindAsync(request.Id);
-                if (appConfigType == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { AppConfigType = "Not found" });
+                if (appNitificationTemplate == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { AppNitificationTemplate = "Not found" });
 
-				appConfigType.Title  = request.Title ?? appConfigType.Title;
-				appConfigType.Description  = request.Description ?? appConfigType.Description;
-
-                
+				appNitificationTemplate.Title  = request.Title ?? appNitificationTemplate.Title;
+				appNitificationTemplate.Template  = request.Template ?? appNitificationTemplate.Template;
+				appNitificationTemplate.Description  = request.Description ?? appNitificationTemplate.Description;
 				
 				
 				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /
@@ -70,7 +71,7 @@ namespace Application._AppConfigType
 				//if (success) return Unit.Value;
 				if (success)
 				{
-					var toReturn = _mapper.Map<AppConfigType, AppConfigTypeDto>(appConfigType);
+					var toReturn = _mapper.Map<AppNitificationTemplate, AppNitificationTemplateDto>(appNitificationTemplate);
 					return toReturn;
 				}
 

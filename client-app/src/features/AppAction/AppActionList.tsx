@@ -67,7 +67,8 @@ const AppActionList: React.FC = () => {
     const TableColumns = [
       {
         title: "Id",
-        field: "Id",
+        field: "Id",       
+        width: "10%"
       },
       {
         title: "Action",
@@ -137,7 +138,7 @@ const AppActionList: React.FC = () => {
               title="Left Navigation List"
               data={AppActionStore.itemList}
               columns={TableColumns}
-              options={{ search: true, paging: true, filtering: true, exportButton: true, pageSize:100 }}            
+              options={{ search: true, paging: true, filtering: true, exportButton: true, pageSize:100,  tableLayout: "auto" }}            
             />
           </div>
         </div>

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210704031339_c911")]
+    partial class c911
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,9 +187,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ConfigTypeId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Det1")
                         .HasColumnType("TEXT");
 
@@ -213,8 +212,6 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConfigTypeId");
 
                     b.ToTable("AppConfigs");
                 });
@@ -619,6 +616,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("URL")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("AppNitificationTemplates");
@@ -628,6 +628,12 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("NextReminderTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("NoOfReminders")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("NotificationsMasterId")
@@ -650,9 +656,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AppPath")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Body")
                         .HasColumnType("TEXT");
 
@@ -665,8 +668,8 @@ namespace Persistence.Migrations
                     b.Property<int>("DataId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Frequency")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Frequency")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("NextReminderTime")
                         .HasColumnType("TEXT");
@@ -1092,15 +1095,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("FromStatusListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.AppConfig", b =>
-                {
-                    b.HasOne("Domain.AppConfigType", "ConfigType")
-                        .WithMany()
-                        .HasForeignKey("ConfigTypeId");
-
-                    b.Navigation("ConfigType");
                 });
 
             modelBuilder.Entity("Domain.ToDo", b =>

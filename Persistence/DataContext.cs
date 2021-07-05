@@ -36,6 +36,7 @@ namespace Persistence
 		public DbSet<AppNavigation> AppNavigations { get; set; }		
 		public DbSet<AppNotificationsMaster> AppNotificationsMasters { get; set; }
         public DbSet<AppNotifications> AppNotificationss { get; set; }
+		public DbSet<AppNitificationTemplate> AppNitificationTemplates { get; set; }
 		//##ModelDbSet##
  
         protected override void OnModelCreating(ModelBuilder builder)
@@ -76,6 +77,7 @@ namespace Persistence
         }
     }
 }
+
 
 
 

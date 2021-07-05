@@ -2,25 +2,25 @@
 import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { AppConfigType, IAppConfigType } from "./AppConfigType";
+import { AppNitificationTemplate, IAppNitificationTemplate } from "./AppNitificationTemplate";
 
-const IAppConfigTypeAPI = "/AppConfigType";
+const IAppNitificationTemplateAPI = "/AppNitificationTemplate";
 
 const DBFun = {
-  list: (): Promise<IAppConfigType[]> => agent.requests.get(IAppConfigTypeAPI),
-  details: (Id: number) => agent.requests.get(`${IAppConfigTypeAPI}/${Id}`),
-  create: (item: IAppConfigType) => agent.requests.post(IAppConfigTypeAPI, item),
-  update: (item: IAppConfigType) =>
-    agent.requests.put(`${IAppConfigTypeAPI}/${item.Id}`, item),
-  delete: (Id: number) => agent.requests.del(`${IAppConfigTypeAPI}/${Id}`),
+  list: (): Promise<IAppNitificationTemplate[]> => agent.requests.get(IAppNitificationTemplateAPI),
+  details: (Id: number) => agent.requests.get(`${IAppNitificationTemplateAPI}/${Id}`),
+  create: (item: IAppNitificationTemplate) => agent.requests.post(IAppNitificationTemplateAPI, item),
+  update: (item: IAppNitificationTemplate) =>
+    agent.requests.put(`${IAppNitificationTemplateAPI}/${item.Id}`, item),
+  delete: (Id: number) => agent.requests.del(`${IAppNitificationTemplateAPI}/${Id}`),
 };
-
-export default class AppConfigTypeStoreImpl {
+ 
+export default class AppNitificationTemplateStoreImpl {
 
   loading = false;
   updating = false;
-  itemList: IAppConfigType[] = [];
-  item: AppConfigType = new AppConfigType()
+  itemList: IAppNitificationTemplate[] = [];
+  item: AppNitificationTemplate = new AppNitificationTemplate()
 
   constructor() {
     makeObservable(this, {
@@ -38,8 +38,7 @@ export default class AppConfigTypeStoreImpl {
     this.loading = true;
     try {               
       this.itemList = await DBFun.list();       
-      this.loading = false;         
-      return this.itemList;          
+      this.loading = false;                   
     } catch (error) {
       runInAction( () => {
         this.loading = false;            
@@ -62,10 +61,10 @@ export default class AppConfigTypeStoreImpl {
       }
   }
 
- editItem = async (item: IAppConfigType) => {    
+ editItem = async (item: IAppNitificationTemplate) => {    
     this.loading = true;
     try {        
-      let itm = new  AppConfigType();
+      let itm = new  AppNitificationTemplate();
       if (item.Id) {
         itm = await DBFun.update(item);
       } else {
@@ -97,5 +96,5 @@ export default class AppConfigTypeStoreImpl {
   };  
 }
 
-export const AppConfigTypeContext = createContext(new AppConfigTypeStoreImpl());
+export const AppNitificationTemplateContext = createContext(new AppNitificationTemplateStoreImpl());
 
