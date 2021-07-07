@@ -2,6 +2,7 @@ export interface IAppNotificationsMaster {
 	Id: number
 	Subject: string
 	Body: string
+	AppPath: string
 	NextReminderTime: Date
 	NoOfReminders: number
 	Frequency: number
@@ -17,6 +18,7 @@ export class AppNotificationsMaster implements IAppNotificationsMaster {
 	Id: number = 0;
 	Subject: string = '';
 	Body: string = '';
+	AppPath: string = '';
 	NextReminderTime: Date = new Date();
 	NoOfReminders: number = 0;
 	Frequency: number = 0;

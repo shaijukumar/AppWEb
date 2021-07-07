@@ -13,11 +13,11 @@ using Persistence;
 
 namespace Application._AppNotifications
 {
-    public class List
+    public class Count
     {
-        public class Query : IRequest<List<AppNotificationsDto>> { }
+        public class Query : IRequest<int> { }
 
-        public class Handler : IRequestHandler<Query, List<AppNotificationsDto>>
+        public class Handler : IRequestHandler<Query, int>
         {
             private readonly IMapper _mapper;
 
@@ -34,13 +34,9 @@ namespace Application._AppNotifications
                 _userManager = userManager;
             }
 
-            public async Task<List<AppNotificationsDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<int> Handle(Query request, CancellationToken cancellationToken)
             {
-                var appNotifications = await _context.AppNotificationss
-                     .Where(x => x.UserId ==  _userAccessor.GetCurrentUsername() ).ToListAsync();
-                                     	
-                return _mapper.Map<List<AppNotifications>, List<AppNotificationsDto>>(appNotifications);
-                
+                return await _context.AppNotificationss.CountAsync(x=> x.ReadStatus != true && x.UserId == _userAccessor.GetCurrentUsername() );                
             }
         }
     }

@@ -7,7 +7,8 @@ import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppNitificationTemplate } from './AppNitificationTemplate';
 import { AppNitificationTemplateContext } from './AppNitificationTemplateStore';
 import { observer } from 'mobx-react-lite';
- 
+import ContentEditable from "react-contenteditable";
+
 interface DetailParms {
   id: string;
 } 
@@ -53,11 +54,11 @@ const AppNitificationTemplateEdit: React.FC = () => {
           initialValues={item}
           validationSchema={Yup.object({
             Title: Yup.string().required('Template Name required'),      
-            Template: Yup.string().required('Template required'),    
-            URL: Yup.string().required('URL required'),              
+            Template: Yup.string().required('Template required'),                         
           })}
           onSubmit={onItemSubmit}
         >
+          {({ handleChange, handleBlur, handleSubmit, values, isValid, dirty, setFieldValue, setFieldTouched, validateForm }) => (
           <Form > 
             {item.Id}
             <MyCustomTxt   
@@ -68,12 +69,28 @@ const AppNitificationTemplateEdit: React.FC = () => {
               label="Template Name"                                                                     
             />
 
-            <MyCustomTxt   
+            {/* <MyCustomTxt   
               name="Template"                         
               type="text"                              
               required={true}                                
               label="Template"   
               multiline={true}                                                                  
+            /> */}
+
+            <ContentEditable
+              id="Template"              
+              className="editable"
+              tagName="pre"
+              html={item.Template} // innerHTML of the editable div
+              //disabled={!this.state.editable} // use true to disable edition
+              onChange={(d:any) => { 
+                debugger;                                 
+                item.Template = d.target.value ; 
+                setFieldValue('PageHtml', d.target.value);
+                setFieldTouched("PageHtml", true);
+                
+              }} // handle innerHTML change
+              //onBlur={sanitize}
             />
            
             <MyCustomTxt   
@@ -110,7 +127,8 @@ const AppNitificationTemplateEdit: React.FC = () => {
               </ButtonGroup>
 
           </Form>
-        </Formik>
+        )} 
+       </Formik>
     </Container>
   );
 };

@@ -1,3 +1,6 @@
+import { isNullishCoalesce } from "typescript";
+import { AppNotificationsMaster, IAppNotificationsMaster } from "../AppNotificationsMaster/AppNotificationsMaster";
+
 export interface IAppNotifications {
 	Id: number
 	NotificationsMasterId: number
@@ -5,6 +8,7 @@ export interface IAppNotifications {
 	NextReminderTime: Date
 	NoOfReminders: number
 	ReadStatus: boolean
+	NotificationsMaster : IAppNotificationsMaster
 }
 
 export class AppNotifications implements IAppNotifications {
@@ -14,9 +18,9 @@ export class AppNotifications implements IAppNotifications {
 	NextReminderTime: Date = new Date();
 	NoOfReminders: number = 0;
 	ReadStatus: boolean = false;
+	NotificationsMaster : IAppNotificationsMaster = new AppNotificationsMaster();
   
   constructor(init?: IAppNotifications) {
     Object.assign(this, init);
   }
 }
-

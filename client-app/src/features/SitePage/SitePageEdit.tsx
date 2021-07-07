@@ -118,6 +118,13 @@ const SitePageEdit: React.FC = () => {
               required={true}                                
               label="Title"                                                                     
             />
+
+            <MyCustomTxt   
+              name="URLTitle"                         
+              type="text"                
+              required={true}                                
+              label="URLTitle"                                                                     
+            />
                
 
             <PageCategorySelect
@@ -177,7 +184,7 @@ const SitePageEdit: React.FC = () => {
                          
               <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                 <Button
-                  disabled={!isValid}
+                  // disabled={!isValid}
                   type="submit"
                   fullWidth
                   variant="contained"

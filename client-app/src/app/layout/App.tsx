@@ -1,6 +1,6 @@
 import { AppBar, Badge, Container, Drawer, IconButton, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { observer } from 'mobx-react-lite';
 import React, { useState, useEffect, useContext } from 'react';
@@ -57,6 +57,12 @@ import AppNotificationsMasterEdit from '../../features/AppNotificationsMaster/Ap
 import AppNitificationTemplateList from '../../features/AppNitificationTemplate/AppNitificationTemplateList';
 import AppNitificationTemplateEdit from '../../features/AppNitificationTemplate/AppNitificationTemplateEdit';
 import AdminPage from '../../features/AdminPage/AdminPage';
+import Notifications from '../../features/nav/Notifications';
+import CurrentUser from '../../features/nav/CurrentUser';
+import AppNotificationsList from '../../features/AppNotifications/AppNotificationsList';
+import AppNotificationsEdit from '../../features/AppNotifications/AppNotificationsEdit';
+import UserProfile from '../../features/user/UserProfile';
+import ErrorPage from '../common/common/ErrorPage';
 //##FeatureImport##"
 
 const drawerWidth = 240;
@@ -193,11 +199,10 @@ const App = () => {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+
+          <Notifications/>  
+          <CurrentUser/>     
+
         </Toolbar>
       </AppBar>
 
@@ -219,6 +224,7 @@ const App = () => {
         <List>{secondaryListItems}</List> */}
 
         <AppLeftNavBar/>
+        
 
       </Drawer>
 
@@ -228,12 +234,15 @@ const App = () => {
           <Route exact path='/login' component={Login} />
           <Route exact path='/userlist' component={UserList} />
           <Route exact path={['/useredit/:id', '/useredit/']} component={UserEdit} />
-
+          <Route exact path='/UserProfile' component={UserProfile} />
+          
           <Route exact path='/' component={HomePage} />
           <Route exact path='/todolist' component={ToDoList} />
           <Route exact path={['/todoedit/:id', '/todoedit/']} component={ToDoEdit} />
           <Route path='/PageTagList' component={PageTagList} />
           <Route path={['/PageTagItemEdit/:id', '/PageTagItemEdit/']} component={PageTagEdit} />
+
+          <Route path='/ErrorPage/:err' component={ErrorPage} />
 
           <Route path='/SitePageList' component={SitePageList} />
           <Route path={['/SitePageItemEdit/:id', '/SitePageItemEdit/']} component={SitePageEdit} />
@@ -274,6 +283,11 @@ const App = () => {
           <Route  path={['/AppNavigationItemEdit/:id', '/AppNavigationItemEdit/']} component={AppNavigationEdit} />          
           <Route path='/AppNotificationsMasterList' component={AppNotificationsMasterList} />
           <Route  path={['/AppNotificationsMasterItemEdit/:id', '/AppNotificationsMasterItemEdit/']} component={AppNotificationsMasterEdit} />
+          
+          <Route path='/AppNotificationsList' component={AppNotificationsList} />
+          <Route  path={['/AppNotificationsEdit/:id', '/AppNotificationsEdit/']} component={AppNotificationsEdit} />
+          
+          
           <Route path='/AppNitificationTemplateList' component={AppNitificationTemplateList} />
           <Route  path={['/AppNitificationTemplateItemEdit/:id', '/AppNitificationTemplateItemEdit/']} component={AppNitificationTemplateEdit} />
 

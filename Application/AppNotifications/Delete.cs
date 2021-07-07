@@ -27,15 +27,24 @@ namespace Application._AppNotifications
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
+
                 var appNotifications = await _context.AppNotificationss
                     .FindAsync(request.Id);
                 if (appNotifications == null)
                     throw new RestException(HttpStatusCode.NotFound, new { AppNotifications = "Not found" });
 
-                var CurrentUsername = _userAccessor.GetCurrentUsername();
+				appNotifications.ReadStatus  = true;
+                var success = await _context.SaveChangesAsync() > 0;
 
-                _context.Remove(appNotifications);
-				var success = await _context.SaveChangesAsync() > 0;
+                // var appNotifications = await _context.AppNotificationss
+                //     .FindAsync(request.Id);
+                // if (appNotifications == null)
+                //     throw new RestException(HttpStatusCode.NotFound, new { AppNotifications = "Not found" });
+
+                // var CurrentUsername = _userAccessor.GetCurrentUsername();
+
+                // _context.Remove(appNotifications);
+				// var success = await _context.SaveChangesAsync() > 0;
 				if (success) return Unit.Value;
 
                 throw new Exception("Problem saving changes");

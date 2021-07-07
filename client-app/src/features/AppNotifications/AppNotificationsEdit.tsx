@@ -62,12 +62,20 @@ const AppNotificationsEdit: React.FC = () => {
           <Form > 
             {item.Id}
             <MyCustomTxt   
-                name="Title"                         
-                type="text"                
-                autoFocus={true}
-                required={true}                                
-                label="Title"                                                                     
-              />
+              name="NotificationsMasterId"                         
+              type="text"                
+              autoFocus={true}
+              required={true}                                
+              label="NotificationsMasterId"                                                                     
+            />
+
+            <MyCustomTxt   
+              name="UserId"                         
+              type="text"                
+              autoFocus={true}
+              required={true}                                
+              label="UserId"                                                                     
+            />
                            
               <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                 <Button

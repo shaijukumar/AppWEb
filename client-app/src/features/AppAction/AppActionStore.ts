@@ -4,6 +4,7 @@ import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
 import { AppAction, IAppAction } from "./AppAction";
 
+
 const IAppActionAPI = "/AppAction";
 
 const DBFun = {
@@ -15,12 +16,16 @@ const DBFun = {
   delete: (Id: number) => agent.requests.del(`${IAppActionAPI}/${Id}`),
 };
 
+
+
 export default class AppActionStoreImpl {
 
   loading = false;
   updating = false;
   itemList: IAppAction[] = [];
   item: AppAction = new AppAction()
+
+ 
 
   constructor() {
     makeObservable(this, {
@@ -41,8 +46,10 @@ export default class AppActionStoreImpl {
       this.loading = false;                   
     } catch (error) {
       runInAction( () => {
-        this.loading = false;            
+        this.loading = false;  
+        agent.requests.ErrorPage(error.message) ;            
         throw error;
+
       });
     }
   }

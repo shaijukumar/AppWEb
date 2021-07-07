@@ -11,12 +11,12 @@ const AppNotificationsList: React.FC = () => {
   
     useEffect(() => {       
       AppNotificationsStore.getList();                  
-    }, [AppNotificationsStore, AppNotificationsStore.getList])       
+    }, [AppNotificationsStore, AppNotificationsStore.getList]);        
 
     if(AppNotificationsStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
     }
-
+ 
     return (
       <List>
         <ListItem divider>
@@ -34,7 +34,8 @@ const AppNotificationsList: React.FC = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Title</TableCell>
+                  <TableCell align="right">Title1</TableCell>
+                  <TableCell align="right">UserId</TableCell>
                   <TableCell align="right">Delete</TableCell>
                 </TableRow>
               </TableHead>
@@ -42,10 +43,11 @@ const AppNotificationsList: React.FC = () => {
                 {AppNotificationsStore.itemList.map((row) => (
                   <TableRow key={row.Id} >
                     <TableCell component="th" scope="row"  >
-                      <NavLink to={"/AppNotificationsItemEdit/" + row.Id } >{row.Id}</NavLink> 
+                      <NavLink to={"/AppNotificationsEdit/" + row.Id } >{row.Id}</NavLink> 
                     </TableCell>
                                              
-                    <TableCell align="right">{row.NotificationsMasterId}</TableCell>  
+                    <TableCell align="right">{row.NotificationsMaster.Subject}</TableCell>  
+                    <TableCell align="right">{row.UserId}</TableCell>  
                     <TableCell align="right" >
                       <DeleteOutlinedIcon onClick={ () => { AppNotificationsStore.deleteItem(row.Id).then( () => {   AppNotificationsStore.getList(); })}}  />
                     </TableCell>            

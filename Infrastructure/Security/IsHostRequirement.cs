@@ -1,9 +1,14 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Application.Errors;
+using Application.Interfaces;
+using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Persistence;
 
@@ -17,28 +22,37 @@ namespace Infrastructure.Security
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DataContext _context;
-        public IsHostRequirementHandler(IHttpContextAccessor httpContextAccessor, DataContext context)
+        private readonly IUserAccessor _userAccessor;
+        
+        public IsHostRequirementHandler(IHttpContextAccessor httpContextAccessor, DataContext context, IUserAccessor userAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _userAccessor = userAccessor;
+            
+            
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
         {
-            if (context.Resource is AuthorizationFilterContext authContext)
-            {
-                var currentUserName = _httpContextAccessor.HttpContext.User?.Claims?.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var currentUserId = _userAccessor.GetCurrentUsername();
 
-                var id = Guid.Parse(authContext.RouteData.Values["id"].ToString());
+            var role =  _context.AppUserRoleMasters
+                    .Where(x => x.Title == "Admin" ).FirstOrDefault();
+            if(role == null){
+                throw new RestException(HttpStatusCode.OK, new { Error = "Admin user is null" });                
+            }
 
-                var todoItem = _context.Todos.FindAsync(id).Result;
-                if(todoItem.ToDoUser.Id == currentUserName ){
-                    context.Succeed(requirement);
-                }                           
-            } 
-            else 
-            {
+            var appUserRole =  _context.AppUserRoles
+                    .Where(x => x.UserId == currentUserId && x.AppUserRoleMasterId == role.Id )
+                    .FirstOrDefault();
+
+            if(appUserRole == null){
+                //throw new RestException(HttpStatusCode.Unauthorized, new { Error = "Unauthorized" });   
                 context.Fail();
+            }
+            else{
+                 context.Succeed(requirement);
             }
 
             return Task.CompletedTask;

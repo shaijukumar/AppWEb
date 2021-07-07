@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class AppActionController : BaseController
+    public class AppActionController : AdminController
     {
 
         [HttpGet]

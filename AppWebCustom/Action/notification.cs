@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;  
+using System.Net.Mail;
 
 namespace AppWebCustom.Action
 {
@@ -165,9 +167,12 @@ namespace AppWebCustom.Action
                 _context.AppNotificationsMasters.Add(appNotiMgr);
                 var success = await _context.SaveChangesAsync() > 0; 
 
+                SendEmail(Subject, Body,ToEmailList,CCEmailList );
+
                 if(success){
                     foreach(var noti in appNotiList){
-                        noti.NotificationsMasterId = appNotiMgr.Id;
+                        noti.NotificationsMaster = appNotiMgr;
+                        //noti.NotificationsMasterId = appNotiMgr.Id;
                          _context.AppNotificationss.Add(noti);                         
                     }
                     await _context.SaveChangesAsync(); 
@@ -328,6 +333,31 @@ namespace AppWebCustom.Action
             }
             outStr += inStr;
             return outStr;
+        }
+    
+        public static void SendEmail(string subject, string body, string to, string cc){
+            string smtpAddress = "smtp.gmail.com";  
+            int portNumber = 587;  
+            bool enableSSL = true;  
+            string emailFromAddress = "shaiju.app1@gmail.com"; //Sender Email Address  
+            string password = "Shaiju1*"; //Sender Password  
+            string emailToAddress = "shaiju.app1@gmail.com"; //Receiver Email Address  
+
+            using(MailMessage mail = new MailMessage()) {  
+                mail.From = new MailAddress(emailFromAddress);  
+                mail.To.Add(emailToAddress);  
+                mail.Subject = subject;  
+                mail.Body = body;  
+                mail.IsBodyHtml = true;                  
+                //mail.Attachments.Add(new Attachment("D:\\TestFile.txt"));//--Uncomment this to send any attachment  
+                using(SmtpClient smtp = new SmtpClient(smtpAddress, portNumber)) {  
+                    smtp.Credentials = new NetworkCredential(emailFromAddress, password);  
+                    smtp.EnableSsl = enableSSL;  
+                    smtp.Send(mail);  
+                }  
+
+                
+            }              
         }
     }
 }

@@ -6,8 +6,9 @@ import { AppNotifications, IAppNotifications } from "./AppNotifications";
 
 const IAppNotificationsAPI = "/AppNotifications";
 
-const DBFun = {
-  list: (): Promise<IAppNotifications[]> => agent.requests.get(IAppNotificationsAPI),
+const DBFun = { 
+  list: (): Promise<IAppNotifications[]> => agent.requests.get(`${IAppNotificationsAPI}/NotificationList`),
+  count: (): Promise<IAppNotifications[]> => agent.requests.get(`${IAppNotificationsAPI}/NotificationCount`),
   details: (Id: number) => agent.requests.get(`${IAppNotificationsAPI}/${Id}`),
   create: (item: IAppNotifications) => agent.requests.post(IAppNotificationsAPI, item),
   update: (item: IAppNotifications) =>
@@ -33,6 +34,30 @@ export default class AppNotificationsStoreImpl {
          editItem: action
     });
   }
+
+  getCount = async () => {           
+    try {               
+      return await DBFun.count();                              
+    } catch (error) {
+      runInAction( () => {                    
+        throw error;
+      });
+    }
+  }
+
+  markRead = async (id: number) => {  
+    try {
+      await DBFun.delete(id);    
+      this.updating = false;   
+      this.loading = false;
+    } catch (error) {    
+      this.updating = false;  
+      this.loading = false;             
+      console.log(error);
+      throw error;
+    }
+  };  
+
 
   getList = async () => {        
     this.loading = true;
@@ -98,3 +123,4 @@ export default class AppNotificationsStoreImpl {
 
 export const AppNotificationsContext = createContext(new AppNotificationsStoreImpl());
 
+ 

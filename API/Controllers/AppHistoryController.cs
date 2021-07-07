@@ -12,6 +12,7 @@ namespace API.Controllers
     {
 
         [HttpGet]
+        
 		public async Task<ActionResult<List<AppHistoryDto>>> List()
         {
             return await Mediator.Send(new List.Query());

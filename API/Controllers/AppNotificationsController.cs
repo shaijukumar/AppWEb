@@ -11,11 +11,36 @@ namespace API.Controllers
     public class AppNotificationsController : BaseController
     {
 
-        [HttpGet]
+
+        // [HttpGet("{id}", Name = "AppStatusList")]
+        // [Route("AppStatusList/{id}")]
+		// public async Task<ActionResult<List<AppStatusListDto>>> List(int id)
+        // {
+        //     return await Mediator.Send(new StatusList.Query { Id = id });
+        // }
+        
+		// [HttpGet("{id}")]
+        // [Route("[action]/{id}")]
+		// public async Task<ActionResult<AppStatusListDto>> Details(int id)
+        // {
+        //     return await Mediator.Send(new Details.Query { Id = id });
+        // }
+
+
+        [HttpGet(Name = "NotificationList")] //[HttpGet]
+        [Route("NotificationList")]
 		public async Task<ActionResult<List<AppNotificationsDto>>> List()
         {
             return await Mediator.Send(new List.Query());
         }
+
+        [HttpGet(Name = "NotificationCount")] 
+        [Route("NotificationCount")]
+		public async Task<ActionResult<int>> Count()
+        {
+            return await Mediator.Send(new Count.Query());
+        }
+
 
 		[HttpGet("{id}")]
 		public async Task<ActionResult<AppNotificationsDto>> Details(int id)

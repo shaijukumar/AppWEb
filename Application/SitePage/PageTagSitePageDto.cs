@@ -9,6 +9,6 @@ namespace Application._SitePage
         public Guid PageTagId { get; set; }    
         
         public Guid Id { get; set; }
-        public String PageTagTitle { get; set; }      
+        public String PageTagTitle { get; set; }                              
     }
 }
