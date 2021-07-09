@@ -40,7 +40,7 @@ const AppStatusListEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppStatusListStore, AppStatusListStore.loadItem]);
+  }, [id, AppStatusListStore, AppStatusListStore.loadItem, AppTableMasterStore]);
 
   const onItemSubmit = (values: any) => {    
       setLoading(true);
@@ -74,7 +74,7 @@ const AppStatusListEdit: React.FC = () => {
             />
             table id : {table}
             <Autocomplete                             
-              value={ AppTableMasterStore.itemList.find( u => u.Id == table ) } 
+              value={ AppTableMasterStore.itemList.find( u => u.Id === table ) } 
               id="TableId"
               options={AppTableMasterStore.itemList}
               getOptionLabel={(option) => option.Title }                

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AppConfigContext } from './AppConfigStore';
-import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Button, ButtonGroup, LinearProgress, List, ListItem } from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
 import { IAppConfig } from './AppConfig';
@@ -30,7 +30,7 @@ const AppConfigList: React.FC = () => {
     {
       title: "Type",
       field: "ConfigTypeId", 
-      render : (values: IAppConfig) => { return AppConfigTypeStore.itemList.find( u => u.Id == values.ConfigTypeId )?.Title },
+      render : (values: IAppConfig) => { return AppConfigTypeStore.itemList.find( u => u.Id === values.ConfigTypeId )?.Title },
       lookup: types, 
     },
     {
@@ -46,11 +46,10 @@ const AppConfigList: React.FC = () => {
     useEffect(() => {       
       
       AppConfigTypeStore.getList().then( (res : any) => {
+        
         res.map( (row:IAppConfigType) => {
-          types[ row.Id  ] =  row.Title;        
-        });
-
-        //var v = res.map( (row:IAppConfigType) => { types[ row.Id  ] =  row.Title; });
+          types[ row.Id ] =  row.Title;                  
+        });        
         setTypes(types);
       });
 

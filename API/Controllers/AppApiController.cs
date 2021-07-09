@@ -41,6 +41,8 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
+
+        
  
         // [HttpPut("{id}")]
 		// public async Task<ActionResult<AppApiDto>> Edit(Guid id, Edit.Command command)

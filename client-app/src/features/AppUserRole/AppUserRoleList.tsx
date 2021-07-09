@@ -14,7 +14,7 @@ const AppUserRoleList: React.FC = () => {
     useEffect(() => {       
       AppUserRoleMasterStore.getList();
       AppUserRoleStore.getList();                  
-    }, [AppUserRoleStore, AppUserRoleStore.getList])       
+    }, [AppUserRoleStore, AppUserRoleStore.getList, AppUserRoleMasterStore])       
 
     if(AppUserRoleStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
@@ -54,7 +54,7 @@ const AppUserRoleList: React.FC = () => {
                     </TableCell>
                                              
                     <TableCell align="right">{row.UserId}</TableCell>
-                    <TableCell align="right">{ AppUserRoleMasterStore.itemList.find( u => u.Id == row.AppUserRoleMasterId )?.Title }</TableCell>  
+                    <TableCell align="right">{ AppUserRoleMasterStore.itemList.find( u => u.Id === row.AppUserRoleMasterId )?.Title }</TableCell>  
                     <TableCell align="right" >
                       <DeleteOutlinedIcon onClick={ () => { AppUserRoleStore.deleteItem(row.Id).then( () => {   AppUserRoleStore.getList(); })}}  />
                     </TableCell>            

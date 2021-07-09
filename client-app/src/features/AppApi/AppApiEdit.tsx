@@ -7,14 +7,14 @@ import { observer } from 'mobx-react-lite';
 import moment from 'moment';
 
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
-import { AppApiAction, AttachmentDetails, Customer, Attachment, ICustomer } from './AppApi';
+import { AppApiAction, AttachmentDetails, Customer, Attachment } from './AppApi';
 import { AppStatusListContext } from '../AppStatusList/AppStatusListStore';
 import { AppApiContext } from './AppApiStore';
  
 interface DetailParms {
   id: string;
 }
-const AppApiEdit: React.FC = () => {
+const AppApiEdit: React.FC = () => { 
 
   const FlowId = 1;
   const { id } = useParams<DetailParms>();
@@ -47,6 +47,10 @@ const AppApiEdit: React.FC = () => {
 
     if(id){
       setLoading(true);
+
+
+
+      
       let act: AppApiAction = new AppApiAction()
       act.ActionId = 10;  
       act.ItemId = Number(id);
@@ -80,7 +84,7 @@ const AppApiEdit: React.FC = () => {
       setItem(new Customer()); 
       setLoading(false);
     }
-  }, [id, AppApiStore.ExecuteAction , AppApiStore.getActions]);
+  }, [id, AppApiStore.ExecuteAction , AppApiStore.getActions, AppApiStore, AppStatusListStore, attachFileList]);
 
 
   const onItemSubmit = (values: any) => {    
@@ -149,10 +153,7 @@ const AppApiEdit: React.FC = () => {
     });
   };
 
-  const deleteItem = () => {  
-   
-  }
-
+  
   const prop1Change = (e:any, i:number) => { 
     let files = [...attachFileList];
     files[i].Details.Prop1 = e.target.value;
@@ -221,7 +222,7 @@ const AppApiEdit: React.FC = () => {
           onSubmit={onItemSubmit}
         >
           <Form > 
-            Status : { AppStatusListStore.itemList.find( s => s.Id == item.StatusId )?.Title }
+            Status : { AppStatusListStore.itemList.find( s => s.Id === item.StatusId )?.Title }
             <MyCustomTxt   
               name="CustomerName"                         
               type="text"                
@@ -236,15 +237,15 @@ const AppApiEdit: React.FC = () => {
               required={true}                                
               label="CIF"                                                                     
             />
-            {item.StatusId == 4 && 
+            {item.StatusId === 4 && 
             <MyCustomTxt   
               name="ApprovalComment"                         
               type="text"                
-              required={item.StatusId == 4 ? true : false}                                
+              required={item.StatusId === 4 ? true : false}                                
               label="Approval Comment"                                                                     
             />
             }
-            {item.StatusId != 4 && 
+            {item.StatusId !== 4 && 
               <div>Approval Comment : {item.ApprovalComment} </div>
             }
 
@@ -280,7 +281,7 @@ const AppApiEdit: React.FC = () => {
       <TableBody>
       { attachFileList && attachFileList.map( (rr, index) => (
           <TableRow>       
-            <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
+            <TableCell align="left"> <a  onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
             <TableCell align="left">
               <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
             </TableCell>     
@@ -313,8 +314,8 @@ const AppApiEdit: React.FC = () => {
                   <TableCell align="left"> {  moment(hist.DateTime).format("DD-MMM-YYYY")  }</TableCell>
                   <TableCell align="left">{hist.ActionBy}</TableCell>
                   <TableCell align="left">{hist.Action}</TableCell>
-                  <TableCell align="left">{ AppStatusListStore.AppStatusList.find( s => s.Id == hist.FromStage )?.Title } {hist.FromStage}</TableCell>     
-                  <TableCell align="left">{ AppStatusListStore.AppStatusList.find( s => s.Id == hist.ToStage )?.Title } {hist.ToStage}</TableCell> 
+                  <TableCell align="left">{ AppStatusListStore.AppStatusList.find( s => s.Id === hist.FromStage )?.Title } {hist.FromStage}</TableCell>     
+                  <TableCell align="left">{ AppStatusListStore.AppStatusList.find( s => s.Id === hist.ToStage )?.Title } {hist.ToStage}</TableCell> 
                   <TableCell align="left">{hist.Comment}</TableCell>      
                 </TableRow>
                 ))

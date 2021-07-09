@@ -2,7 +2,6 @@ import { Button, ButtonGroup, Container, LinearProgress, TextField } from '@mate
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppColumnMaster } from './AppColumnMaster';
 import { AppColumnMasterContext } from './AppColumnMasterStore';
@@ -12,8 +11,6 @@ import { Autocomplete } from '@material-ui/lab';
 import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
 import { AppConfigType } from '../AppConfigType/AppConfigType';
 
-
-
 type CustomProps = {  initVal : AppColumnMaster, parentRefresh : any } ;
 
 const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {   
@@ -21,7 +18,7 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
   const AppColumnMasterStore = useContext(AppColumnMasterContext);
   const AppConfigTypeStore = useContext(AppConfigTypeContext);
 
-  const [item, setItem] = useState(initVal);
+  const [item] = useState(initVal);
   const [loading, setLoading] = useState(false);
 
   const [type, setType] = useState(initVal.Type);
@@ -71,7 +68,7 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
             />
             
             <Autocomplete                
-              value={ ColumnDataType.find( u => u.Id == item.Type ) } 
+              value={ ColumnDataType.find( u => u.Id === item.Type ) } 
               id="Type"              
               options={ColumnDataType}
               getOptionLabel={(option:SystemConstant) => option.value }                
@@ -83,9 +80,9 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
                 //debugger;                     
               }}
             />
-            { type == '6' &&
+            { type === '6' &&
             <Autocomplete                
-              value={ AppConfigTypeStore.itemList.find( u => u.Id == item.ConfigId ) } 
+              value={ AppConfigTypeStore.itemList.find( u => u.Id === item.ConfigId ) } 
               id="ConfigId"              
               options={AppConfigTypeStore.itemList}
               getOptionLabel={(option:AppConfigType) => option.Title }                
@@ -99,9 +96,9 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
             />
             }
 
-            { type == '7' &&
+            { type === '7' &&
             <Autocomplete                
-              value={ ColumnAttachmentType.find( u => u.Id == item.AttachmentConfig.toString() ) } 
+              value={ ColumnAttachmentType.find( u => u.Id === item.AttachmentConfig.toString() ) } 
               id="AttachmentConfig"              
               options={ColumnAttachmentType}
               getOptionLabel={(option:SystemConstant) => option.value }                

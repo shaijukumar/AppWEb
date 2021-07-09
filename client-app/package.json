@@ -20,8 +20,6 @@
     "axios": "^0.21.1",
     "clsx": "^1.1.1",
     "formik": "^2.2.6",
-    "jodit": "^3.6.2",
-    "jodit-react": "^1.0.71",
     "js-file-download": "^0.4.12",
     "material-design-icons": "^3.0.1",
     "material-design-icons-iconfont": "^6.1.0",

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class AppUserRoleController : BaseController
+    public class AppUserRoleController : AdminController
     {
 
         [HttpGet]

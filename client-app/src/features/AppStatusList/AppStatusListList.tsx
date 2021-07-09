@@ -14,7 +14,7 @@ const AppStatusListList: React.FC = () => {
     useEffect(() => {  
       AppTableMasterStore.getList();     
       AppStatusListStore.getList();                  
-    }, [AppStatusListStore, AppStatusListStore.getList])       
+    }, [AppStatusListStore, AppStatusListStore.getList, AppTableMasterStore])       
 
     if(AppStatusListStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
@@ -52,7 +52,7 @@ const AppStatusListList: React.FC = () => {
                     <TableCell component="th" scope="row"  >
                       <NavLink to={"/AppStatusListItemEdit/" + row.Id } >{row.Title}</NavLink> 
                     </TableCell>
-                    <TableCell align="left">{ AppTableMasterStore.itemList.find( u => u.Id == row.TableId )?.Title } </TableCell>
+                    <TableCell align="left">{ AppTableMasterStore.itemList.find( u => u.Id === row.TableId )?.Title } </TableCell>
                                              
                     {/* <TableCell align="right">{row.Title}</TableCell>   */}
                     <TableCell align="left" >

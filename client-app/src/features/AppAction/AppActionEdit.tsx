@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Checkbox, Chip, Container, FormControl, FormControlLabel, InputLabel, LinearProgress, MenuItem, Select, TextField } from '@material-ui/core';
+import { Button, ButtonGroup, Checkbox, Chip, Container,  FormControlLabel, LinearProgress, TextField } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -11,11 +11,8 @@ import { Autocomplete } from '@material-ui/lab';
 import { AppStatusList } from '../AppStatusList/AppStatusList';
 import { AppStatusListContext } from '../AppStatusList/AppStatusListStore';
 import MyDropDown from '../../app/common/form/MyDropDown';
-import { AppConfigContext } from '../AppConfig/AppConfigStore';
 import { AppTableMasterContext } from '../AppTableMaster/AppTableMasterStore';
 import { AppFlowContext } from '../AppFlow/AppFlowStore';
-import { AppConfig } from '../AppConfig/AppConfig';
-import MyCheckBox from '../../app/common/form/MyCheckBox';
 
 interface DetailParms {
   id: string;
@@ -26,7 +23,6 @@ const AppActionEdit: React.FC = () => {
   const AppFlowStore = useContext(AppFlowContext);  
   const AppActionStore = useContext(AppActionContext);
   const AppStatusListStore = useContext(AppStatusListContext);
-  const AppConfigStore = useContext(AppConfigContext);
   const AppTableMasterStore = useContext(AppTableMasterContext);
   
  
@@ -59,7 +55,7 @@ const AppActionEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppActionStore, AppActionStore.loadItem]);
+  }, [id, AppActionStore, AppActionStore.loadItem, AppFlowStore, AppStatusListStore, AppTableMasterStore]);
 
   const onItemSubmit = (values: any) => {  
     debugger;
@@ -75,10 +71,7 @@ const AppActionEdit: React.FC = () => {
     });
   };
 
-  const onTableChange = (event: any) => {
-    alert(event.target.value as string);
-  };
-
+ 
   if(loading){
     return <LinearProgress color="secondary"  className="loaderStyle" /> 
   }
@@ -124,7 +117,7 @@ const AppActionEdit: React.FC = () => {
                 debugger;
                 var unq = true;
                 for(let i=0;i<newValue.length-1;i++){
-                  if( newValue[i].Id == newValue[newValue.length-1].Id){
+                  if( newValue[i].Id === newValue[newValue.length-1].Id){
                     unq = false;
                     break;
                   }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class AppStatusListController : BaseController
+    public class AppStatusListController : AdminController
     {       
         [HttpGet]
 		public async Task<ActionResult<List<AppStatusListDto>>> List()

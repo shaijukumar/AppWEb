@@ -1,8 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { useHistory } from "react-router-dom";
-import { ApiAttachment } from "../../features/AppAttachment/AppAttachment";
 import { IUser, IUserFormValues } from "../../features/user/User";
-import {BrowserRouter} from 'react-router-dom';
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 

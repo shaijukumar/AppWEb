@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class AppTableMasterController : BaseController
+    public class AppTableMasterController : AdminController
     {
 
         [HttpGet]

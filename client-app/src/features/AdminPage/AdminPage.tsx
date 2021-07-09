@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Icon, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
@@ -22,23 +22,7 @@ const AdminPage: React.FC = () => {
     ];
 
      
-    
-    const TableColumns = [
-      {
-        title: "Page",
-        field: "Page",
-        render : (values: any) => { return <NavLink to={"/" + values.Path } >{<ListItemIcon><Icon>{values.Icon}</Icon> <ListItemText style={{paddingLeft : '40px'}} primary={values.Title} /></ListItemIcon>}</NavLink> }        
-      } 
-    ]
-      const tableData = [
-        {
-          lorem: "lorem",
-          name: "name",
-          customStatus: "customStatus"
-        }
-      ];
 
-    const tableRef = React.createRef();
 
     return (
        

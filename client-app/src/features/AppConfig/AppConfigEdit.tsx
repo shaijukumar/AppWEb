@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
+import { Button, ButtonGroup, Container, LinearProgress, TextField } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import { AppConfigContext } from './AppConfigStore';
 import { observer } from 'mobx-react-lite';
 import { Autocomplete } from '@material-ui/lab';
 import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
-import { isTypeAssertionExpression } from 'typescript';
+
 
 interface DetailParms {
   id: string;
@@ -42,7 +42,7 @@ const AppConfigEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppConfigStore, AppConfigStore.loadItem]);
+  }, [id, AppConfigStore, AppConfigStore.loadItem, AppConfigTypeStore]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);
@@ -78,7 +78,7 @@ const AppConfigEdit: React.FC = () => {
             />
             Type : {type}
             <Autocomplete                             
-              value={ AppConfigTypeStore.itemList.find( u => u.Id == type ) } 
+              value={ AppConfigTypeStore.itemList.find( u => u.Id === type ) } 
               id="Type"
               options={AppConfigTypeStore.itemList}
               getOptionLabel={(option) => option.Title }                

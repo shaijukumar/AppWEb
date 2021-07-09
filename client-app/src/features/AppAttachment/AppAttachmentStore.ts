@@ -2,7 +2,7 @@
 import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { ApiAttachment, AppAttachment, IAppAttachment } from "./AppAttachment";
+import { AppAttachment, IAppAttachment } from "./AppAttachment";
 
 const IAppAttachmentAPI = "/AppAttachment";
 
@@ -123,7 +123,7 @@ export default class AppAttachmentStoreImpl {
   uploadPhoto = async (formData : FormData) => {
   
     try {
-        const photo = await DBFun.uploadPhoto(formData); 
+        //const photo = await DBFun.uploadPhoto(formData); 
         debugger;
        
     } catch (error) {

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, LinearProgress, List, ListItem, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Link, AppBar, Tabs, Tab, Box, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, Container, LinearProgress, List, ListItem, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Dialog, DialogTitle, DialogContent, DialogContentText, Link, AppBar, Tabs, Tab } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -12,7 +12,6 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import AppColumn from '../AppColumnMaster/AppColumn';
 import { AppColumnMaster } from '../AppColumnMaster/AppColumnMaster';
 import { ColumnDataType } from '../../app/common/SystemConstants';
-import { TabPanel } from '@material-ui/lab';
 
 interface DetailParms {
   id: string;
@@ -53,7 +52,7 @@ const AppTableMasterEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppTableMasterStore, AppTableMasterStore.loadItem, AppColumnMasterStore.getColumnList]);
+  }, [id, AppTableMasterStore, AppTableMasterStore.loadItem, AppColumnMasterStore.getColumnList, AppColumnMasterStore]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);
@@ -160,7 +159,7 @@ const AppTableMasterEdit: React.FC = () => {
       
           </ListItem>
           
-          <div hidden={tabValue != 0}>
+          <div hidden={tabValue !== 0}>
           <ListItem divider hidden={true}  >
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
@@ -185,7 +184,7 @@ const AppTableMasterEdit: React.FC = () => {
                         <Link href="#" onClick={ () => { openModel( row ) } } >{row.Title}</Link>
                         
                       </TableCell>  
-                      <TableCell align="left"> { ColumnDataType.find( u => u.Id == row.Type )?.value }</TableCell> 
+                      <TableCell align="left"> { ColumnDataType.find( u => u.Id === row.Type )?.value }</TableCell> 
                       <TableCell align="left">{row.AppDataFiled}</TableCell> 
                       {/* <TableCell align="left">{row.UserAccess}</TableCell>   */}
                       <TableCell align="left" >

@@ -4,7 +4,6 @@ import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
 import { IUserManager, UserManager } from "./UserManager";
 
-
 const IUserManagerAPI = "/UserManager";
 
 const DBFun = {

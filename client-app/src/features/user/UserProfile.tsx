@@ -1,13 +1,7 @@
-import { Button, ButtonGroup, Checkbox, Container, FormControlLabel, LinearProgress } from '@material-ui/core';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
-import React, { useContext, useEffect, useState } from 'react';
-import {  useHistory, useParams } from 'react-router-dom';
-import MyCustomTxt from '../../app/common/form/MyCustomTxt';
-import { UserManager } from './UserManager';
-import { UserManagerContext } from './UserManagerStore';
+import { Container} from '@material-ui/core';
+import React, { useContext, useEffect } from 'react';
+
 import { observer } from 'mobx-react-lite';
-import { debug } from 'console';
 import { UserStoreContext } from '../user/UserStore';
 
 const UserProfile: React.FC = () => {

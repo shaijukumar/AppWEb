@@ -37,7 +37,7 @@ export default class AppNavigationStoreImpl {
   
   setSelected = async (path: string) => {     
     for(var i=0;i<this.itemList.length;i++){
-      if(this.itemList[i].Path == path){
+      if(this.itemList[i].Path === path){
         this.itemList[i].Selected = true;
       }
       else{

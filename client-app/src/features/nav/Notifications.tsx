@@ -1,35 +1,22 @@
 
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
-import Toolbar from '@material-ui/core/Toolbar';
-import { AppBar, Badge, Button, CssBaseline, IconButton, makeStyles, Theme, createStyles, List, ListItem, TableContainer, Table, TableCell, TableHead, TableRow, TableBody, Paper  } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
+import {  Badge, IconButton, List, ListItem, TableContainer, Table, TableCell, TableRow, TableBody, Paper  } from '@material-ui/core';
 import Popover from '@material-ui/core/Popover';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import Popper from '@material-ui/core/Popper';
-import { UserStoreContext } from '../user/UserStore';
 import { observer } from 'mobx-react-lite';
 import { AppNotificationsContext } from '../AppNotifications/AppNotificationsStore';
 import DoneIcon from '@material-ui/icons/Done';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      border: '1px solid',
-      padding: theme.spacing(1),
-      backgroundColor: theme.palette.background.paper,
-    },
-  }),
-);
+
 
 const Notifications: React.FC = () => {
 
     const AppNotificationsStore = useContext(AppNotificationsContext);    
-    
-    const classes = useStyles();
+        
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [count, SetCount ] = useState(0);
-    let history = useHistory();
-
+  
     useEffect(() => {       
         AppNotificationsStore.getCount().then( c => {
             SetCount(c as any);
@@ -46,11 +33,7 @@ const Notifications: React.FC = () => {
       });
     };
 
-    const navigateToPath = (path:string) => {
-      setAnchorEl(null);
-      history.push(path); 
-    };
-      
+          
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popper' : undefined;
 

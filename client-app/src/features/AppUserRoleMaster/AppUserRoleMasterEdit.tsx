@@ -46,7 +46,7 @@ const AppUserRoleMasterEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppUserRoleMasterStore, AppUserRoleMasterStore.loadItem, AppUserRoleStore.getRoleList]);
+  }, [id, AppUserRoleMasterStore, AppUserRoleMasterStore.loadItem, AppUserRoleStore, UserManagerStore]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);

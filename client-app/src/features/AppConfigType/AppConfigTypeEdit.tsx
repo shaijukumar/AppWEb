@@ -36,7 +36,7 @@ const AppConfigTypeEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppConfigTypeStore, AppConfigTypeStore.loadItem]);
+  }, [id, AppConfigTypeStore, AppConfigTypeStore.loadItem, AppConfigStore]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);

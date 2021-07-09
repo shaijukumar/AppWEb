@@ -58,3 +58,38 @@ textarea.editable {
 }
 
 
+
+/* .MuiIconButton-root
+  .ActionLinkButton{
+    background-color: red !important;
+  } */
+
+  /* .MuiIconButton-root{
+     background-color: red !important;
+  } */
+
+  /* .ActionLinkButton > span > button
+  {
+    background-color: red !important;
+    border-radius: 0% !important;
+  } */
+
+  /* button > .ActionLinkButton{
+  background-color: red !important;
+} */
+
+/* .MuiIconButton-colorInherit {
+  background-color: red !important;
+  border-radius: 0% !important;
+} */
+
+
+.MuiIconButton-root {
+ border-radius: 0% !important;
+ 
+}
+.TableButton{
+  font-size: 14px; 
+  background-color: rosybrown;
+}
+

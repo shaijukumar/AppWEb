@@ -3,7 +3,6 @@ import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
 import { AppUserRole, IAppUserRole } from "./AppUserRole";
-import { resolveElement } from "jodit/src/core/helpers";
 
 const IAppUserRoleAPI = "/AppUserRole";
 

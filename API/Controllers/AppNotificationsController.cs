@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class AppNotificationsController : BaseController
+    public class AppNotificationsController : AdminController
     {
 
 

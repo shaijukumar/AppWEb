@@ -7,7 +7,7 @@ import {
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import { IPageCategory } from "../../../features/PageCategory/PageCategory";
+
 
 type CustomProps = { label: string, list : any, handleChange?: any } & FieldAttributes<{}>;
 
@@ -15,10 +15,9 @@ const MyDropDown: React.FC<CustomProps> = ({ list, label, placeholder, type,requ
 
     //const [field] = useField<{}>(props);
 
-    const [field, meta] = useField<{}>(props);
+    const [field] = useField<{}>(props);
     
-    const errorText = meta.error && meta.touched ? meta.error : "";
-
+   
     return (                
         <FormControl variant="outlined" fullWidth style={{ marginTop : 10 , marginBottom : 10}}>
             <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
@@ -33,7 +32,7 @@ const MyDropDown: React.FC<CustomProps> = ({ list, label, placeholder, type,requ
             >
                 <option aria-label="None" value="" />
                 {list.map((row:any) => (                              
-                  row.Pid != row.Id && <option value={row.Id}>{row.Title}</option>               
+                  row.Pid !== row.Id && <option value={row.Id}>{row.Title}</option>               
                 ))}
             </Select>
             }
@@ -48,7 +47,7 @@ const MyDropDown: React.FC<CustomProps> = ({ list, label, placeholder, type,requ
             >
                 <option aria-label="None" value="" />
                 {list.map((row:any) => (                              
-                  row.Pid != row.Id && <option value={row.Id}>{row.Title}</option>               
+                  row.Pid !== row.Id && <option value={row.Id}>{row.Title}</option>               
                 ))}
             </Select>
             }

@@ -1,22 +1,15 @@
-import { AppBar, Badge, Container, Drawer, IconButton, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar,  Container, Drawer, IconButton, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { observer } from 'mobx-react-lite';
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, NavLink, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
-import ToDoEdit from '../../features/ToDo/ToDoEdit';
-import ToDoList from '../../features/ToDo/ToDoList';
+
 import Login from '../../features/user/Login';
 import { UserStoreContext } from '../../features/user/UserStore';
-import PageTagList from '../../features/PageTag/PageTagList';
-import PageTagEdit from '../../features/PageTag/PageTagEdit';
-import SitePageList from '../../features/SitePage/SitePageList';
-import SitePageEdit from '../../features/SitePage/SitePageEdit';
-import { PageTagContext } from '../../features/PageTag/PageTagStore';
-import PageCategoryList from '../../features/PageCategory/PageCategoryList';
-import PageCategoryEdit from '../../features/PageCategory/PageCategoryEdit';
+
 import UserList from '../../features/user/UserList';
 import UserEdit from '../../features/user/UserEdit';
 import AppUserRoleList from '../../features/AppUserRole/AppUserRoleList';
@@ -48,7 +41,6 @@ import AppApiEdit from '../../features/AppApi/AppApiEdit';
 import AppAttachmentList from '../../features/AppAttachment/AppAttachmentList';
 import AppAttachmentEdit from '../../features/AppAttachment/AppAttachmentEdit';
 import clsx from 'clsx';
-import { mainListItems, secondaryListItems } from '../../features/nav/listItems';
 import AppNavigationList from '../../features/AppNavigation/AppNavigationList';
 import AppNavigationEdit from '../../features/AppNavigation/AppNavigationEdit';
 import AppLeftNavBar from '../../features/nav/AppLeftNavBar';
@@ -63,6 +55,8 @@ import AppNotificationsList from '../../features/AppNotifications/AppNotificatio
 import AppNotificationsEdit from '../../features/AppNotifications/AppNotificationsEdit';
 import UserProfile from '../../features/user/UserProfile';
 import ErrorPage from '../common/common/ErrorPage';
+import EmployeeList from '../../features/Employee/EmployeeList';
+import EmployeeEdit from '../../features/Employee/EmployeeEdit';
 //##FeatureImport##"
 
 const drawerWidth = 240;
@@ -157,19 +151,14 @@ const App = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-
-
+  
   const userStore = useContext(UserStoreContext);
-  const PageTagStore = useContext(PageTagContext);
+
   const  [loader, setLoader ] = useState(true)
   
   useEffect(() => {     
     userStore.getCurrentUser().then( () => {
-      PageTagStore.getList().then( () => {
-        setLoader(false);
-      });            
+      setLoader(false);           
     })
     .catch( () => {      
       setLoader(false);
@@ -236,19 +225,10 @@ const App = () => {
           <Route exact path={['/useredit/:id', '/useredit/']} component={UserEdit} />
           <Route exact path='/UserProfile' component={UserProfile} />
           
-          <Route exact path='/' component={HomePage} />
-          <Route exact path='/todolist' component={ToDoList} />
-          <Route exact path={['/todoedit/:id', '/todoedit/']} component={ToDoEdit} />
-          <Route path='/PageTagList' component={PageTagList} />
-          <Route path={['/PageTagItemEdit/:id', '/PageTagItemEdit/']} component={PageTagEdit} />
+          <Route exact path='/' component={HomePage} />      
 
           <Route path='/ErrorPage/:err' component={ErrorPage} />
-
-          <Route path='/SitePageList' component={SitePageList} />
-          <Route path={['/SitePageItemEdit/:id', '/SitePageItemEdit/']} component={SitePageEdit} />
-
-          <Route path='/PageCategoryList' component={PageCategoryList} />
-          <Route  path={['/PageCategoryItemEdit/:id', '/PageCategoryItemEdit/']} component={PageCategoryEdit} />        
+                
           <Route path='/AppUserRoleList' component={AppUserRoleList} />
           <Route  path={['/AppUserRoleItemEdit/:id', '/AppUserRoleItemEdit/']} component={AppUserRoleEdit} />
           <Route path='/AppUserAccessList' component={AppUserAccessList} />
@@ -290,6 +270,10 @@ const App = () => {
           
           <Route path='/AppNitificationTemplateList' component={AppNitificationTemplateList} />
           <Route  path={['/AppNitificationTemplateItemEdit/:id', '/AppNitificationTemplateItemEdit/']} component={AppNitificationTemplateEdit} />
+
+
+          <Route path='/EmployeeList' component={EmployeeList} />
+          <Route  path={['/EmployeeEdit/:id', '/EmployeeEdit/']} component={EmployeeEdit} />
 
           <Route path='/AppAdminPage' component={AdminPage} />
           

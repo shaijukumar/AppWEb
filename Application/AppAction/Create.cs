@@ -9,6 +9,8 @@ using Application.Interfaces;
 using Domain;
 using System.Collections.Generic;
 using Application.AppEngine;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application._AppAction
 {
@@ -63,17 +65,32 @@ namespace Application._AppAction
 
                 //ActionXml
                 var appAction = new AppAction
-                {
+                {                    
 					ToStatusId  = request.ToStatusId,
+                    Action  = request.Action,
                     ActionType  = request.ActionType,
                     WhenXml  = request.WhenXml,
 					FlowId  = request.FlowId,
 					InitStatus  = request.InitStatus,
 					TableId  = request.TableId,
-					ActionXml  = request.ActionXml,
-                    //FromStatusList = request.FromStatusList  
-
+					ActionXml  = request.ActionXml,     
+                                   
                 };
+
+                if( request.FromStatusList != null ){
+                
+                    appAction.FromStatusList = new List<AppStatusList>();
+
+                    foreach(var f in  request.FromStatusList){
+                        var status = await _context.AppStatusLists
+                        .Where( x => x.Id == f.Id )
+                        .FirstOrDefaultAsync();
+
+                        if( status != null ){
+                            appAction.FromStatusList.Add(status);
+                        }
+                    }
+                }
 
                 _context.AppActions.Add(appAction);
                 var success = await _context.SaveChangesAsync() > 0;

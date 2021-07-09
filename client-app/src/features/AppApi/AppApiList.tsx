@@ -24,7 +24,7 @@ const AppApiList: React.FC = () => {
         setLoading(false);              
       });      
 
-    }, [AppApiStore.ExecuteAction])       
+    }, [AppApiStore.ExecuteAction, AppApiStore, AppStatusListStore])       
 
     if(loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
@@ -62,7 +62,7 @@ const AppApiList: React.FC = () => {
                                              
                     {/* <TableCell align="left">{row.CustomerName}</TableCell>   */}
                     <TableCell align="left">{row.CIF}</TableCell> 
-                    <TableCell align="left">{ AppStatusListStore.itemList.find( s => s.Id == row.StatusId )?.Title }</TableCell>         
+                    <TableCell align="left">{ AppStatusListStore.itemList.find( s => s.Id === row.StatusId )?.Title }</TableCell>         
 
                     <TableCell align="right" >
                       <DeleteOutlinedIcon onClick={ () => { 

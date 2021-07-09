@@ -7,7 +7,6 @@ import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { UserManager } from './UserManager';
 import { UserManagerContext } from './UserManagerStore';
 import { observer } from 'mobx-react-lite';
-import { debug } from 'console';
 
 
 interface DetailParms {

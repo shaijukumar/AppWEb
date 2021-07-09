@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
-import { AppAttachment, ApiAttachment } from './AppAttachment';
+import { AppAttachment } from './AppAttachment';
 import { AppAttachmentContext } from './AppAttachmentStore';
 import { observer } from 'mobx-react-lite';
 

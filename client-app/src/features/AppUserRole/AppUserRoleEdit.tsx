@@ -3,7 +3,6 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppUserRole } from './AppUserRole';
 import { AppUserRoleContext } from './AppUserRoleStore';
 import { observer } from 'mobx-react-lite';
@@ -41,7 +40,7 @@ const AppUserRoleEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppUserRoleStore, AppUserRoleStore.loadItem]);
+  }, [id, AppUserRoleStore, AppUserRoleStore.loadItem, AppUserRoleMasterStore, UserManagerStore]);
 
   const onItemSubmit = (values: any) => {    
     debugger;
@@ -80,7 +79,7 @@ const AppUserRoleEdit: React.FC = () => {
             /> */}
 
             <Autocomplete                             
-                value={ UserManagerStore.itemList.find( u => u.Username == item.UserId ) } 
+                value={ UserManagerStore.itemList.find( u => u.Username === item.UserId ) } 
                 id="UserId"
                 options={UserManagerStore.itemList}
                 getOptionLabel={(option) => option.Email ? option.DisplayName : '-'}                
@@ -95,7 +94,7 @@ const AppUserRoleEdit: React.FC = () => {
               />
 
               <Autocomplete                
-                value={ AppUserRoleMasterStore.itemList.find( u => u.Id == item.AppUserRoleMasterId ) } 
+                value={ AppUserRoleMasterStore.itemList.find( u => u.Id === item.AppUserRoleMasterId ) } 
                 id="AppUserRoleMasterId"
                 options={AppUserRoleMasterStore.itemList}
                 getOptionLabel={(option) => option.Title }                

@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AppActionContext } from './AppActionStore';
-import { Badge, Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import {  Button, ButtonGroup, LinearProgress, List, ListItem} from '@material-ui/core';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { AppFlowContext } from '../AppFlow/AppFlowStore';
 import { AppTableMasterContext } from '../AppTableMaster/AppTableMasterStore';
@@ -23,7 +23,7 @@ const AppActionList: React.FC = () => {
       AppStatusListStore.getList();
 
       AppActionStore.getList();                  
-    }, [AppActionStore, AppActionStore.getList])       
+    }, [AppActionStore, AppActionStore.getList, AppFlowStore, AppStatusListStore, AppTableMasterStore])       
 
     if(AppActionStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
@@ -40,30 +40,7 @@ const AppActionList: React.FC = () => {
       return res;
     };
 
-    /*
-      <TableCell component="th" scope="row"  >{row.Id}</TableCell>
-                                             
-      <TableCell align="left">
-        <Badge color="secondary" variant="dot" invisible={!row.InitStatus} >
-          <NavLink to={"/AppActionItemEdit/" + row.Id } >{row.Action}</NavLink>
-        </Badge> 
-      </TableCell> 
-
-      <TableCell align="left">
-        { row.FromStatusList.map( (fs, i, arr) =>(<span key={fs.Id} >{fs.Title}{i != (arr.length-1) ? ',' : ''} </span>) ) } 
-      </TableCell>
-      <TableCell align="left">{ AppStatusListStore.itemList.find( u => u.Id == row.ToStatusId )?.Title }</TableCell>
-      <TableCell align="left">{row.ActionType}</TableCell>
-      <TableCell align="left">{ AppFlowStore.itemList.find( u => u.Id == row.FlowId )?.Title }</TableCell>
-      <TableCell align="left">{ AppTableMasterStore.itemList.find( u => u.Id == row.TableId )?.Title }</TableCell>
-      <TableCell align="left">{ShowDesc(row.WhenXml)}</TableCell>
-      <TableCell align="left">{ShowDesc(row.ActionXml)}</TableCell>
-
-
-      <TableCell align="right" >
-        <DeleteOutlinedIcon onClick={ () => { AppActionStore.deleteItem(row.Id).then( () => {   AppActionStore.getList(); })}}  />
-      </TableCell>  
-    */
+    
     const TableColumns = [
       {
         title: "Id",
@@ -80,12 +57,12 @@ const AppActionList: React.FC = () => {
       {
         title: "From Status",
         field: "FromStatus",       
-        render : (values: IAppAction) => { return values.FromStatusList.map( (fs, i, arr) =>(<span key={fs.Id} >{fs.Title}{i != (arr.length-1) ? ',' : ''} </span>) )  }
+        render : (values: IAppAction) => { return values.FromStatusList.map( (fs, i, arr) =>(<span key={fs.Id} >{fs.Title}{i !== (arr.length-1) ? ',' : ''} </span>) )  }
       }, 
       {
         title: "To Status",
         field: "FromStatus",       
-        render : (values: IAppAction) => { return  AppStatusListStore.itemList.find( u => u.Id == values.ToStatusId )?.Title }
+        render : (values: IAppAction) => { return  AppStatusListStore.itemList.find( u => u.Id === values.ToStatusId )?.Title }
       },     
       {
         title: "ActionType",
@@ -96,12 +73,12 @@ const AppActionList: React.FC = () => {
       {
         title: "Flow",
         field: "Flow",  
-        render : (values: IAppAction) => { return AppFlowStore.itemList.find( u => u.Id == values.FlowId )?.Title }  
+        render : (values: IAppAction) => { return AppFlowStore.itemList.find( u => u.Id === values.FlowId )?.Title }  
       },
       {
         title: "Table",
         field: "Table",  
-        render : (values: IAppAction) => { return AppTableMasterStore.itemList.find( u => u.Id == values.TableId )?.Title  }  
+        render : (values: IAppAction) => { return AppTableMasterStore.itemList.find( u => u.Id === values.TableId )?.Title  }  
       },
       {
         title: "WhenXml",
@@ -143,56 +120,7 @@ const AppActionList: React.FC = () => {
           </div>
         </div>
         
-        {/* <ListItem divider>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell align="left">Action</TableCell>
-                  
-                  <TableCell align="left">From Status</TableCell>
-                  <TableCell align="left">To Status</TableCell>
-                  <TableCell align="left">ActionType</TableCell>
-                  <TableCell align="left">Flow</TableCell>
-                  <TableCell align="left">TableId</TableCell>
-                  <TableCell align="left">WhenXml</TableCell>
-                  <TableCell align="left">ActionXml</TableCell>
-
-                  <TableCell align="right">Delete</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {AppActionStore.itemList.map((row) => (
-                  <TableRow key={row.Id} >
-                    <TableCell component="th" scope="row"  >{row.Id}</TableCell>
-                                             
-                    <TableCell align="left">
-                      <Badge color="secondary" variant="dot" invisible={!row.InitStatus} >
-                        <NavLink to={"/AppActionItemEdit/" + row.Id } >{row.Action}</NavLink>
-                      </Badge> 
-                    </TableCell> 
-
-                    <TableCell align="left">
-                      { row.FromStatusList.map( (fs, i, arr) =>(<span key={fs.Id} >{fs.Title}{i != (arr.length-1) ? ',' : ''} </span>) ) } 
-                    </TableCell>
-                    <TableCell align="left">{ AppStatusListStore.itemList.find( u => u.Id == row.ToStatusId )?.Title }</TableCell>
-                    <TableCell align="left">{row.ActionType}</TableCell>
-                    <TableCell align="left">{ AppFlowStore.itemList.find( u => u.Id == row.FlowId )?.Title }</TableCell>
-                    <TableCell align="left">{ AppTableMasterStore.itemList.find( u => u.Id == row.TableId )?.Title }</TableCell>
-                    <TableCell align="left">{ShowDesc(row.WhenXml)}</TableCell>
-                    <TableCell align="left">{ShowDesc(row.ActionXml)}</TableCell>
-
-
-                    <TableCell align="right" >
-                      <DeleteOutlinedIcon onClick={ () => { AppActionStore.deleteItem(row.Id).then( () => {   AppActionStore.getList(); })}}  />
-                    </TableCell>            
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </ListItem> */}
+        
 
       </List>        
      

@@ -1,3 +1,20 @@
+
+export interface IDataResult  {
+	Id: number
+	Result1: any[]
+}
+
+export class DataResult implements IDataResult {
+	Id: number = 0;
+	Result1: any[] = [];
+  
+  constructor(init?: IDataResult ) {
+    Object.assign(this, init);
+  }
+}
+
+//------------------------------------
+
 export interface IAppApi {
 	Id: number
 	CustomerName: string

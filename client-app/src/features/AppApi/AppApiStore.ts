@@ -2,7 +2,7 @@
 import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { ApiResult, AppApi, AppApiAction, Customer, IApiAction, IApiResult, IAppApi, ICustomer, ITaskAction } from "./AppApi";
+import { ApiResult, AppApi,  Customer, DataResult, IApiAction, IAppApi, ICustomer, ITaskAction } from "./AppApi";
 
 const IAppApiAPI = "/AppApi";
 
@@ -22,28 +22,33 @@ const DBFun = {
   delete: (Id: number) => agent.requests.del(`${IAppApiAPI}/${Id}`),
 };
 
+
 export default class AppApiStoreImpl {
 
   loading = false;
   updating = false;
   actionList: ITaskAction[] = [];
-  apiResult : ApiResult = new ApiResult();
-  
+
+  dateResult : DataResult = new DataResult();  
+
+
+  apiResult : ApiResult = new ApiResult();  
   itemList: ICustomer[] = [];
-  item: Customer = new Customer()
+  item: Customer = new Customer();
 
   constructor() {
     makeObservable(this, {      
       actionList: observable,
       apiResult :  observable,
-
       itemList: observable,
       loading: observable,
       updating: observable,
       item: observable,
       getList: action,
       //loadItem: action,
-      editItem: action
+      editItem: action,
+
+      dateResult:  observable,
     });
   }
 
@@ -78,10 +83,28 @@ export default class AppApiStoreImpl {
     }
   }
 
+  GetData = async (action: IApiAction) => {
+    this.loading = true;
+    try {        
+      //debugger;
+      let itm = new DataResult();
+      itm = await DBFun.ExecuteQuery(action);  
+      this.dateResult = itm;
+      return itm;
+      //this.apiResult = await DBFun.Execute(action);                 
+      //return this.apiResult;   
+    } catch (error) {
+      runInAction( () => {   
+
+      });        
+      throw error;
+    }
+  }
+
   ExecuteQuery = async (action: IApiAction) => {
     this.loading = true;
     try {        
-      debugger;
+      //debugger;
       let itm = new ApiResult();
       itm = await DBFun.ExecuteQuery(action);  
       this.apiResult = itm;

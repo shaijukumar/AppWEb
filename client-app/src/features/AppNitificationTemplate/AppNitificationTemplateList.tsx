@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AppNitificationTemplateContext } from './AppNitificationTemplateStore';
-import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { Button, ButtonGroup, LinearProgress, List, ListItem } from '@material-ui/core';
+
 import MaterialTable from 'material-table';
 import { AppNitificationTemplate } from './AppNitificationTemplate';
 

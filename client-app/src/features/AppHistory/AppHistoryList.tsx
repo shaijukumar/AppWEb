@@ -1,11 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AppHistoryContext } from './AppHistoryStore';
-import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { LinearProgress } from '@material-ui/core';
 import MaterialTable from 'material-table';
-import {TablePagination} from "@material-ui/core";
 
 import 'material-design-icons/iconfont/material-icons.css'
 import { AppStatusListContext } from '../AppStatusList/AppStatusListStore';
@@ -23,7 +20,7 @@ const AppHistoryList: React.FC = () => {
       AppHistoryStore.getList(); 
 
       console.log(React.version);         
-    }, [AppHistoryStore, AppHistoryStore.getList])       
+    }, [AppHistoryStore, AppHistoryStore.getList, AppStatusListStore])       
 
     if(AppHistoryStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
@@ -43,13 +40,13 @@ const AppHistoryList: React.FC = () => {
         title: "FromStage",
         field: "FromStage",
         //render : rend
-        render : (values: IAppHistory) => { return AppStatusListStore.itemList.find( u => u.Id ==values.FromStage )?.Title }
+        render : (values: IAppHistory) => { return AppStatusListStore.itemList.find( u => u.Id ===values.FromStage )?.Title }
       },     
       {
         title: "ToStage",
         field: "ToStage",
         //render : rend
-        render : (values: IAppHistory) => { return AppStatusListStore.itemList.find( u => u.Id ==values.FromStage )?.Title }
+        render : (values: IAppHistory) => { return AppStatusListStore.itemList.find( u => u.Id ===values.FromStage )?.Title }
       }, 
       {
         title: "ActionBy",

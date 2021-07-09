@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
-import { Divider, Grid, Typography } from '@material-ui/core';
+import {Typography } from '@material-ui/core';
 import { AppColor } from '../Theme';
 
 

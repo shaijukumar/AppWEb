@@ -15,7 +15,7 @@ using Persistence;
 namespace API.Controllers
 {
     [AllowAnonymous]
-    public class UserManagerController : BaseController
+    public class UserManagerController : AdminController
     {
         
         // GET api/values

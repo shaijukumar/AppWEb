@@ -119,30 +119,31 @@ namespace AppWebCustom.Action
                             else
                             {                                
                                 var col = ad.appColumns.FindLast( x => x.Title == key );
-                                if(col == null){
-                                    throw new Exception("invalid column " + key);
-                                }
-                                PropertyInfo ap1 = appDataType.GetProperty(col.AppDataFiled);
-                                if(  col.Type == AppColumnType.Float ){
-                                    ap1.SetValue (ad.appData,  float.Parse(value), null);
-                                }
-                                else if( col.Type == AppColumnType.LongNumber ){
-                                    ap1.SetValue (ad.appData,  Int64.Parse(value), null);
-                                }
-                                else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
-                                    ap1.SetValue (ad.appData,  Int32.Parse(value), null);
-                                }
-                                else if( col.Type == AppColumnType.Attachment ){
-                                    if(!string.IsNullOrEmpty(value)){
-                                        List<AttachmentJson> att = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
-                                        foreach( var a in att){
-                                            a.AppDataColumn = col.Id;
-                                        }
-                                        attachments.AddRange(att);   
-                                    }                                                             
-                                }
-                                else{
-                                    ap1.SetValue (ad.appData,  value, null);
+                                if(col != null){
+                                    //throw new Exception("invalid column " + key);
+                                
+                                    PropertyInfo ap1 = appDataType.GetProperty(col.AppDataFiled);
+                                    if(  col.Type == AppColumnType.Float ){
+                                        ap1.SetValue (ad.appData,  float.Parse(value), null);
+                                    }
+                                    else if( col.Type == AppColumnType.LongNumber ){
+                                        ap1.SetValue (ad.appData,  Int64.Parse(value), null);
+                                    }
+                                    else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
+                                        ap1.SetValue (ad.appData,  Int32.Parse(value), null);
+                                    }
+                                    else if( col.Type == AppColumnType.Attachment ){
+                                        if(!string.IsNullOrEmpty(value)){
+                                            List<AttachmentJson> att = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
+                                            foreach( var a in att){
+                                                a.AppDataColumn = col.Id;
+                                            }
+                                            attachments.AddRange(att);   
+                                        }                                                             
+                                    }
+                                    else{
+                                        ap1.SetValue (ad.appData,  value, null);
+                                    }
                                 }                            
                             }                                                                                                                       
                         }

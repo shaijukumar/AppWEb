@@ -11,13 +11,7 @@ namespace Persistence
         {
         }
         
-        public DbSet<Value> Values { get; set; }
-        public DbSet<Activity> Activities { get; set; }
-
-        public DbSet<ToDo> Todos { get; set; }
-        public DbSet<PageTag> PageTags { get; set; }
-		public DbSet<SitePage> SitePages { get; set; }
-		public DbSet<PageCategory> PageCategorys { get; set; }		
+        public DbSet<Value> Values { get; set; }		
 		public DbSet<AppUserRole> AppUserRoles { get; set; }		
 		public DbSet<AppUserAccess> AppUserAccesss { get; set; }
 		public DbSet<AppTableMaster> AppTableMasters { get; set; }
@@ -27,7 +21,6 @@ namespace Persistence
 		public DbSet<AppStatusList> AppStatusLists { get; set; }
 		public DbSet<AppHistory> AppHistorys { get; set; }
 		public DbSet<AppConfigType> AppConfigTypes { get; set; }
-
         public DbSet<AppConfig> AppConfigs { get; set; }
 		public DbSet<AppAction> AppActions { get; set; }
 		public DbSet<AppFlow> AppFlows { get; set; }
