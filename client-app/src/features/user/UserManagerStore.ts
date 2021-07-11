@@ -74,10 +74,15 @@ export default class UserManagerStoreImpl {
       this.loading = false;         
       return itm;   
     } catch (error) {
-      runInAction( () => {
-        this.loading = false;        
-      });        
-      throw error;
+      
+      this.loading = false;     
+      return error;  
+
+      // runInAction( () => {
+      //   this.loading = false;     
+      //   return error;   
+      // });        
+      //throw error;
     }
   };
 

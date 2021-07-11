@@ -2,7 +2,7 @@
 import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { ApiResult, AppApi,  Customer, DataResult, IApiAction, IAppApi, ICustomer, ITaskAction } from "./AppApi";
+import { ApiResult, AppApi,  AppApiAction,  Customer, DataResult, IApiAction, IAppApi, ICustomer, ITaskAction } from "./AppApi";
 
 const IAppApiAPI = "/AppApi";
 
@@ -11,7 +11,7 @@ const DBFun = {
   ExecuteQuery: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Query`, action),  
   //FileDownload: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Attachment`, action),
   FileDownload: (action: IApiAction) => agent.requests.downloadPost(`${IAppApiAPI}/Attachment`, action),
-  ActionList: (FlowId: number, Id: number) =>  agent.requests.get(`${IAppApiAPI}/${FlowId}?ItemId=${Id}`),
+  ActionList: (FlowId: number, Id: number) =>  agent.requests.get(`${IAppApiAPI}/ActionList/${FlowId}?ItemId=${Id}`),
   
 
   list: (): Promise<IAppApi[]> => agent.requests.get(IAppApiAPI),
@@ -90,6 +90,7 @@ export default class AppApiStoreImpl {
       let itm = new DataResult();
       itm = await DBFun.ExecuteQuery(action);  
       this.dateResult = itm;
+      this.loading = false;
       return itm;
       //this.apiResult = await DBFun.Execute(action);                 
       //return this.apiResult;   
@@ -100,6 +101,29 @@ export default class AppApiStoreImpl {
       throw error;
     }
   }
+
+  GetDataByActionId = async (ActionId: number) => {
+    this.loading = true;
+    let action: AppApiAction = new AppApiAction()
+    action.ActionId = ActionId;      
+
+    try {        
+      //debugger;
+      let itm = new DataResult();
+      itm = await DBFun.ExecuteQuery(action);  
+      this.dateResult = itm;
+      this.loading = false;
+      return itm;
+      //this.apiResult = await DBFun.Execute(action);                 
+      //return this.apiResult;   
+    } catch (error) {
+      runInAction( () => {   
+
+      });        
+      throw error;
+    }
+  }
+
 
   ExecuteQuery = async (action: IApiAction) => {
     this.loading = true;

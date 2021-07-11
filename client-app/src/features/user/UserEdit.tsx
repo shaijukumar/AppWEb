@@ -19,13 +19,16 @@ const UserEdit: React.FC = () => {
  
   let history = useHistory();
   const [item, setItem] = useState(new UserManager());
+  const [active, setActive] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
   useEffect(() => {
-debugger;
     if (id) {
       UserManagerStore.loadItem(id).then((val) => {
-        setItem(val as any);     
+        setItem(val as any);   
+        debugger;
+        setActive(val?.IsActive ? true : false );  
         setLoading(false);   
       });
     } else {
@@ -33,17 +36,28 @@ debugger;
       setLoading(false);          
     }
     
-  }, [id, UserManagerStore, UserManagerStore.loadItem]);
+  }, [id, UserManagerStore, UserManagerStore.loadItem, setItem]);
 
   const onItemSubmit = (values: any) => {    
 
     debugger;
     setLoading(true);
+    values.IsActive = active;
     UserManagerStore.editItem(values, id).then((val) => {
       debugger;
-      setItem(new UserManager(val as any));
-      setLoading(false);
-      history.push('/userlist')
+      if((val as any).errors){
+        setError((val as any).errors.Error);  
+        setLoading(false);              
+        return;
+      }
+      else{
+        history.push('/userlist')
+        //setItem(new UserManager(val as any));
+        //setLoading(false);       
+      }
+     
+     
+     
     });
   };
 
@@ -51,9 +65,11 @@ debugger;
     return <LinearProgress color="secondary"  className="loaderStyle" /> 
   }
 
-    
+  
+  
   return (
     <Container component="main" maxWidth="xs">  
+       {error && <div  style={{ color:'red' , fontWeight:'bold', padding:5 , border: '1px solid green', margin:10 }} >{error}</div>} 
 
       <Formik
           initialValues={item}
@@ -101,9 +117,16 @@ debugger;
                 required={false}                                
                 label="Phone Number"                                                                     
               />
-
+             
             <FormControlLabel
-              control={<Checkbox id="IsActive" name="IsActive" checked={item.IsActive} onClick={ () => { item.IsActive = !item.IsActive; setItem(item) } }  />}
+              control={<Checkbox id="IsActive" name="IsActive" checked={active} onClick={ () => { 
+                debugger;
+                item.IsActive = !item.IsActive; 
+                setItem(item) 
+
+                
+                setActive(!active);
+              } }  />}
               label="IsActive"              
             />
             

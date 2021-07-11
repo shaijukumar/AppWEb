@@ -82,14 +82,22 @@ namespace Application.User
                 }
                                               
                 var result = await _userManager.UpdateAsync(user);
+                string errMsg = string.Empty;
             
                 if (result.Succeeded)
                 {
                     var toReturn = _mapper.Map <AppUser, UserDTO>(user);
                     return toReturn;
                 }
+                else{
+                   
+                   foreach(var err in result.Errors){
+                       errMsg += err.Code + " - " + err.Description;
+                   }
+                }
 
-                throw new Exception("Problem saving changes");
+                throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {errMsg}" });
+               
             }
         }
     }

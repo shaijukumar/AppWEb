@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AppWebCustom;
+using Application.User;
 
 namespace API.Controllers
 {
@@ -17,8 +18,17 @@ namespace API.Controllers
         // {
         //     return await Mediator.Send(new List.Query());
         // } 
+       
+        [HttpGet("{id}", Name = "UserList")]
+        [Route("UserList")]
+		public async Task<ActionResult<List<UserDTO>>>  UserList( string UserId, string DispalyName)
+        {
+            return await Mediator.Send(new AppApiUser.Query { UserId = UserId, DispalyName = DispalyName});
+        }
 
-		[HttpGet("{id}")]
+		//[HttpGet("{id}")]
+        [HttpGet("{id}", Name = "ActionList")]
+        [Route("[action]/{id}")]
 		public async Task<ActionResult<List<AppApiActionsDto>>>  ActionList(int id, int ItemId)
         {
             return await Mediator.Send(new ActionList.Query { FlowId = id, ItemId = ItemId });

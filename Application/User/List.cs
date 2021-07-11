@@ -28,7 +28,7 @@ namespace Application.User
             {
                
                 var users = await _context.Users.ToListAsync(); 
-               return _mapper.Map<List<AppUser>, List<UserDTO>>(users);
+                return _mapper.Map<List<AppUser>, List<UserDTO>>(users);
             }
         }
     }

@@ -1,5 +1,14 @@
 
-export const AppColor : {[key: string]: string} = 
+export const AppTheme : {[key: string]: string} = 
 {
-    ErrorMessge : "#FF0000"
+    ErrorMessgeColor : "#FF0000",
+
+    ActionButtonColor : "#fff",
+    ActionButtonBackgroundColor : "#303f9f",
+    ActionButtonFontSize : '14px',
+
 }
+
+
+
+

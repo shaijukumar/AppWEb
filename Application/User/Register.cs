@@ -23,6 +23,9 @@ namespace Application.User
             public string Username { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
+            public bool IsActive { get; set; }
+            
+            
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -60,8 +63,9 @@ namespace Application.User
                 {
                     DisplayName = request.DisplayName,
                     Email = request.Email,
-                    UserName = request.Username
-                };
+                    UserName = request.Username,
+                    IsActive = request.IsActive,                   
+                };  
 
                 var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -72,7 +76,7 @@ namespace Application.User
                         DisplayName = user.DisplayName,
                         Token = _jwtGenerator.CreateToken(user),
                         Username = user.UserName,
-                        Image = null
+                        Image = null,                        
                     };
                 }
 

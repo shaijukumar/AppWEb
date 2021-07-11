@@ -25,6 +25,7 @@ namespace Application.User
             public string Email { get; set; }
             public string Password { get; set; }
             public string PhoneNumber { get; set; }
+             public bool IsActive { get; set; }
 
         }
 
@@ -66,19 +67,28 @@ namespace Application.User
                     DisplayName = request.DisplayName,
                     Email = request.Email,
                     UserName = request.Username,
-                    PhoneNumber = request.PhoneNumber
+                    PhoneNumber = request.PhoneNumber,
+                    IsActive = request.IsActive, 
                 };
 
                 var result = await _userManager.CreateAsync(user, request.Password);
+                string errMsg = string.Empty;
             
                 if (result.Succeeded)
                 {
                     var toReturn = _mapper.Map <AppUser, UserDTO>(user);
                     return toReturn;
                 }
+                else{
+                   
+                   foreach(var err in result.Errors){
+                       errMsg += err.Code + " - " + err.Description;
+                   }
+                }
 
-                throw new Exception("Problem saving changes");
-}
+                throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {errMsg}" });
+               
+            }
         }
     }
 }
