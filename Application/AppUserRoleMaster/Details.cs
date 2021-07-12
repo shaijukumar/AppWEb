@@ -7,6 +7,7 @@ using AutoMapper;
 using MediatR;
 using Persistence;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application._AppUserRoleMaster
 {
@@ -14,7 +15,7 @@ namespace Application._AppUserRoleMaster
     {
         public class Query : IRequest<AppUserRoleMasterDto>
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, AppUserRoleMasterDto>
@@ -29,15 +30,13 @@ namespace Application._AppUserRoleMaster
 
             public async Task<AppUserRoleMasterDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var appUserRoleMaster = await _context.AppUserRoleMasters
-                    .FindAsync(request.Id);
+                var roles = await  _context.AspNetRoles.FindAsync(request.Id);
 
-                if (appUserRoleMaster == null)
+                if (roles == null)
                     throw new RestException(HttpStatusCode.NotFound, new { AppUserRoleMaster = "Not found" });
 
-                var toReturn = _mapper.Map <AppUserRoleMaster, AppUserRoleMasterDto>(appUserRoleMaster); 
+                return _mapper.Map <IdentityRole, AppUserRoleMasterDto>(roles);                 
 
-                return toReturn;
             }
     }
 }

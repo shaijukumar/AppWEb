@@ -8,7 +8,7 @@ const IAppUserRoleAPI = "/AppUserRole";
 
 const DBFun = {
   list: (): Promise<IAppUserRole[]> => agent.requests.get(IAppUserRoleAPI),
-  RoleList: (Role: number): Promise<IAppUserRole[]> => agent.requests.get(`${IAppUserRoleAPI}/RoleList/${Role}`),
+  RoleList: (Role: string): Promise<IAppUserRole[]> => agent.requests.get(`${IAppUserRoleAPI}/RoleList/${Role}`),
   details: (Id: number) => agent.requests.get(`${IAppUserRoleAPI}/Details/${Id}`),
   //RoleList: (Role: number) => agent.requests.get(`${IAppUserRoleAPI}/RoleList/${Role}`),
   create: (item: IAppUserRole) => agent.requests.post(IAppUserRoleAPI, item),
@@ -51,7 +51,7 @@ export default class AppUserRoleStoreImpl {
     }
   }
 
-  getRoleList = async (role: number) => {        
+  getRoleList = async (role: string) => {        
     this.loading = true;
     try {               
       this.roleList = await DBFun.RoleList(role);       

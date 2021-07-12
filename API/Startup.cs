@@ -70,14 +70,21 @@ namespace API
             .AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
         
             
-            var builder = services.AddIdentityCore<AppUser>();
+            //var builder = services.AddIdentityCore<AppUser>();
+            
+            var builder =services.AddIdentityCore<AppUser>();
+
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identityBuilder.AddRoles<IdentityRole>();
 
             
-            
+
+
+
 
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+           
 
             services.AddAuthorization(opt => 
             {

@@ -31,8 +31,7 @@ namespace API.Controllers
         {
             return await Mediator.Send(new Details.Query { Id = id });
         }
-
-
+        
         [HttpPost]
 		public async Task<ActionResult<AppColumnMasterDto>> Create(Create.Command command)
         {

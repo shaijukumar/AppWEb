@@ -8,7 +8,7 @@ namespace Application._AppAction
     {
         public MappingProfile()
         {
-            CreateMap <AppAction, AppActionDto>();
+            CreateMap <AppAction, AppActionDto>();           
         }
     }
 }

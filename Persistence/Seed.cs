@@ -44,20 +44,20 @@ namespace Persistence
                 }
             }
             
-            if (!context.AppUserRoleMasters.Any())
-            {
-                var userRoleMasters = new List<AppUserRoleMaster>
-                {
-                    new AppUserRoleMaster
-                    {
-                        Title = "Admin",                        
-                    },
+            // if (!context.AppUserRoleMasters.Any())
+            // {
+            //     var userRoleMasters = new List<AppUserRoleMaster>
+            //     {
+            //         new AppUserRoleMaster
+            //         {
+            //             Title = "Admin",                        
+            //         },
                     
-                };
+            //     };
 
-                context.AppUserRoleMasters.AddRange(userRoleMasters);
-                context.SaveChanges();
-            }
+            //     context.AppUserRoleMasters.AddRange(userRoleMasters);
+            //     context.SaveChanges();
+            // }
         
            
         }

@@ -2,17 +2,22 @@
 import { createContext } from "react";
 import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { AppUserRoleMaster, IAppUserRoleMaster } from "./AppUserRoleMaster";
+import { AddRole, AppUserRoleMaster, IAppUserRoleMaster, IRoleUser } from "./AppUserRoleMaster";
 
 const IAppUserRoleMasterAPI = "/AppUserRoleMaster";
 
 const DBFun = {
   list: (): Promise<IAppUserRoleMaster[]> => agent.requests.get(IAppUserRoleMasterAPI),
-  details: (Id: number) => agent.requests.get(`${IAppUserRoleMasterAPI}/${Id}`),
-  create: (item: IAppUserRoleMaster) => agent.requests.post(IAppUserRoleMasterAPI, item),
+  details: (Id: string) => agent.requests.get(`${IAppUserRoleMasterAPI}/Details/${Id}`),
+  create: (item: IAppUserRoleMaster) => agent.requests.post(`${IAppUserRoleMasterAPI}/CreateRole`, item),
   update: (item: IAppUserRoleMaster) =>
     agent.requests.put(`${IAppUserRoleMasterAPI}/${item.Id}`, item),
   delete: (Id: number) => agent.requests.del(`${IAppUserRoleMasterAPI}/${Id}`),
+
+  AddUserToRole: (item: AddRole) => agent.requests.post(`${IAppUserRoleMasterAPI}/AddUserToRole`, item),
+  RoleUserList: (Id: string) => agent.requests.get(`${IAppUserRoleMasterAPI}/RoleUserList/${Id}`),
+  RemoveUserFromRole: (item: AddRole) => agent.requests.post(`${IAppUserRoleMasterAPI}/RemoveUserFromRole`, item),
+  
 };
 
 export default class AppUserRoleMasterStoreImpl {
@@ -20,7 +25,9 @@ export default class AppUserRoleMasterStoreImpl {
   loading = false;
   updating = false;
   itemList: IAppUserRoleMaster[] = [];
-  item: AppUserRoleMaster = new AppUserRoleMaster()
+  item: AppUserRoleMaster = new AppUserRoleMaster();
+  userList: IRoleUser[] = [];
+
 
   constructor() {
     makeObservable(this, {
@@ -28,9 +35,13 @@ export default class AppUserRoleMasterStoreImpl {
          loading: observable,
          updating: observable,
          item: observable,
+         userList: observable,
          getList: action,
          loadItem: action,
-         editItem: action
+         editItem: action,
+         addUserToRole: action,
+         roleUserList: action,
+         
     });
   }
 
@@ -47,7 +58,7 @@ export default class AppUserRoleMasterStoreImpl {
     }
   }
 
-  loadItem = async (id: number) => {
+  loadItem = async (id: string) => {
     this.loading = true;
     try {
       this.itemList = await DBFun.list(); 
@@ -93,8 +104,53 @@ export default class AppUserRoleMasterStoreImpl {
       console.log(error);
       throw error;
     }
-  };  
+  }; 
+  
+  addUserToRole = async (item: AddRole) => {    
+    this.loading = true;
+    try {        
+      var u = await DBFun.AddUserToRole(item);
+      this.loading = false;         
+      return u;   
+    } catch (error) {
+      runInAction( () => {
+        this.loading = false;        
+      });        
+      throw error;
+    }
+  };
+
+  
+  roleUserList = async (id: string) => {
+    debugger;
+    this.loading = true;
+    try {
+      this.userList = await DBFun.RoleUserList(id);                
+      this.loading = false;     
+      return this.userList; 
+      return this.item;     
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
+  }
+
+  RemoveUserFromRole = async (item: AddRole) => {    
+    this.loading = true;
+    try {        
+      var u = await DBFun.RemoveUserFromRole(item);
+      this.loading = false;         
+      return u;   
+    } catch (error) {
+      runInAction( () => {
+        this.loading = false;        
+      });        
+      throw error;
+    }
+  };
+
 }
 
 export const AppUserRoleMasterContext = createContext(new AppUserRoleMasterStoreImpl());
+
 

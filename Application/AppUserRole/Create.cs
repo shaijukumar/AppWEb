@@ -7,7 +7,8 @@ using AutoMapper;
 using Persistence;
 using Application.Interfaces;
 using Domain;
-
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application._AppUserRole
 {
@@ -44,12 +45,22 @@ namespace Application._AppUserRole
             }
 
             public async Task<AppUserRoleDto> Handle(Command request, CancellationToken cancellationToken)
-            {                                                   
+            {                               
+                // public virtual AppUser user { get; set; }
+                // public virtual AppUserRoleMaster role { get; set; }    
+
+
                 var appUserRole = new AppUserRole
                 {
 					UserId  = request.UserId,
 					AppUserRoleMasterId  = request.AppUserRoleMasterId                  
                 };
+
+                appUserRole.user = await _context.Users
+                    .Where(x => x.UserName == request.UserId ).FirstOrDefaultAsync();
+
+                appUserRole.role = await _context.AppUserRoleMasters
+                    .Where(x => x.Id == request.AppUserRoleMasterId ).FirstOrDefaultAsync();
 
                 _context.AppUserRoles.Add(appUserRole);
                 var success = await _context.SaveChangesAsync() > 0;

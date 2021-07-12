@@ -86,17 +86,15 @@ namespace Application._AppConfig
                 appConfig.ConfigType = await _context.AppConfigTypes
                     .Where(x => x.Id == request.Type ).FirstOrDefaultAsync();
 				
+
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;          
+                    return _mapper.Map<AppConfig, AppConfigDto>(appConfig);        				                                       
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }
 				
-				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /
-				var success = await _context.SaveChangesAsync() > 0;                   
-				//if (success) return Unit.Value;
-				if (success)
-				{
-					var toReturn = _mapper.Map<AppConfig, AppConfigDto>(appConfig);
-					return toReturn;
-				}
-
-
                 throw new Exception("Problem saving changes");
             }
         }

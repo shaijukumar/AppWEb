@@ -2,7 +2,7 @@ import { Button, ButtonGroup, Container, LinearProgress, Link, List, ListItem, P
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppConfigType } from './AppConfigType';
 import { AppConfigTypeContext } from './AppConfigTypeStore';
@@ -137,8 +137,8 @@ const AppConfigTypeEdit: React.FC = () => {
                       </TableCell> */}
                       <TableCell align="left" width="50">{row.Order}</TableCell>                          
                       <TableCell align="left"  >
-                        <Link href="#" onClick={ () => { openModel( row as any ) } } >{row.Title}</Link>
-                        
+                        {/* <Link href="#" onClick={ () => { openModel( row as any ) } } >{row.Title}</Link> */}
+                        <NavLink to={`/AppConfigItemEdit/${item.Id}/${row.Id}` } >{row.Title}</NavLink>
                       </TableCell>  
                       {/* <TableCell align="left"> { ColumnDataType.find( u => u.Id == row.Type )?.value }</TableCell>  
                       <TableCell align="left">{row.UserAccess}</TableCell>  
@@ -150,7 +150,8 @@ const AppConfigTypeEdit: React.FC = () => {
 
                   <TableRow key="AddNew"  >   
                     <TableCell colSpan={2}>
-                      <Button color="primary" onClick={ () => { openModel( new AppConfigType() ) }}>Add New {item.Title}</Button>   
+                      <NavLink to={`/AppConfigItemEdit/${item.Id}/` } >Add New {item.Title}</NavLink>
+                      {/* <Button color="primary" onClick={ () => { openModel( new AppConfigType() ) }}>Add New {item.Title}</Button>    */}
                     </TableCell>                                                                                  
                     
                   </TableRow>

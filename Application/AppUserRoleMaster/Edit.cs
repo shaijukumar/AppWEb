@@ -60,16 +60,20 @@ namespace Application._AppUserRoleMaster
 
 				appUserRoleMaster.Title  = request.Title ?? appUserRoleMaster.Title;
 				
+								
 				
-				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /
-				var success = await _context.SaveChangesAsync() > 0;                   
-				//if (success) return Unit.Value;
-				if (success)
-				{
-					var toReturn = _mapper.Map<AppUserRoleMaster, AppUserRoleMasterDto>(appUserRoleMaster);
-					return toReturn;
-				}
 
+                try{
+                   var success = await _context.SaveChangesAsync() > 0;                   				
+                    if (success)
+                    {
+                        var toReturn = _mapper.Map<AppUserRoleMaster, AppUserRoleMasterDto>(appUserRoleMaster);
+                        return toReturn;
+                    }
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                } 
 
                 throw new Exception("Problem saving changes");
             }

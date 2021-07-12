@@ -249,7 +249,7 @@ const App = () => {
           <Route  path={['/AppConfigTypeItemEdit/:id', '/AppConfigTypeItemEdit/']} component={AppConfigTypeEdit} />
 
           <Route path='/AppConfigList' component={AppConfigList} />
-          <Route  path={['/AppConfigItemEdit/:id', '/AppConfigItemEdit/']} component={AppConfigEdit} />
+          <Route  path={['/AppConfigItemEdit/:typeid/:id', '/AppConfigItemEdit/:typeid/']} component={AppConfigEdit} />
 
           <Route path='/AppActionList' component={AppActionList} />
           <Route  path={['/AppActionItemEdit/:id', '/AppActionItemEdit/']} component={AppActionEdit} />

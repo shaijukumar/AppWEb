@@ -70,9 +70,9 @@ namespace Application._AppTableMaster
 
             public string UpdateUserAccess(string UserAccess)
             {
-                 XmlDocument xmlDoc = new XmlDocument();  
-                 string qry = HttpUtility.UrlDecode(UserAccess);
-                 try{                   
+                XmlDocument xmlDoc = new XmlDocument();  
+                string qry = HttpUtility.UrlDecode(UserAccess);
+                try{                   
                     xmlDoc.LoadXml(qry);                                       
                 }
                 catch(Exception ex){

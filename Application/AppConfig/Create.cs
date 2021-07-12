@@ -9,6 +9,8 @@ using Application.Interfaces;
 using Domain;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Application.Errors;
+using System.Net;
 
 namespace Application._AppConfig
 {
@@ -70,16 +72,20 @@ namespace Application._AppConfig
                 appConfig.ConfigType = await _context.AppConfigTypes
                     .Where(x => x.Id == request.Type ).FirstOrDefaultAsync();
 
+                try{
+                    _context.AppConfigs.Add(appConfig);
+                    var success = await _context.SaveChangesAsync() > 0;
 
-                _context.AppConfigs.Add(appConfig);
-                var success = await _context.SaveChangesAsync() > 0;
-
-                if (success)
-                {
-                    var toReturn = _mapper.Map <AppConfig, AppConfigDto>(appConfig);
-                    return toReturn;
-                }                
-
+                    if (success)
+                    {
+                        var toReturn = _mapper.Map <AppConfig, AppConfigDto>(appConfig);
+                        return toReturn;
+                    } 
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }
+                
                 throw new Exception("Problem saving changes");
 }
         }

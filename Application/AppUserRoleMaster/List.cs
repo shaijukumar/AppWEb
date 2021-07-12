@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
@@ -23,22 +26,30 @@ namespace Application._AppUserRoleMaster
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly UserManager<AppUser> _userManager;
-            
+            private RoleManager<IdentityRole> _roleManager;            
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, UserManager<AppUser> userManager )
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleMgr )
             {
                 _mapper = mapper;
                 _context = context;
                 _userAccessor = userAccessor;
                 _userManager = userManager;
+                 _roleManager = roleMgr;
             }
 
             public async Task<List<AppUserRoleMasterDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var appUserRoleMaster = await _context.AppUserRoleMasters
-                    .ToListAsync();
+                
+                List<IdentityRole> roles = await  _context.AspNetRoles.ToListAsync();
+
+                List<AppUserRoleMasterDto> v ;
+                try{
+                    v = _mapper.Map<List<IdentityRole>, List<AppUserRoleMasterDto>>(roles);
+                }catch(Exception ex){
+                      throw new RestException(HttpStatusCode.OK, new { Error = $" {ex.Message}. {ex.InnerException.Message}." });
+                }
 					
-                return _mapper.Map<List<AppUserRoleMaster>, List<AppUserRoleMasterDto>>(appUserRoleMaster);
+                return v;
                 
             }
         }

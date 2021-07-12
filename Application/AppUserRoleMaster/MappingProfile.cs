@@ -1,6 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application._AppUserRoleMaster
 {
@@ -8,7 +9,8 @@ namespace Application._AppUserRoleMaster
     {
         public MappingProfile()
         {
-            CreateMap <AppUserRoleMaster, AppUserRoleMasterDto>();
+            CreateMap <IdentityRole, AppUserRoleMasterDto>();
+            CreateMap <AppUser, GroupUserDTO>();
         }
     }
 }

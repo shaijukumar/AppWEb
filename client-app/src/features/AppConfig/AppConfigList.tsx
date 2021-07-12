@@ -25,7 +25,7 @@ const AppConfigList: React.FC = () => {
     {
       title: "Title",
       field: "Title",
-      render : (values: IAppConfig) => { return <NavLink to={"/AppConfigItemEdit/" + values.Id } >{values.Title}</NavLink> },
+      render : (values: IAppConfig) => { return <NavLink to={`/AppConfigItemEdit/${values.ConfigTypeId}/${values.Id}` } >{values.Title}</NavLink> },
     },
     {
       title: "Type",

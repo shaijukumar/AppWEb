@@ -31,35 +31,6 @@ namespace Persistence.Migrations
                     b.ToTable("AppActionAppStatusList");
                 });
 
-            modelBuilder.Entity("Domain.Activity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Category")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Venue")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Activities");
-                });
-
             modelBuilder.Entity("Domain.AppAction", b =>
                 {
                     b.Property<int>("Id")
@@ -185,7 +156,7 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ConfigTypeId")
+                    b.Property<int>("ConfigTypeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Det1")
@@ -215,6 +186,9 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ConfigTypeId");
+
+                    b.HasIndex("Title", "Order")
+                        .IsUnique();
 
                     b.ToTable("AppConfigs");
                 });
@@ -727,6 +701,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title")
+                        .IsUnique();
+
                     b.ToTable("AppTableMasters");
                 });
 
@@ -834,6 +811,10 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserRoleMasterId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("AppUserRoles");
                 });
 
@@ -849,94 +830,6 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUserRoleMasters");
-                });
-
-            modelBuilder.Entity("Domain.PageCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("Pid")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Prop1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Prop2")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Prop3")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Prop4")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PageCategorys");
-                });
-
-            modelBuilder.Entity("Domain.PageTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("label")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PageTags");
-                });
-
-            modelBuilder.Entity("Domain.SitePage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CatId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PageHtml")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Tags")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("URLTitle")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SitePages");
-                });
-
-            modelBuilder.Entity("Domain.ToDo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ToDoUserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ToDoUserId");
-
-                    b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("Domain.Value", b =>
@@ -1100,7 +993,9 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.AppConfigType", "ConfigType")
                         .WithMany()
-                        .HasForeignKey("ConfigTypeId");
+                        .HasForeignKey("ConfigTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ConfigType");
                 });
@@ -1116,13 +1011,21 @@ namespace Persistence.Migrations
                     b.Navigation("NotificationsMaster");
                 });
 
-            modelBuilder.Entity("Domain.ToDo", b =>
+            modelBuilder.Entity("Domain.AppUserRole", b =>
                 {
-                    b.HasOne("Domain.AppUser", "ToDoUser")
+                    b.HasOne("Domain.AppUserRoleMaster", "role")
                         .WithMany()
-                        .HasForeignKey("ToDoUserId");
+                        .HasForeignKey("AppUserRoleMasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ToDoUser");
+                    b.HasOne("Domain.AppUser", "user")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("role");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

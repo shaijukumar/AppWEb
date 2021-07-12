@@ -23,8 +23,8 @@ const AppUserRoleMasterList: React.FC = () => {
       // },
       {
         title: "Title",
-        field: "Title",                 
-        render :  (values: any) => { return <NavLink to={"/AppUserRoleMasterItemEdit/" + values.Id } >{values.Title}</NavLink> } 
+        field: "Name",                 
+        render :  (values: any) => { return <NavLink to={"/AppUserRoleMasterItemEdit/" + values.Id } >{values.Name}</NavLink> } 
       }
   ];
 

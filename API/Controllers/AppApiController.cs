@@ -21,9 +21,9 @@ namespace API.Controllers
        
         [HttpGet("{id}", Name = "UserList")]
         [Route("UserList")]
-		public async Task<ActionResult<List<UserDTO>>>  UserList( string UserId, string DispalyName)
+		public async Task<ActionResult<List<UserDTO>>>  UserList( string Type = null, string Value = null)
         {
-            return await Mediator.Send(new AppApiUser.Query { UserId = UserId, DispalyName = DispalyName});
+            return await Mediator.Send(new AppApiUser.Query { Type = Type, Value = Value});
         }
 
 		//[HttpGet("{id}")]

@@ -22,8 +22,10 @@ namespace Application._AppApi
     {
         public class Query : IRequest<List<UserDTO>>
         {
-            public string UserId { get; set; }
-            public string DispalyName { get; set; }  
+            public string Type { get; set; }   //CurrentUser, * => all, ByUserID, ByDispalyName     
+            public string Value { get; set; } //Value of ByUserID, ByDispalyName                                        
+            // public string UserId { get; set; }
+            // public string DispalyName { get; set; }  
         }
 
         public class Handler : IRequestHandler<Query, List<UserDTO>>
@@ -44,10 +46,36 @@ namespace Application._AppApi
 
             public async Task<List<UserDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var users = await _context.Users.ToListAsync(); 
+                if( string.IsNullOrEmpty(request.Type)){
+                    request.Type = "currentuser";
+                }
 
-                users = await _context.Users
-                    .Where( u => u.UserName.ToLower().Contains(request.UserId.ToLower()) || u.DisplayName.ToLower().Contains(request.DispalyName.ToLower()) ).ToListAsync();
+                List<AppUser> users = new List<AppUser>();
+                if(request.Type == "*" ){
+                    users = await _context.Users.ToListAsync(); 
+                }
+                else if (request.Type.ToLower() == "currentuser" ){
+                    users = await _context.Users
+                        .Where( u => u.UserName ==  _userAccessor.GetCurrentUsername()  ).ToListAsync();  
+                }
+                else if (request.Type.ToLower() == "byuserid" || request.Type.ToLower() == "bydispalyname" ){
+
+                    if( string.IsNullOrEmpty(request.Value)){
+                         throw new RestException(HttpStatusCode.OK, new { Error = $"Invalid value parm" });
+                    }
+
+                    if (request.Type.ToLower() == "byuserid" ){                     
+                        users = await _context.Users
+                            .Where( u => u.UserName.ToLower() == request.Value.ToLower()  ).ToListAsync();
+                    }
+                    else if (request.Type.ToLower() == "bydispalyname" ){                        
+                        users = await _context.Users
+                            .Where( u => u.DisplayName.ToLower().Contains(request.Value.ToLower())  ).ToListAsync();
+                    }
+                }
+                                                
+                // users = await _context.Users
+                //     .Where( u => u.UserName.ToLower().Contains(request.Value.ToLower()) || u.DisplayName.ToLower().Contains(request.DispalyName.ToLower()) ).ToListAsync();
 
                 return _mapper.Map<List<AppUser>, List<UserDTO>>(users);
                 

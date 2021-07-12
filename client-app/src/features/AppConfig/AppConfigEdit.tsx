@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, LinearProgress, TextField } from '@material-ui/core';
+import { Button, ButtonGroup, Chip, Container, LinearProgress, TextField } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -12,21 +12,24 @@ import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
 
 
 interface DetailParms {
-  id: string;
+  typeid: string;
+  id: string; 
 }
 const AppConfigEdit: React.FC = () => {
 
-  const { id } = useParams<DetailParms>();
+  const { id, typeid } = useParams<DetailParms>();
   const AppConfigTypeStore = useContext(AppConfigTypeContext);
   const AppConfigStore = useContext(AppConfigContext);
  
  
   let history = useHistory();
   const [item, setItem] = useState(new AppConfig());
-  const [type, setType] = useState(0);
+  const [type, setType] = useState(Number(typeid));
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
   useEffect(() => {
+    
 
     AppConfigTypeStore.getList(); 
     AppConfigStore.loadItem(Number(id));
@@ -39,6 +42,7 @@ const AppConfigEdit: React.FC = () => {
       });
     } else {
       setItem(new AppConfig()); 
+      setType(Number(typeid));
       setLoading(false);     
     }
     
@@ -49,7 +53,16 @@ const AppConfigEdit: React.FC = () => {
     values.Type = type;
     
     AppConfigStore.editItem(values).then((val) => {
-	    history.push('/AppConfiglist');
+      debugger;
+      if((val as any).errors){
+        setError((val as any).errors.Error);  
+        setLoading(false);              
+        return;
+      }
+      else{
+        history.push(`/AppConfigTypeItemEdit/${typeid}`);
+      }
+	    
     });
   }; 
 
@@ -59,6 +72,7 @@ const AppConfigEdit: React.FC = () => {
   
   return (
     <Container component="main" maxWidth="xs">  
+       {error && <div  style={{ color:'red' , fontWeight:'bold', padding:5 , border: '1px solid green', margin:10 }} >{error}</div>}
 
       <Formik
           initialValues={item}
@@ -68,15 +82,12 @@ const AppConfigEdit: React.FC = () => {
           onSubmit={onItemSubmit}
         >
           <Form > 
-            {item.Id}
-            <MyCustomTxt   
-              name="Title"                         
-              type="text"                
-              autoFocus={true}
-              required={true}                                
-              label="Title"                                                                     
-            />
-            Type : {type}
+           
+            {type && 
+              <Chip label={ `Type : ${AppConfigTypeStore.itemList.find( u => u.Id === type )?.Title }` }  color="primary"  />
+            }
+
+            {/* { !type && 
             <Autocomplete                             
               value={ AppConfigTypeStore.itemList.find( u => u.Id === type ) } 
               id="Type"
@@ -90,7 +101,17 @@ const AppConfigEdit: React.FC = () => {
                   setType(newValue.Id);
                 }                
               }}
+            /> } */}
+
+            <MyCustomTxt   
+              name="Title"                         
+              type="text"                
+              autoFocus={true}
+              required={true}                                
+              label="Title"                                                                     
             />
+            
+            
 
             <MyCustomTxt   
               name="Order"                         
@@ -141,14 +162,14 @@ const AppConfigEdit: React.FC = () => {
                     color="primary"                    
                     onClick={ () => {
                       AppConfigStore.deleteItem(item.Id).then( () => {
-                        history.push('/AppConfiglist');
+                        history.push(`/AppConfigTypeItemEdit/${typeid}`);
                       })
                     }}
                   >
                     Delete
                   </Button>
                 }
-                <Button onClick={ () => { history.push('/AppConfiglist');  }}>Back</Button>          
+                <Button onClick={ () => { history.push(`/AppConfigTypeItemEdit/${typeid}`);  }}>Back</Button>          
               </ButtonGroup>
 
           </Form>

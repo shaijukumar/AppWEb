@@ -93,7 +93,7 @@ const AppUserRoleEdit: React.FC = () => {
                 }}
               />
 
-              <Autocomplete                
+              {/* <Autocomplete                
                 value={ AppUserRoleMasterStore.itemList.find( u => u.Id === item.AppUserRoleMasterId ) } 
                 id="AppUserRoleMasterId"
                 options={AppUserRoleMasterStore.itemList}
@@ -106,7 +106,7 @@ const AppUserRoleEdit: React.FC = () => {
                   setItem(item);
                   debugger;                     
                 }}
-              />
+              /> */}
 
 
 

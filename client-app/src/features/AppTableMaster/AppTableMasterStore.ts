@@ -63,7 +63,7 @@ export default class AppTableMasterStoreImpl {
   }
 
  editItem = async (item: IAppTableMaster) => {    
-    this.loading = true;
+    //this.loading = true;
     try {        
       let itm = new  AppTableMaster();
       if (item.Id) {
@@ -71,11 +71,11 @@ export default class AppTableMasterStoreImpl {
       } else {
         itm = await DBFun.create(item);
       }
-      this.loading = false;         
+      //this.loading = false;         
       return itm;   
     } catch (error) {
       runInAction( () => {
-        this.loading = false;        
+        //this.loading = false;        
       });        
       throw error;
     }
@@ -85,9 +85,10 @@ export default class AppTableMasterStoreImpl {
     this.updating = true;
     this.loading = true;
     try {
-      await DBFun.delete(id);    
+      var res = await DBFun.delete(id);    
       this.updating = false;   
       this.loading = false;
+      return res;
     } catch (error) {    
       this.updating = false;  
       this.loading = false;             

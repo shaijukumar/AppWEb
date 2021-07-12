@@ -1,5 +1,6 @@
 using System;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,8 @@ namespace Persistence
         {
         }
         
-        public DbSet<Value> Values { get; set; }		
+        public DbSet<Value> Values { get; set; }	
+        public DbSet<IdentityRole> AspNetRoles { get; set; }		
 		public DbSet<AppUserRole> AppUserRoles { get; set; }		
 		public DbSet<AppUserAccess> AppUserAccesss { get; set; }
 		public DbSet<AppTableMaster> AppTableMasters { get; set; }
@@ -35,6 +37,19 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {            
               base.OnModelCreating(builder); 
+
+            //   builder.Entity<AppUserRoleMaster>(entity => {
+            //         entity.HasIndex(e => e.Title).IsUnique();
+            //     });
+
+            builder.Entity<AppTableMaster>(entity => {
+                 entity.HasIndex(e => e.Title).IsUnique();
+            });
+
+            builder.Entity<AppConfig>(entity => {
+                entity.HasIndex(e => new  {e.Title, e.Order} ).IsUnique();
+            });
+                
 
             //   builder.Entity<AppData>()
             //     .HasMany(u => u.Attachment1)

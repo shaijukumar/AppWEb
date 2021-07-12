@@ -25,7 +25,7 @@ const UserEdit: React.FC = () => {
   
   useEffect(() => {
     if (id) {
-      UserManagerStore.loadItem(id).then((val) => {
+      UserManagerStore.loadItem(Number(id)).then((val) => {
         setItem(val as any);   
         debugger;
         setActive(val?.IsActive ? true : false );  
