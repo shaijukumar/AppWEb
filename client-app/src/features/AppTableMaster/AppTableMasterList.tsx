@@ -49,9 +49,9 @@ const AppTableMasterList: React.FC = () => {
       <React.Fragment>              
         <div className={"tabcontainers1"}>
           <div className={"tabcontainers2"} >     
-            {AppTableMasterStore.itemList.length > 0     &&   
+            {AppTableMasterStore.itemList.length > 0  &&   
             <MaterialTable                    
-              title="Application Configration"
+              title="Table List"
               data={AppTableMasterStore.itemList}
               columns={TableColumns as any}
               options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}
@@ -62,8 +62,17 @@ const AppTableMasterList: React.FC = () => {
                   //let filedName : any =  "Title"; //columnDef.field == null ? columnDef.field as string : "Title" 
                   return new Promise((resolve, reject) => {
                     (rowData as any)[columnDef.field as string] = newValue;                   
-                    AppTableMasterStore.editItem(rowData).then((val) =>{                    
-                      resolve();                                
+                    AppTableMasterStore.editItem(rowData).then((val) =>{   
+                      
+                      if((val as any).errors){
+                        setError((val as any).errors.Error);                         
+                        reject();                                        
+                        setOpen(true);                                                     
+                      }    
+                      else{
+                        resolve();
+                      }               
+                                                        
                     });                                    
                   });
                 }
@@ -93,20 +102,14 @@ const AppTableMasterList: React.FC = () => {
                             resolve(true);
                             //alert(error);      
                             setOpen(true);                                                     
-                          }
-                                                  
+                          }                                                  
                           AppTableMasterStore.getList().then( () => {resolve(true);});                                          
                                                       
                         })                  
                       resolve(true);
                     }, 10)
-                  }),    
-
-              }}
-
-              
-
-            
+                  }),
+              }}                          
             />
           }
           </div>
@@ -123,8 +126,7 @@ const AppTableMasterList: React.FC = () => {
             {error}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          
+        <DialogActions>          
           <Button onClick={handleClose} color="primary" autoFocus>
             Close
           </Button>
