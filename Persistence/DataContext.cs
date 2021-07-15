@@ -20,7 +20,7 @@ namespace Persistence
 		public DbSet<AppColumnMaster> AppColumnMasters { get; set; }
 		public DbSet<AppUserRoleMaster> AppUserRoleMasters { get; set; }
 		public DbSet<AppData> AppDatas { get; set; }        
-		public DbSet<AppStatusList> AppStatusLists { get; set; }
+		public DbSet<AppStatusList> AppStatusLists { get; set; }        
 		public DbSet<AppHistory> AppHistorys { get; set; }
 		public DbSet<AppConfigType> AppConfigTypes { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
@@ -46,8 +46,16 @@ namespace Persistence
                  entity.HasIndex(e => e.Title).IsUnique();
             });
 
+            builder.Entity<AppColumnMaster>(entity => {
+                 entity.HasIndex(e => e.Title).IsUnique();
+            });
+
+            builder.Entity<AppStatusList>(entity => {
+                entity.HasIndex(e => new  {e.Title, e.TableId} ).IsUnique();
+            });
+
             builder.Entity<AppConfig>(entity => {
-                entity.HasIndex(e => new  {e.Title, e.Order} ).IsUnique();
+                entity.HasIndex(e => new  {e.Title, e.ConfigTypeId} ).IsUnique();
             });
                 
 

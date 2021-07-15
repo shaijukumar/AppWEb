@@ -56,11 +56,11 @@ namespace Application._AppUserRole
 					AppUserRoleMasterId  = request.AppUserRoleMasterId                  
                 };
 
-                appUserRole.user = await _context.Users
-                    .Where(x => x.UserName == request.UserId ).FirstOrDefaultAsync();
+                // appUserRole.user = await _context.Users
+                //     .Where(x => x.UserName == request.UserId ).FirstOrDefaultAsync();
 
-                appUserRole.role = await _context.AppUserRoleMasters
-                    .Where(x => x.Id == request.AppUserRoleMasterId ).FirstOrDefaultAsync();
+                // appUserRole.role = await _context.AppUserRoleMasters
+                //     .Where(x => x.Id == request.AppUserRoleMasterId ).FirstOrDefaultAsync();
 
                 _context.AppUserRoles.Add(appUserRole);
                 var success = await _context.SaveChangesAsync() > 0;

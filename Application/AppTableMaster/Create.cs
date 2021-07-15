@@ -9,6 +9,8 @@ using Application.Interfaces;
 using Domain;
 using System.Xml;
 using System.Web;
+using Application.Errors;
+using System.Net;
 
 namespace Application._AppTableMaster
 {
@@ -53,18 +55,19 @@ namespace Application._AppTableMaster
                 };
 
                 _context.AppTableMasters.Add(appTableMaster);
-                var success = await _context.SaveChangesAsync() > 0;
+                
 
-                if (success)
-                {
-                     //var myTableDefinition = "CREATE TABLE TEST(COLUMNTESTE INTEGER PRIMARY KEY)";
-                     //_context.FromExpression== .Database.ex ExecuteSqlCommand(myTableDefinition);
-                     //var success = await _context.
-                     
-                    var toReturn = _mapper.Map <AppTableMaster, AppTableMasterDto>(appTableMaster);
-                    return toReturn;
-                }                
-
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;
+                    if (success) 
+                        return  _mapper.Map <AppTableMaster, AppTableMasterDto>(appTableMaster);
+                    else    
+                        throw new RestException(HttpStatusCode.OK, new { Error = $"No dows updated." });
+                } 
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                } 
+              
                 throw new Exception("Problem saving changes");
             }
 

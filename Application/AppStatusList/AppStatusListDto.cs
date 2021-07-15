@@ -8,6 +8,8 @@ namespace Application._AppStatusList
 		public int Id { get; set; }
 		public string Title { get; set; }
      public int Order { get; set; }	
-      public int TableId { get; set; }  
+    public int TableId { get; set; }  
+
+
     }
 }

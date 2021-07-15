@@ -39,9 +39,8 @@ const AppTableMasterList: React.FC = () => {
       {
         title: "Details",
         field: "Details", 
-        render : (values: any) => { return <TableDetails tableId={values.Id}  /> },      
-        filtering: false,  
-        editable: 'never',    
+        render : (values: any) => { return <TableDetails showTitle={false} tableId={values.Id}  /> },              
+        editable: "never",    
       },  
     ];
   
@@ -80,6 +79,7 @@ const AppTableMasterList: React.FC = () => {
 
               editable={{
                 onRowAdd: newData => new Promise(resolve => { 
+                  debugger;
                   var tab = new AppTableMaster();
                   tab.Title = newData.Title;
                   AppTableMasterStore.editItem(tab).then((val) =>{  
@@ -87,6 +87,9 @@ const AppTableMasterList: React.FC = () => {
                     resolve(true);                                
                   }) 
                 }),
+
+               
+
                   
                 onRowDelete: oldData =>
                   new Promise((resolve, reject) => {

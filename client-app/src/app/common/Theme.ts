@@ -7,6 +7,8 @@ export const AppTheme : {[key: string]: string} =
     ActionButtonBackgroundColor : "#303f9f",
     ActionButtonFontSize : '14px',
 
+    TableTitleColor : "#303f9f",
+
 }
 
 

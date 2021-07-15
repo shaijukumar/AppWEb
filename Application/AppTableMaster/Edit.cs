@@ -62,14 +62,7 @@ namespace Application._AppTableMaster
 
 				appTableMaster.Title  = request.Title ?? appTableMaster.Title;
 				appTableMaster.UserAccess  = request.UserAccess ?? appTableMaster.UserAccess;
-												
-				//var success = await _context.SaveChangesAsync() > 0;                   				
-				// if (success)
-				// {
-				// 	var toReturn = _mapper.Map<AppTableMaster, AppTableMasterDto>(appTableMaster);
-				// 	return toReturn;
-				// }
-
+				
                 try{
                     var success = await _context.SaveChangesAsync() > 0;
                     if (success) 

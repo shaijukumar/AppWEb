@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 namespace Application._AppFlow
 {
@@ -27,20 +28,35 @@ namespace Application._AppFlow
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
+                var appActionUsed = await _context.AppActions                    
+                    .AnyAsync( x => x.FlowId == request.Id );
+                if (appActionUsed)
+                     throw new RestException(HttpStatusCode.OK, new { Error = "Flow already using in Status flow To status" });
+                     
                 var appFlow = await _context.AppFlows
                     .FindAsync(request.Id);
                 if (appFlow == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { AppFlow = "Not found" });
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Not found" });                    
 
-                var CurrentUsername = _userAccessor.GetCurrentUsername();
-
+                
                 _context.Remove(appFlow);
-				var success = await _context.SaveChangesAsync() > 0;
-				if (success) return Unit.Value;
+				
+                try{                   
+                    var success = await _context.SaveChangesAsync() > 0;
+				    if (success) {
+                        return Unit.Value; 
+                    }                   
+                    else{
+                       throw new RestException(HttpStatusCode.OK, new { Error = $"No rows updated" });  
+                    }
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                } 
 
                 throw new Exception("Problem saving changes");
 
-            }
+            } 
 
         }
 

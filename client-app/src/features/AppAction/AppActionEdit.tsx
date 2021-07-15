@@ -15,7 +15,7 @@ import { AppTableMasterContext } from '../AppTableMaster/AppTableMasterStore';
 import { AppFlowContext } from '../AppFlow/AppFlowStore';
 
 interface DetailParms {
-  id: string;
+  id: string; 
 }
 const AppActionEdit: React.FC = () => {
 

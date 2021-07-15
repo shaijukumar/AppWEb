@@ -86,7 +86,8 @@ namespace Application._AppConfig
                      throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
                 }
                 
-                throw new Exception("Problem saving changes");
+                //throw new Exception("Problem saving changes");
+                throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes." });
 }
         }
     }

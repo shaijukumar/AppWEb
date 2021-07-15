@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
 using Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 namespace Application._AppStatusList
 {
@@ -26,11 +28,21 @@ namespace Application._AppStatusList
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
-            {
+            {                
+                var appActiionUsed = await _context.AppActions                    
+                    .AnyAsync( x => x.ToStatusId == request.Id );
+                if (appActiionUsed)
+                     throw new RestException(HttpStatusCode.OK, new { Error = "Status already using in Status flow To status" });
+
+                appActiionUsed = await _context.AppActions
+                    .AnyAsync( x => x.FromStatusList.Any( s => s.Id ==  request.Id) );
+                 if (appActiionUsed)
+                     throw new RestException(HttpStatusCode.OK, new { Error = "Status already using in Status flow from status" });
+                
                 var appStatusList = await _context.AppStatusLists
                     .FindAsync(request.Id);
                 if (appStatusList == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { AppStatusList = "Not found" });
+                    throw new RestException(HttpStatusCode.OK, new { Error = "Not found" });
 
                 var CurrentUsername = _userAccessor.GetCurrentUsername();
 

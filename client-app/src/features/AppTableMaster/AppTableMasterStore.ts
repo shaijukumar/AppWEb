@@ -51,11 +51,10 @@ export default class AppTableMasterStoreImpl {
   loadItem = async (id: number) => {
     this.loading = true;
     try {
-      this.itemList = await DBFun.list(); 
-      this.item = await DBFun.details(id); 
-      
+      //this.itemList = await DBFun.list(); 
+      this.item = await DBFun.details(id);       
       this.loading = false;      
-      return this.item;     
+      return this.item;   
       } catch (error) {
         console.log(error);
         this.loading = false;
@@ -89,11 +88,12 @@ export default class AppTableMasterStoreImpl {
       this.updating = false;   
       this.loading = false;
       return res;
+      return res;
     } catch (error) {    
       this.updating = false;  
       this.loading = false;             
       console.log(error);
-      throw error;
+      return error;
     }
   };  
 }

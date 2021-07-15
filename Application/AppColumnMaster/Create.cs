@@ -135,13 +135,18 @@ namespace Application._AppColumnMaster
                 };
 
                 _context.AppColumnMasters.Add(appColumnMaster);
-                var success = await _context.SaveChangesAsync() > 0;
+                
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;
+                    if (success) 
+                        return  _mapper.Map <AppColumnMaster, AppColumnMasterDto>(appColumnMaster);
+                    else    
+                        throw new RestException(HttpStatusCode.OK, new { Error = $"No dows updated." });
+                } 
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                } 
 
-                if (success)
-                {
-                    var toReturn = _mapper.Map <AppColumnMaster, AppColumnMasterDto>(appColumnMaster);
-                    return toReturn;
-                }                
 
                 throw new Exception("Problem saving changes");
             }

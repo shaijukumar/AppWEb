@@ -20,7 +20,8 @@ namespace Application._AppAction
     {
         public class Command : IRequest<AppActionDto>
         {            
-            public int Id { get; set; }                        
+            public int Id { get; set; }    
+            public int Order { get; set; }                    
 		    public virtual ICollection<AppStatusList> FromStatusList { get; set; } 							
             public int ToStatusId { get; set; }						
             public string Action { get; set; }
@@ -36,9 +37,11 @@ namespace Application._AppAction
         {
             public CommandValidator()
             {
+                RuleFor(x => x.Id).NotEmpty();
+                RuleFor(x => x.FlowId).NotEmpty();
+                RuleFor(x => x.TableId).NotEmpty();
                 RuleFor(x => x.Action).NotEmpty();
-				RuleFor(x => x.ActionType).NotEmpty();
-				
+                RuleFor(x => x.ActionType).NotEmpty();                              				
             }
 
             private object RRuleFor(Func<object, object> p)
@@ -73,6 +76,7 @@ namespace Application._AppAction
                     throw new RestException(HttpStatusCode.NotFound, new { AppAction = "Not found" });
                 
                 appAction.ToStatusId  = request.ToStatusId;
+                appAction.Order = request.Order;
 
 				appAction.Action  = request.Action ?? appAction.Action;
 				appAction.ActionType  = request.ActionType ?? appAction.ActionType;
@@ -80,11 +84,7 @@ namespace Application._AppAction
 				appAction.FlowId  = request.FlowId; // ?? appAction.FlowId;
 				appAction.InitStatus  = request.InitStatus; // ?? appAction.InitStatus;
 				appAction.TableId  = request.TableId; // ?? appAction.TableId;
-				appAction.ActionXml  = request.ActionXml; // ?? appAction.ActionXml;
-
-                
-
-                
+				appAction.ActionXml  = request.ActionXml  ?? appAction.ActionXml;
 
                 appAction.FromStatusList.Clear();                
                 foreach(var f in  request.FromStatusList){
@@ -96,18 +96,23 @@ namespace Application._AppAction
                          appAction.FromStatusList.Add(status);
                     }
                 }
-                //appAction.FromStatusList  = request.FromStatusList;
 
-				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /
-				var success = await _context.SaveChangesAsync() > 0;                   
-				//if (success) return Unit.Value;
-				//if (success)
-				{
-					var toReturn = _mapper.Map<AppAction, AppActionDto>(appAction);
-					return toReturn;
-				}
+				// var success = await _context.SaveChangesAsync() > 0;                   
+				// {
+				// 	var toReturn = _mapper.Map<AppAction, AppActionDto>(appAction);
+				// 	return toReturn;
+				// }
 
-                throw new Exception("Problem saving changes");
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;          
+                    return _mapper.Map<AppAction, AppActionDto>(appAction);        				                                       
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }
+
+                //throw new Exception("Problem saving changes");
+                throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes." });
             }
         }
 

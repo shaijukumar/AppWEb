@@ -7,7 +7,8 @@ using AutoMapper;
 using Persistence;
 using Application.Interfaces;
 using Domain;
-
+using Application.Errors;
+using System.Net;
 
 namespace Application._AppStatusList
 {
@@ -53,12 +54,23 @@ namespace Application._AppStatusList
                 };
 
                 _context.AppStatusLists.Add(appStatusList);
-                var success = await _context.SaveChangesAsync() > 0;
+                //var success = await _context.SaveChangesAsync() > 0;
 
-                if (success)
-                {
-                    var toReturn = _mapper.Map <AppStatusList, AppStatusListDto>(appStatusList);
-                    return toReturn;
+                // if (success)
+                // {
+                //     var toReturn = _mapper.Map <AppStatusList, AppStatusListDto>(appStatusList);
+                //     return toReturn;
+                // } 
+
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;
+                    if (success) 
+                        return  _mapper.Map <AppStatusList, AppStatusListDto>(appStatusList);
+                    else    
+                        throw new RestException(HttpStatusCode.OK, new { Error = $"No dows updated." });
+                } 
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
                 }                
 
                 throw new Exception("Problem saving changes");

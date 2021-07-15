@@ -9,9 +9,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 
 
-type CustomProps = { label: string, list : any, handleChange?: any } & FieldAttributes<{}>;
+type CustomProps = { label: string, list : any, handleChange?: any, width?: string  } & FieldAttributes<{}>;
 
-const MyDropDown: React.FC<CustomProps> = ({ list, label, placeholder, type,required,autoComplete, autoFocus, handleChange, ...props }) => {
+const MyDropDown: React.FC<CustomProps> = ({ list, label, placeholder, type,required,autoComplete, autoFocus, handleChange, width, ...props }) => {
 
     //const [field] = useField<{}>(props);
 
@@ -19,7 +19,7 @@ const MyDropDown: React.FC<CustomProps> = ({ list, label, placeholder, type,requ
     
    
     return (                
-        <FormControl variant="outlined" fullWidth style={{ marginTop : 10 , marginBottom : 10}}>
+        <FormControl variant="outlined" fullWidth style={{ marginTop : 10 , marginBottom : 10, width:width,  display: 'block'}} >
             <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
             {handleChange && 
             <Select

@@ -2,6 +2,7 @@ import { AppStatusList } from "../AppStatusList/AppStatusList";
 
 export interface IAppAction {
 	Id: number
+	Order: number
 	Action: string
 	ActionType: string	
 	FromStatusList : AppStatusList[];
@@ -15,6 +16,7 @@ export interface IAppAction {
 
 export class AppAction implements IAppAction {
 	Id: number = 0;
+	Order: number = 0;
 	Action: string = '';
 	FromStatusList : AppStatusList[] = [];
 	ActionType: string = '';

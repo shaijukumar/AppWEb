@@ -1,7 +1,7 @@
 
-import { Button, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import React from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AppTheme } from "../Theme";
 
 interface Parms {

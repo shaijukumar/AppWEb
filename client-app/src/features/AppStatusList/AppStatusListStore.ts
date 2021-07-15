@@ -102,17 +102,20 @@ export default class AppStatusListStoreImpl {
     this.updating = true;
     this.loading = true;
     try {
-      await DBFun.delete(id);    
+      var res = await DBFun.delete(id);    
       this.updating = false;   
       this.loading = false;
+      return res;
     } catch (error) {    
       this.updating = false;  
       this.loading = false;             
-      console.log(error);
-      throw error;
+      //console.log(error);
+      //throw error;
+      return error;
     }
   };  
 }
 
 export const AppStatusListContext = createContext(new AppStatusListStoreImpl());
 
+ 

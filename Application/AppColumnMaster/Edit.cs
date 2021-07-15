@@ -77,13 +77,24 @@ namespace Application._AppColumnMaster
                 appColumnMaster.ConfigId  = request.ConfigId; 
                 appColumnMaster.AttachmentConfig  = request.AttachmentConfig; 
 				
-				var success = await _context.SaveChangesAsync() > 0;                   
-				//if (success) return Unit.Value;
-				if (success)
-				{
-					var toReturn = _mapper.Map<AppColumnMaster, AppColumnMasterDto>(appColumnMaster);
-					return toReturn;
-				}
+				// var success = await _context.SaveChangesAsync() > 0;                   
+				// //if (success) return Unit.Value;
+				// if (success)
+				// {
+				// 	var toReturn = _mapper.Map<AppColumnMaster, AppColumnMasterDto>(appColumnMaster);
+				// 	return toReturn;
+				// }
+
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;
+                    if (success) 
+                        return  _mapper.Map <AppColumnMaster, AppColumnMasterDto>(appColumnMaster);
+                    else    
+                        throw new RestException(HttpStatusCode.OK, new { Error = $"No dows updated." });
+                } 
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                } 
 
                 throw new Exception("Problem saving changes");
             }

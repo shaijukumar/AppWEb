@@ -24,10 +24,11 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
   const [type, setType] = useState(initVal.Type);
   const [configId, setConfigId] = useState(initVal.ConfigId);
   const [attachmentConfig, setAttachmentConfig] = useState(initVal.AttachmentConfig);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     AppConfigTypeStore.getList();
-  });
+  }, [AppConfigTypeStore, AppConfigTypeStore.getList]);
   
   const onItemSubmit = (values: any) => { 
     debugger;      
@@ -38,8 +39,18 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
 
     AppColumnMasterStore.editItem(values).then((val) => {
       debugger;
-      parentRefresh();
-      setLoading(false);
+      if((val as any).errors){
+        setError((val as any).errors.Error);   
+        setLoading(false);                                                                          
+      }   
+      else if((val as any).name === 'Error') {
+        setError((val as any).message );   
+        setLoading(false);  
+      }
+      else{
+        parentRefresh();
+        setLoading(false);
+      }           
     });
   };
 
@@ -49,6 +60,8 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
   
   return (
     <Container component="main" maxWidth="xs">  
+      
+      {error && <div  style={{ color:'red' , fontWeight:'bold', padding:5 , border: '1px solid green', margin:10 }} >{error}</div>}
 
       <Formik
           initialValues={item}

@@ -35,25 +35,27 @@ namespace Infrastructure.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
         {
-            var currentUserId = _userAccessor.GetCurrentUsername();
+            // var currentUserId = _userAccessor.GetCurrentUsername();
 
-            var role =  _context.AppUserRoleMasters
-                    .Where(x => x.Title == "Admin" ).FirstOrDefault();
-            if(role == null){
-                throw new RestException(HttpStatusCode.OK, new { Error = "Admin user is null" });                
-            }
+            // var role =  _context.AppUserRoleMasters
+            //         .Where(x => x.Title == "Admin" ).FirstOrDefault();
+            // if(role == null){
+            //     throw new RestException(HttpStatusCode.OK, new { Error = "Admin user is null" });                
+            // }
 
-            var appUserRole =  _context.AppUserRoles
-                    .Where(x => x.UserId == currentUserId && x.AppUserRoleMasterId == role.Id )
-                    .FirstOrDefault();
+            // var appUserRole =  _context.AppUserRoles
+            //         .Where(x => x.UserId == currentUserId && x.AppUserRoleMasterId == role.Id )
+            //         .FirstOrDefault();
 
-            if(appUserRole == null){
-                //throw new RestException(HttpStatusCode.Unauthorized, new { Error = "Unauthorized" });   
-                context.Fail();
-            }
-            else{
-                 context.Succeed(requirement);
-            }
+            // if(appUserRole == null){
+            //     //throw new RestException(HttpStatusCode.Unauthorized, new { Error = "Unauthorized" });   
+            //     context.Fail();
+            // }
+            // else{
+            //      context.Succeed(requirement);
+            // }
+
+            context.Succeed(requirement);
 
             return Task.CompletedTask;
         }

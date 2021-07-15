@@ -90,10 +90,12 @@ export default class AppColumnMasterStoreImpl {
       this.loading = false;         
       return itm;   
     } catch (error) {
-      runInAction( () => {
-        this.loading = false;        
-      });        
-      throw error;
+      // runInAction( () => {
+      //   this.loading = false;        
+      // });        
+      // throw error;
+      this.loading = false;
+      return error;
     }
   };
 
@@ -101,14 +103,15 @@ export default class AppColumnMasterStoreImpl {
     this.updating = true;
     this.loading = true;
     try {
-      await DBFun.delete(id);    
+      var re = await DBFun.delete(id);    
       this.updating = false;   
       this.loading = false;
+      return re;
     } catch (error) {    
       this.updating = false;  
       this.loading = false;             
       console.log(error);
-      throw error;
+      return error;
     }
   };  
 }

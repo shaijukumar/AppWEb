@@ -7,7 +7,10 @@ using AutoMapper;
 using Persistence;
 using Application.Interfaces;
 using Domain;
-
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Application.Errors;
+using System.Net;
 
 namespace Application._AppFlow
 {
@@ -15,8 +18,8 @@ namespace Application._AppFlow
     {
         public class Command : IRequest<AppFlowDto>
         {
-
 		    public string Title { get; set; }
+            public int TableId { get; set; }            
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -24,7 +27,7 @@ namespace Application._AppFlow
             public CommandValidator()
             {
                 RuleFor(x => x.Title).NotEmpty();
-				
+				RuleFor(x => x.TableId).NotEmpty();
             }
         }
 
@@ -42,20 +45,36 @@ namespace Application._AppFlow
             }
 
             public async Task<AppFlowDto> Handle(Command request, CancellationToken cancellationToken)
-            {                                                   
+            { 
+                var table = await _context.AppTableMasters
+                        .Where( x => x.Id == request.TableId )
+                        .FirstOrDefaultAsync();    
+                if( table == null ){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Table not found." }); 
+                }            
+                                                  
                 var appFlow = new AppFlow
                 {
 					Title  = request.Title                  
                 };
+                appFlow.Table = table; 
 
                 _context.AppFlows.Add(appFlow);
-                var success = await _context.SaveChangesAsync() > 0;
+              
+                try{                   
+                    var success = await _context.SaveChangesAsync() > 0;
 
-                if (success)
-                {
-                    var toReturn = _mapper.Map <AppFlow, AppFlowDto>(appFlow);
-                    return toReturn;
-                }                
+                    if (success)
+                    {
+                        return _mapper.Map <AppFlow, AppFlowDto>(appFlow);                      
+                    } 
+                    else{
+                       throw new RestException(HttpStatusCode.OK, new { Error = $"No rows updated" });  
+                    }
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }             
 
                 throw new Exception("Problem saving changes");
 }

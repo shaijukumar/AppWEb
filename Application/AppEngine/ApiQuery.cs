@@ -28,7 +28,7 @@ namespace Application.AppEngine
             #region init variables
 
             string SqlSelct = " * ";    
-            bool retAttach = false;
+            //bool retAttach = false;
             bool retHist = false;
 
             string SqlWhere = string.Empty;
@@ -67,7 +67,7 @@ namespace Application.AppEngine
                     try{
                         if (selectNode.Attributes["history"] != null && selectNode.Attributes["history"].Value == "true" )
                         {
-                            retAttach = true;
+                            //retAttach = true;
                         }
                     }catch{ }
 

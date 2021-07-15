@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using Application.AppEngine;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Application.Errors;
+using System.Net;
 
 namespace Application._AppAction
 {
@@ -18,7 +20,8 @@ namespace Application._AppAction
     {
         public class Command : IRequest<AppActionDto>
         {
-            public int Id { get; set; }                        
+            public int Id { get; set; }          
+            public int Order { get; set; }              
 		    public virtual ICollection<AppStatusList> FromStatusList { get; set; } 							
             public int ToStatusId { get; set; }						
             public string Action { get; set; }
@@ -33,9 +36,11 @@ namespace Application._AppAction
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
-            {
+            {                
+                //RuleFor(x => x.FlowId).NotEmpty();
+                RuleFor(x => x.TableId).NotEmpty();
                 RuleFor(x => x.Action).NotEmpty();
-				RuleFor(x => x.ActionType).NotEmpty();
+                RuleFor(x => x.ActionType).NotEmpty();                   
 				
             }
         }
@@ -67,6 +72,7 @@ namespace Application._AppAction
                 var appAction = new AppAction
                 {                    
 					ToStatusId  = request.ToStatusId,
+                    Order = request.Order,
                     Action  = request.Action,
                     ActionType  = request.ActionType,
                     WhenXml  = request.WhenXml,
@@ -93,15 +99,23 @@ namespace Application._AppAction
                 }
 
                 _context.AppActions.Add(appAction);
-                var success = await _context.SaveChangesAsync() > 0;
+                // var success = await _context.SaveChangesAsync() > 0;
 
-                if (success)
-                {
-                    var toReturn = _mapper.Map <AppAction, AppActionDto>(appAction);
-                    return toReturn;
-                }                
+                // if (success)
+                // {
+                //     var toReturn = _mapper.Map <AppAction, AppActionDto>(appAction);
+                //     return toReturn;
+                // }  
+                
+                try{
+                    var success = await _context.SaveChangesAsync() > 0;          
+                    return _mapper.Map<AppAction, AppActionDto>(appAction);        				                                       
+                } 
+                catch(Exception ex){
+                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }              
 
-                throw new Exception("Problem saving changes");
+                throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes." });
 }
         }
     }

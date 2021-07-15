@@ -17,7 +17,15 @@ namespace API.Controllers
             return await Mediator.Send(new List.Query());
         }
 
+        [HttpGet("{id}", Name = "FlowActions")]
+        [Route("FlowActions/{id}")]
+        public async Task<ActionResult<List<AppActionDto>>> FlowActions(int id)
+        {
+            return await Mediator.Send(new FlowActions.Query{ Id = id });
+        }
+
 		[HttpGet("{id}")]
+        [Route("[action]/{id}")]
 		public async Task<ActionResult<AppActionDto>> Details(int id)
         {
             return await Mediator.Send(new Details.Query { Id = id });

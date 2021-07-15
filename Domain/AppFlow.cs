@@ -9,6 +9,8 @@ namespace Domain
       [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
       public int Id { get; set; }
       public string Title { get; set; }
+      public int TableId { get; set; }            
+      public virtual AppTableMaster Table { get; set; } 
     }
 }
 

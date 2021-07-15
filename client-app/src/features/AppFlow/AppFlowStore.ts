@@ -8,11 +8,12 @@ const IAppFlowAPI = "/AppFlow";
 
 const DBFun = {
   list: (): Promise<IAppFlow[]> => agent.requests.get(IAppFlowAPI),
-  details: (Id: number) => agent.requests.get(`${IAppFlowAPI}/${Id}`),
+  details: (Id: number) => agent.requests.get(`${IAppFlowAPI}/Details/${Id}`),
   create: (item: IAppFlow) => agent.requests.post(IAppFlowAPI, item),
   update: (item: IAppFlow) =>
     agent.requests.put(`${IAppFlowAPI}/${item.Id}`, item),
   delete: (Id: number) => agent.requests.del(`${IAppFlowAPI}/${Id}`),
+  TableFlows: (TableId: number) => agent.requests.get(`${IAppFlowAPI}/TableFlows/${TableId}`),
 };
 
 export default class AppFlowStoreImpl {
@@ -20,11 +21,13 @@ export default class AppFlowStoreImpl {
   loading = false;
   updating = false;
   itemList: IAppFlow[] = [];
+  tableFlows: IAppFlow[] = [];
   item: AppFlow = new AppFlow()
 
   constructor() {
     makeObservable(this, {
          itemList: observable,
+         tableFlows: observable,
          loading: observable,
          updating: observable,
          item: observable,
@@ -32,6 +35,18 @@ export default class AppFlowStoreImpl {
          loadItem: action,
          editItem: action
     });
+  }
+
+  getFlowList = async (tableId: number) => {        
+    this.loading = true;
+    try {               
+      this.tableFlows = await DBFun.TableFlows(tableId);       
+      this.loading = false; 
+      return this.tableFlows;                   
+    } catch (error) {
+      this.loading = false;    
+      return error;
+    }
   }
 
   getList = async () => {        
@@ -52,6 +67,7 @@ export default class AppFlowStoreImpl {
     try {
       this.itemList = await DBFun.list(); 
       this.item = await DBFun.details(id); 
+      return this.item;
       
       this.loading = false;      
       return this.item;     
@@ -73,10 +89,8 @@ export default class AppFlowStoreImpl {
       this.loading = false;         
       return itm;   
     } catch (error) {
-      runInAction( () => {
-        this.loading = false;        
-      });        
-      throw error;
+      this.loading = false;
+      return error;
     }
   };
 
@@ -84,9 +98,10 @@ export default class AppFlowStoreImpl {
     this.updating = true;
     this.loading = true;
     try {
-      await DBFun.delete(id);    
+      var ret = await DBFun.delete(id);    
       this.updating = false;   
       this.loading = false;
+      return ret;
     } catch (error) {    
       this.updating = false;  
       this.loading = false;             

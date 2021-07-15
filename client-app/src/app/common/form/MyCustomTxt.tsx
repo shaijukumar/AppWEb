@@ -9,9 +9,9 @@ import {
   } from "@material-ui/core";
 
 
-type CustomTxtProps = { label: string, multiline?: boolean } & FieldAttributes<{}>;
+type CustomTxtProps = { label: string, multiline?: boolean, width?: string  } & FieldAttributes<{}>;
 
-const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,required,autoComplete, autoFocus,multiline, ...props }) => {
+const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,required,autoComplete, autoFocus,multiline, width, ...props }) => {
 
     //const [field] = useField<{}>(props);
 
@@ -32,7 +32,8 @@ const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,requir
             autoFocus={autoFocus}
             fullWidth   
             label={label}
-            multiline={multiline}                               
+            multiline={multiline}  
+            style={{width: width, display: 'block'}}                                   
       />           
     );        
   };

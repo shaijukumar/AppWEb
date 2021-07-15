@@ -28,7 +28,7 @@ namespace Application._AppTableMaster
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                 if( await _context.AppDatas.AnyAsync( t => t.TableId == request.Id ) ){
+                if( await _context.AppDatas.AnyAsync( t => t.TableId == request.Id ) ){
                     throw new RestException(HttpStatusCode.OK, new { Error = $"Data exists for this table." });
                 }
 

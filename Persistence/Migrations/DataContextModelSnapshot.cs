@@ -52,6 +52,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("InitStatus")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TableId")
                         .HasColumnType("INTEGER");
 
@@ -147,6 +150,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title")
+                        .IsUnique();
+
                     b.ToTable("AppColumnMasters");
                 });
 
@@ -187,7 +193,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ConfigTypeId");
 
-                    b.HasIndex("Title", "Order")
+                    b.HasIndex("Title", "ConfigTypeId")
                         .IsUnique();
 
                     b.ToTable("AppConfigs");
@@ -500,10 +506,15 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("TableId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TableId");
 
                     b.ToTable("AppFlows");
                 });
@@ -684,6 +695,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title", "TableId")
+                        .IsUnique();
+
                     b.ToTable("AppStatusLists");
                 });
 
@@ -810,10 +824,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserRoleMasterId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AppUserRoles");
                 });
@@ -1000,6 +1010,17 @@ namespace Persistence.Migrations
                     b.Navigation("ConfigType");
                 });
 
+            modelBuilder.Entity("Domain.AppFlow", b =>
+                {
+                    b.HasOne("Domain.AppTableMaster", "Table")
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Table");
+                });
+
             modelBuilder.Entity("Domain.AppNotifications", b =>
                 {
                     b.HasOne("Domain.AppNotificationsMaster", "NotificationsMaster")
@@ -1009,23 +1030,6 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("NotificationsMaster");
-                });
-
-            modelBuilder.Entity("Domain.AppUserRole", b =>
-                {
-                    b.HasOne("Domain.AppUserRoleMaster", "role")
-                        .WithMany()
-                        .HasForeignKey("AppUserRoleMasterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AppUser", "user")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("role");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

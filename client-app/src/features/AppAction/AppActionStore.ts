@@ -9,11 +9,12 @@ const IAppActionAPI = "/AppAction";
 
 const DBFun = {
   list: (): Promise<IAppAction[]> => agent.requests.get(IAppActionAPI),
-  details: (Id: number) => agent.requests.get(`${IAppActionAPI}/${Id}`),
+  details: (Id: number) => agent.requests.get(`${IAppActionAPI}/Details/${Id}`),
   create: (item: IAppAction) => agent.requests.post(IAppActionAPI, item),
   update: (item: IAppAction) =>
     agent.requests.put(`${IAppActionAPI}/${item.Id}`, item),
   delete: (Id: number) => agent.requests.del(`${IAppActionAPI}/${Id}`),
+  flowActions: (Id: number) => agent.requests.get(`${IAppActionAPI}/FlowActions/${Id}`),
 };
 
 
@@ -23,6 +24,7 @@ export default class AppActionStoreImpl {
   loading = false;
   updating = false;
   itemList: IAppAction[] = [];
+  flowList: IAppAction[] = [];
   item: AppAction = new AppAction()
 
  
@@ -30,6 +32,7 @@ export default class AppActionStoreImpl {
   constructor() {
     makeObservable(this, {
          itemList: observable,
+         flowList: observable,
          loading: observable,
          updating: observable,
          item: observable,
@@ -37,6 +40,21 @@ export default class AppActionStoreImpl {
          loadItem: action,
          editItem: action
     });
+  }
+ 
+  flowActions = async (id: number) => {        
+    this.loading = true;
+    try {               
+      this.flowList = await DBFun.flowActions(id);       
+      this.loading = false;         
+      return this.flowList;          
+    } catch (error) {
+      runInAction( () => {
+        this.loading = false;  
+        //agent.requests.ErrorPage(error.message) ;            
+        return error;
+      });
+    }
   }
 
   getList = async () => {        
@@ -80,10 +98,8 @@ export default class AppActionStoreImpl {
       this.loading = false;         
       return itm;   
     } catch (error) {
-      runInAction( () => {
-        this.loading = false;        
-      });        
-      throw error;
+      this.loading = false;       
+      return error;
     }
   };
 

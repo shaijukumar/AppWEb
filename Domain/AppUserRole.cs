@@ -11,8 +11,8 @@ namespace Domain
       public int Id { get; set; }
       public string UserId { get; set; }
       public int AppUserRoleMasterId { get; set; }
-      public virtual AppUser user { get; set; }
-      public virtual AppUserRoleMaster role { get; set; }
+      //public virtual AppUser user { get; set; }
+      //public virtual AppUserRoleMaster role { get; set; }
     }
 }
 

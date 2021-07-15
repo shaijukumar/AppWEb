@@ -8,6 +8,7 @@ namespace Application._AppAction
     public class AppActionDto
     {
 		public int Id { get; set; }
+		public int Order { get; set; }
 		public string Action { get; set; }
 		public ICollection<AppStatusListDto> FromStatusList { get; set; }
 		public int ToStatusId { get; set; }	
