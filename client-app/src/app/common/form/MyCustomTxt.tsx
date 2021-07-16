@@ -26,14 +26,16 @@ const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,requir
             helperText={errorText}
             error={!!errorText}
             variant="outlined"
-            margin="normal"
+            margin="none"
             required={required}
            //autoComplete={autoComplete}
             autoFocus={autoFocus}
             fullWidth   
             label={label}
             multiline={multiline}  
-            style={{width: width, display: 'block'}}                                   
+            style={{width: width, display: 'block'}}    
+            size='small'              
+                                      
       />           
     );        
   };

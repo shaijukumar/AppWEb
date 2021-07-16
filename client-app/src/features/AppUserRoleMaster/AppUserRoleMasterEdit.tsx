@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Chip, Container, Grid, LinearProgress, TextField } from '@material-ui/core';
+import { Button, ButtonGroup, Card, Chip, Container, Grid, LinearProgress, TextField } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -14,6 +14,8 @@ import { AppUserRole } from '../AppUserRole/AppUserRole';
 import TableButton from '../../app/common/form/TableButton';
 import MaterialTable from 'material-table';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { AnyAaaaRecord } from 'dns';
+import _ from 'lodash';
 
 interface DetailParms {
   id: string;
@@ -33,19 +35,19 @@ const AppUserRoleMasterEdit: React.FC = () => {
   const [userRole, setUserRole] = useState(new AppUserRole());
   const [role, setRole] = useState(new AddRole());
   const [error, setError] = useState('');
+
+  const [roleList, setRoleList] = useState<AppUserRole[]>();
   
   useEffect(() => {
-    
-    //AppUserRoleStore.getRoleList(id);
+
     UserManagerStore.getList();
-
-    //AppUserRoleMasterStore.loadItem(id);
-   
-
+    
     if (id) {
       AppUserRoleMasterStore.loadItem(id).then((val) => {
         setItem(val as any);          
-        val?.Name && AppUserRoleMasterStore.roleUserList(val?.Name);                   
+        val?.Name && AppUserRoleMasterStore.roleUserList(val?.Name).then((roles => {
+          setRoleList(roles as any);
+        }));                   
         setLoading(false);   
       });
     } else {
@@ -58,16 +60,14 @@ const AppUserRoleMasterEdit: React.FC = () => {
   const onItemSubmit = (values: any) => {    
     setLoading(true);
     AppUserRoleMasterStore.editItem(values).then((val) => {
+
       if((val as any).errors){
         setError((val as any).errors.Error);  
         setLoading(false);              
         return;
       }
-      else{         
-        //debugger;
-        setItem(new AppUserRoleMaster(val));
-        setLoading(false);    
-        //history.push('/AppUserRoleMasterlist');  
+      else{             
+        history.push('/AppUserRoleMasterlist');  
       }
 	 
      
@@ -114,46 +114,37 @@ const AppUserRoleMasterEdit: React.FC = () => {
             u.UserName = values.Username;
             u.RoleName = item.Name;
             AppUserRoleMasterStore.RemoveUserFromRole(u).then( () => {   
-              AppUserRoleMasterStore.roleUserList(item.Name).then( () => {
+              // AppUserRoleMasterStore.roleUserList(item.Name).then( () => {
+              //   setLoading(false);
+              // } ); 
+
+              AppUserRoleMasterStore.roleUserList(item.Name).then((roles => {
+                setRoleList(roles as any);
                 setLoading(false);
-              } ); 
+              }));  
+
             })}            
           }  />  }  
       },
       
     ];
 
-    const TableActions = [
-        {          
-          icon: (values: any) => { return <TableButton path="useredit/" label="Add New"  /> },
-          tooltip: 'Add User',
-          isFreeAction: true,
-          onClick: (event:any) =>{},   
-          iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
-        },
-        {          
-            icon: (values: any) => { return <TableButton label="Refresh"  /> },
-            tooltip: 'Add User',
-            isFreeAction: true,
-            onClick: (event:any) =>{ UserManagerStore.getList();},   
-            iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
-          }
-      ];
+
   
   
   return (
     <Container component="main" maxWidth="lg"> 
 
       {error && <div  style={{ color:'red' , fontWeight:'bold', padding:5 , border: '1px solid green', margin:10 }} >{error}</div>}  
-
+      <Card  style={{ margin: '10px', padding: '10px'}}>
       <Formik
           initialValues={item}
           validationSchema={Yup.object({
-            Title: Yup.string().required('Title required'),                     
+            Name: Yup.string().required('Title required'),                     
           })}
           onSubmit={onItemSubmit}
         >
-          <Form > 
+          <Form style={{ display:'flex'}}> 
             {/* { item.Id  && <Chip  color="primary" variant="outlined" label={`Role ID : ${item.Id}`} /> } */}
 
             <MyCustomTxt   
@@ -161,45 +152,27 @@ const AppUserRoleMasterEdit: React.FC = () => {
                 type="text"                
                 autoFocus={true}
                 required={true}                                
-                label="Name"                                                                     
+                label="Name"
+                width={'300px'}  
+               
+                                                                                  
               />
 
-              
+              <Button type="submit" variant="contained" size="small" color="primary"  style={{  marginLeft:'25px', width: '100px'}}>Save</Button> 
                            
-              <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"                  
-                >
-                  Save
-                </Button> 
-                {/* { item.Id && 
-                  <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    color="primary"                    
-                    onClick={ () => {
-                      AppUserRoleMasterStore.deleteItem(item.Id).then( () => {
-                        history.push('/AppUserRoleMasterlist');
-                      })
-                    }}
-                  >
-                    Delete
-                  </Button>
-                } */}
+              {/* <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group" size="small">
+                <Button type="submit" fullWidth variant="contained" color="primary" size="small">Save</Button>                 
                 <Button onClick={ () => { history.push('/AppUserRoleMasterlist');  }}>Back</Button>          
-              </ButtonGroup>
+              </ButtonGroup> */}
 
           </Form>
         </Formik>
+      </Card>
 
-      
+      {id && 
+        <Card  style={{ margin: '10px', padding: '10px'}}>
         <Formik
           initialValues={userRole}
-
           validationSchema={Yup.object({
             // UserId: Yup.string().required('UserId required'), 
             // AppUserRoleMasterId: Yup.string().required('AppUserRoleMasterId required'),                    
@@ -211,28 +184,26 @@ const AppUserRoleMasterEdit: React.FC = () => {
                 debugger;
                 setLoading(true);
                 AppUserRoleMasterStore.addUserToRole(role).then((val) => {
-                    debugger;                   
-                    AppUserRoleMasterStore.roleUserList(item.Name).then( () => {
+                                        
+                    AppUserRoleMasterStore.roleUserList(item.Name).then((roles => {
+                      setRoleList(roles as any);
                       setLoading(false);
-                    } );
+                    }));  
 
-                  // AppUserRoleStore.getRoleList(id).then( () => {
-                  //   setLoading(false);
-                  // } );                 
                 });
               }
             }
           }
         >
-          <Form >          
+          <Form  style={{ display:'flex'}} >          
+           
 
-            <Grid  container spacing={1}>
-              <Grid item xs={4}>
-                <Autocomplete                                                                  
+              <Autocomplete                                                                  
                   id="UserIdToAdd"
+                  size="small"
                   options={UserManagerStore.itemList}
                   getOptionLabel={(option) =>  option.Email ? option.DisplayName : '-'}                
-                  style={{ width: 300, paddingTop: 20  }}
+                  style={{ width: 300  }}
                   renderInput={(params) => <TextField name="UserId"  {...params} label="User Id" variant="outlined" />}
 
                   onChange={(event:any, newValue:any) => {
@@ -242,44 +213,28 @@ const AppUserRoleMasterEdit: React.FC = () => {
                     setRole(u);              
                     debugger;                     
                   }}
-                />   
-              </Grid>
-              <Grid item xs={4}  style={{paddingTop:'10px'}}> 
-                <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"                  
-                  >
-                    Add User
-                  </Button>                                          
-                </ButtonGroup>
-              </Grid>
-            </Grid>           
-                         
-              
+                /> 
 
+                <Button type="submit" variant="contained" size="small" color="primary" style={{  marginLeft:'25px', width: '100px'}}> Add User</Button>  
+            
           </Form>
         </Formik>
+        </Card >
+      }
 
-
-        { AppUserRoleMasterStore.userList.length > 0 &&
-          <div className={"tabcontainers2"} >        
-              <MaterialTable                       
-                  title="User List"
-                  data={AppUserRoleMasterStore.userList}
-                  columns={TableColumns}
-                  options={{ search: true, paging: true, filtering: true, pageSize:10,  tableLayout: "auto"
-                      // , exportButton: false ,  actionsColumnIndex: -1, toolbarButtonAlignment:"left",                            
-                  }}   
-                  actions={TableActions}         
-              />
-          </div>
-          }
-
-
-       
+      { roleList &&
+      <div className={"tabcontainers2"} >        
+          <MaterialTable                       
+              title="User List"
+              data={roleList as any}
+              columns={TableColumns}
+              options={{ search: true, paging: true, filtering: true, pageSize:10,  tableLayout: "auto"
+                  // , exportButton: false ,  actionsColumnIndex: -1, toolbarButtonAlignment:"left",                            
+              }}   
+            
+          />
+      </div>
+    }
 
     </Container>
   );

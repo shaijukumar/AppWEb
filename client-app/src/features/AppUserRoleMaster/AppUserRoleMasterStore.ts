@@ -122,7 +122,6 @@ export default class AppUserRoleMasterStoreImpl {
 
   
   roleUserList = async (id: string) => {
-    debugger;
     this.loading = true;
     try {
       this.userList = await DBFun.RoleUserList(id);                

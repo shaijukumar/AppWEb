@@ -16,11 +16,6 @@ const AppUserRoleMasterList: React.FC = () => {
     }, [AppUserRoleMasterStore, AppUserRoleMasterStore.getList])     
     
     const TableColumns = [
-      // {
-      //   title: "Id",
-      //   field: "Id",
-                
-      // },
       {
         title: "Title",
         field: "Name",                 
@@ -53,7 +48,7 @@ const AppUserRoleMasterList: React.FC = () => {
     return (
       <div className={"tabcontainers2"} >        
         <MaterialTable                       
-            title="User List"
+            title="User Groups"
             data={AppUserRoleMasterStore.itemList}
             columns={TableColumns}
             options={{ search: true, paging: true, filtering: true, pageSize:10,  tableLayout: "auto"
@@ -61,54 +56,7 @@ const AppUserRoleMasterList: React.FC = () => {
             }}   
             actions={TableActions}         
         />
-      </div>
-
-      // <List>
-
-      //   <ListItem divider>
-      //     <h3>User Role Master</h3>  
-      //   </ListItem>
-
-      //   <ListItem divider>
-      //   <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-      //     <Button >
-      //       <NavLink to="/AppUserRoleMasterItemEdit/" >Add New</NavLink> 
-      //     </Button>
-      //     <Button onClick={ () => { AppUserRoleMasterStore.getList(); }}>Refresh</Button>          
-      //   </ButtonGroup>
-      //   </ListItem>
-        
-      //   <ListItem divider>
-      //     <TableContainer component={Paper}>
-      //       <Table aria-label="simple table">
-      //         <TableHead>
-      //           <TableRow>
-      //             <TableCell>Id</TableCell>
-      //             <TableCell align="left">Title</TableCell>
-      //             <TableCell align="right">Delete</TableCell>
-      //           </TableRow>
-      //         </TableHead>
-      //         <TableBody>
-      //           {AppUserRoleMasterStore.itemList.map((row) => (
-      //             <TableRow key={row.Id} >
-      //               <TableCell align="left"  >{row.Id}</TableCell>
-      //               <TableCell component="th" scope="row"  >
-      //                 <NavLink to={"/AppUserRoleMasterItemEdit/" + row.Id } >{row.Title}</NavLink> 
-      //               </TableCell>
-                                             
-      //               {/* <TableCell align="right">{row.Title}</TableCell>   */}
-      //               <TableCell align="right" >
-      //                 <DeleteOutlinedIcon onClick={ () => { AppUserRoleMasterStore.deleteItem(row.Id).then( () => {   AppUserRoleMasterStore.getList(); })}}  />
-      //               </TableCell>            
-      //             </TableRow>
-      //           ))}
-      //         </TableBody>
-      //       </Table>
-      //     </TableContainer>
-      //   </ListItem>
-
-      // </List>        
-     
+      </div>                  
     );
 };
 

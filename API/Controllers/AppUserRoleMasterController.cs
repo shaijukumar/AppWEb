@@ -62,7 +62,7 @@ namespace API.Controllers
         //Get user roles => get
 
         [HttpPut("{id}")]
-		public async Task<ActionResult<AppUserRoleMasterDto>> Edit(int id, Edit.Command command)
+		public async Task<ActionResult<AppUserRoleMasterDto>> Edit(string id, Edit.Command command)
         {
             command.Id = id;
             return await Mediator.Send(command);

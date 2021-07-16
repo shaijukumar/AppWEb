@@ -8,7 +8,7 @@ const IUserManagerAPI = "/UserManager";
 
 const DBFun = {
   list: (): Promise<IUserManager[]> => agent.requests.get(IUserManagerAPI),
-  details: (Id: number) => agent.requests.get(`${IUserManagerAPI}/${Id}`),
+  details: (Id: string) => agent.requests.get(`${IUserManagerAPI}/${Id}`),
   create: (item: IUserManager) => agent.requests.post(IUserManagerAPI, item),
   update: (item: IUserManager) =>
     agent.requests.put(`${IUserManagerAPI}/${item.Username}`, item),
@@ -47,7 +47,7 @@ export default class UserManagerStoreImpl {
     }
   }
 
-  loadItem = async (id: number) => {
+  loadItem = async (id: string) => {
     this.loading = true;
     try {
       this.itemList = await DBFun.list(); 
