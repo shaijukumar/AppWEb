@@ -158,7 +158,7 @@ const AppUserRoleMasterEdit: React.FC = () => {
                                                                                   
               />
 
-              <Button type="submit" variant="contained" size="small" color="primary"  style={{  marginLeft:'25px', width: '100px'}}>Save</Button> 
+              <Button type="submit" variant="contained" size="large" color="primary"  style={{  marginLeft:'25px', width: '100px', height: '100%', marginTop:'13px'}}>Save</Button> 
                            
               {/* <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group" size="small">
                 <Button type="submit" fullWidth variant="contained" color="primary" size="small">Save</Button>                 
@@ -223,6 +223,7 @@ const AppUserRoleMasterEdit: React.FC = () => {
       }
 
       { roleList &&
+      <Card  style={{ margin: '10px', padding: '10px'}}>
       <div className={"tabcontainers2"} >        
           <MaterialTable                       
               title="User List"
@@ -234,6 +235,7 @@ const AppUserRoleMasterEdit: React.FC = () => {
             
           />
       </div>
+      </Card>
     }
 
     </Container>

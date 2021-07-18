@@ -1,19 +1,23 @@
+import { IAppUserRoleMaster } from "../AppUserRoleMaster/AppUserRoleMaster";
+
 export interface IAppNavigation {
 	Id: number
 	Title: string
 	Path: string
-	Icon: string
-	Access: number
+	Icon: string	
 	Selected: boolean 
+	RolesId : string
+	//Roles : IAppUserRoleMaster[]
 }
 
 export class AppNavigation implements IAppNavigation {
 	Id: number = 0;
 	Title: string = '';
 	Path: string = '';
-	Icon: string = '';
-	Access: number = 0;
+	Icon: string = '';	
 	Selected: boolean = false;
+	RolesId : string= '';
+	//Roles : IAppUserRoleMaster[] = [];
   
   constructor(init?: IAppNavigation) {
     Object.assign(this, init);

@@ -12,6 +12,8 @@ namespace Persistence
         {
         }
         
+       // public DbSet<IdentityUserRole> test { get; set; }	
+
         public DbSet<Value> Values { get; set; }	
         public DbSet<IdentityRole> AspNetRoles { get; set; }		
 		public DbSet<AppUserRole> AppUserRoles { get; set; }		
@@ -27,8 +29,8 @@ namespace Persistence
 		public DbSet<AppAction> AppActions { get; set; }
 		public DbSet<AppFlow> AppFlows { get; set; }
 		public DbSet<AppApi> AppApis { get; set; }
-		public DbSet<AppAttachment> AppAttachments { get; set; }
-		public DbSet<AppNavigation> AppNavigations { get; set; }		
+		public DbSet<AppAttachment> AppAttachments { get; set; }		
+        public DbSet<AppNavigation> AppNavigations { get; set; }			
 		public DbSet<AppNotificationsMaster> AppNotificationsMasters { get; set; }
         public DbSet<AppNotifications> AppNotificationss { get; set; }
 		public DbSet<AppNitificationTemplate> AppNitificationTemplates { get; set; }

@@ -6,15 +6,18 @@ import { Button, ButtonGroup, LinearProgress, List, ListItem } from '@material-u
 
 import MaterialTable from 'material-table';
 import { IAppNavigation } from './AppNavigation';
+import { AppUserRoleMasterContext } from '../AppUserRoleMaster/AppUserRoleMasterStore';
  
 const AppNavigationList: React.FC = () => {
 
-  const AppNavigationStore = useContext(AppNavigationContext);     
+  const AppNavigationStore = useContext(AppNavigationContext);  
+  const AppUserRoleMasterStore = useContext(AppUserRoleMasterContext);     
   
     useEffect(() => {       
+      AppUserRoleMasterStore.getList();  
       AppNavigationStore.setSelected('/AppNavigationlist');
       AppNavigationStore.getList();                  
-    }, [AppNavigationStore, AppNavigationStore.getList, AppNavigationStore.setSelected])       
+    }, [AppUserRoleMasterStore, AppUserRoleMasterStore.getList, AppNavigationStore, AppNavigationStore.getList, AppNavigationStore.setSelected])       
 
     if(AppNavigationStore.loading){
       return <LinearProgress color="secondary"  className="loaderStyle" />     
@@ -44,8 +47,9 @@ const AppNavigationList: React.FC = () => {
         //render : (values: IAppHistory) => { return AppStatusListStore.itemList.find( u => u.Id ==values.FromStage )?.Title }
       }, 
       {
-        title: "Access",
-        field: "Access",    
+        title: "RoleId",
+        field: "RoleId",   
+        render : (values: any) => { return AppUserRoleMasterStore.itemList.find( u => u.Id == values.RoleId )?.Name }
       },
     ];
 

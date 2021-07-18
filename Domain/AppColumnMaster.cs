@@ -9,14 +9,14 @@ namespace Domain
 		[Key]
       	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	  	public int Id { get; set; }
+		public int Order { get; set; }		  		  
 		public int TableID { get; set; }
 		public string Title { get; set; }
 		public string Type { get; set; }
 		public string AppDataFiled { get; set; }				
 		public string UserAccess { get; set; }
 		public int ConfigId { get; set; }	
-		public int AttachmentConfig { get; set; }	
-
+		public int AttachmentConfig { get; set; }
     }
 
 	 public class AppColumnType
@@ -29,6 +29,8 @@ namespace Domain
 		public const string Config = "6";
 		public const string Attachment = "7";
 		public const string LongNumber = "8";
+		public const string User = "9";
+		public const string Group = "10";
 	}
 
 	 public class AppAttachmentConfig

@@ -136,6 +136,9 @@ namespace Persistence.Migrations
                     b.Property<int>("ConfigId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TableID")
                         .HasColumnType("INTEGER");
 
@@ -363,6 +366,15 @@ namespace Persistence.Migrations
                     b.Property<float>("Float5")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("Group1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Group2")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Group3")
+                        .HasColumnType("TEXT");
+
                     b.Property<long>("Long1")
                         .HasColumnType("INTEGER");
 
@@ -495,6 +507,15 @@ namespace Persistence.Migrations
                     b.Property<string>("Txt9")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("User1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("User2")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("User3")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("AppDatas");
@@ -572,19 +593,21 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Access")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Icon")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Path")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AppNavigations");
                 });
@@ -1019,6 +1042,15 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Table");
+                });
+
+            modelBuilder.Entity("Domain.AppNavigation", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Domain.AppNotifications", b =>

@@ -101,5 +101,15 @@ namespace Domain
         public int Attachment3 { get; set; }
         public int Attachment4 { get; set; }
         public int Attachment5 { get; set; }
+        public string User1 { get; set; }
+        public string User2 { get; set; }
+        public string User3 { get; set; }
+        public string Group1 { get; set; }
+        public string Group2 { get; set; }
+        public string Group3 { get; set; }
+        
+        
+        
+        
     }
 }

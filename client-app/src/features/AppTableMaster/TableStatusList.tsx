@@ -34,10 +34,14 @@ interface DetailParms {
 
     useEffect(() => {
       AppStatusListStore.getStatusList(Number(id));
-
     }, [id,AppStatusListStore.getStatusList]);
 
+    const dataRefresh = (values: any) => {
+        
+    }
+    
     const TableColumns = [        
+        {title: "Id", field: "Id", type: 'numeric', editable: 'never'},
         {title: "Order", field: "Order", type: 'numeric', defaultSort: "asc",},
         { title: "Title", field: "Title"},                  
       ];

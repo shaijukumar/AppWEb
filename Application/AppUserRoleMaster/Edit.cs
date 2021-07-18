@@ -42,14 +42,13 @@ namespace Application._AppUserRoleMaster
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
-            private RoleManager<IdentityRole> _roleManager;
+            private RoleManager<IdentityRole> _roleManager; 
             public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper, RoleManager<IdentityRole> roleMgr)
             {
                 _mapper = mapper;
                 _context = context;
-                _userAccessor = userAccessor;
-                ;
-                 _roleManager = roleMgr;
+                _userAccessor = userAccessor;                
+                _roleManager = roleMgr;
             }
 
             public async Task<AppUserRoleMasterDto> Handle(Command request, CancellationToken cancellationToken)

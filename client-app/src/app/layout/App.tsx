@@ -62,6 +62,8 @@ import TableStatusList from '../../features/AppTableMaster/TableStatusList';
 import TableFlowList from '../../features/AppTableMaster/TableFlowList';
 import TableActions from '../../features/AppTableMaster/TableActions';
 import TableActionItemEdit from '../../features/AppTableMaster/TableActionItemEdit';
+import NavigationEdit from '../../Portal/Navigation/NavigationEdit';
+import NavigationList from '../../Portal/Navigation/NavigationList';
 //##FeatureImport##"
 
 const drawerWidth = 240;
@@ -243,7 +245,7 @@ const App = () => {
           <Route path='/TableStatusList/:id' component={TableStatusList} />  
           <Route path='/TableFlowList/:id' component={TableFlowList} />   
           <Route path='/TableActions/:tableId/:id' component={TableActions} />  
-          <Route path='/TableActionItemEdit/:tableId/:flowId/:id' component={TableActionItemEdit} />  
+          <Route path={['/TableActionItemEdit/:tableId/:flowId/:id', '/TableActionItemEdit/:tableId/:flowId']} component={TableActionItemEdit} />  
           
           <Route  path={['/AppTableMasterItemEdit/:id', '/AppTableMasterItemEdit/']} component={AppTableMasterEdit} />
           <Route path='/AppColumnMasterList' component={AppColumnMasterList} />
@@ -287,6 +289,10 @@ const App = () => {
           <Route  path={['/EmployeeEdit/:id', '/EmployeeEdit/']} component={EmployeeEdit} />
 
           <Route path='/AppAdminPage' component={AdminPage} />
+
+          <Route path='/NavigationList' component={NavigationList}/>
+          <Route path={['/NavigationEdit/:id', '/NavigationEdit']} component={NavigationEdit} />
+          
           
           {/*##Navigation##*/}
           

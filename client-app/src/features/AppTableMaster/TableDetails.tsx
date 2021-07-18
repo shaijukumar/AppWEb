@@ -32,8 +32,7 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
    
 
    const navigateToPath = (path:string) => {        
-        history.push(path); 
-       
+        history.push(path);        
    };
 
    const  buttonStyle = {
@@ -42,11 +41,16 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
 
     return (
         <Grid container spacing={1} style={{width:'1000px'}}>
-
+                       
             {showTitle &&
-               <Typography variant="h6" gutterBottom style={{paddingLeft:15, paddingRight:30,color: AppTheme.TableTitleColor }} >
-                  <span>{AppTableMasterStore.item.Title}</span> 
-               </Typography>
+               <React.Fragment>
+                  
+                  <Typography variant="h6" gutterBottom style={{paddingLeft:15, paddingRight:30,color: AppTheme.TableTitleColor }} >
+                     <span>{AppTableMasterStore.item.Title}</span> 
+                  </Typography>
+                  <Button style={buttonStyle} onClick={ () => navigateToPath(`/AppTableMasterList`)}
+                   variant="text" size="small" color= "primary" >Table List</Button>
+               </React.Fragment>
             }
             <Button style={buttonStyle}
               onClick={ () => navigateToPath(`/TableColumns/${tableId}`)} variant="contained" size="small" 

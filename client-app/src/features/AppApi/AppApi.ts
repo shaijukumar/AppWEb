@@ -103,7 +103,7 @@ export interface IApiAction {
 	Parm10 : string 	
 	
 }
-
+ 
 export class AppApiAction implements IApiAction {
 	ActionId : number = 0;
 	ItemId : number = 0;

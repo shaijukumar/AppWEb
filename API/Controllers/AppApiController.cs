@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AppWebCustom;
 using Application.User;
+using Application._AppNavigation;
+using Application._AppStatusList;
+using Application._AppConfig;
+using Application._AppUserRoleMaster;
 
 namespace API.Controllers
 {
@@ -50,6 +54,41 @@ namespace API.Controllers
 		public async Task<ActionResult> Attachment(DownloadAction.Command command)
         {
             return await Mediator.Send(command);
+        }
+
+        [HttpGet("{id}", Name = "GetStatusList")]
+        [Route("GetStatusList/{id}")]
+		public async Task<ActionResult<List<AppStatusListDto>>>  GetStatusList(int id)
+        {
+            return await Mediator.Send(new DataStatusList.Query{Id = id} );
+        }
+
+        [HttpGet("{id}", Name = "GetConfigList")]
+        [Route("GetConfigList/{id}")]
+		public async Task<ActionResult<List<AppConfigDto>>>  GetConfigList(int id)
+        {
+            return await Mediator.Send(new DataConfigList.Query{Id = id} );
+        }
+
+        [HttpGet(Name = "GetRoleList")]
+        [Route("GetRoleList")]
+		public async Task<ActionResult<List<AppUserRoleMasterDto>>>  GetRoleList()
+        {
+            return await Mediator.Send(new GetRoleList.Query() );
+        }
+
+        [HttpGet(Name = "GetUserList")]
+        [Route("GetUserList")]
+		public async Task<ActionResult<List<UserDTO>>>  GetUserList()
+        {
+            return await Mediator.Send(new GetUserList.Query() );
+        }
+
+        [HttpGet]
+        [Route("NavigationList")]
+		public async Task<ActionResult<List<AppNavigationDto>>>  NavigationList()
+        {
+            return await Mediator.Send(new NavigationList.Query());
         }
 
         

@@ -44,9 +44,15 @@ interface DetailParms {
 
     const TableColumns = [
         {
+          title: "Order",
+          field: "Order",          
+          defaultSort: "asc",
+          //render :  (values: any) => { return <Link onClick={ () => { openModel( values ) } } >{values.Title}</Link> } 
+        }, 
+        {
           title: "Title",
           field: "Title",          
-          defaultSort: "asc",
+          //defaultSort: "asc",
           render :  (values: any) => { return <Link onClick={ () => { openModel( values ) } } >{values.Title}</Link> } 
         },  
         {

@@ -73,6 +73,14 @@ const AppColumn: React.FC<CustomProps> = ({initVal, parentRefresh}) => {
           <Form > 
             {item.Id}
             <MyCustomTxt   
+                name="Order"                         
+                type="number"                
+                autoFocus={true}
+                required={true}                                
+                label="Order"                                                                     
+            />
+            
+            <MyCustomTxt   
                 name="Title"                         
                 type="text"                
                 autoFocus={true}

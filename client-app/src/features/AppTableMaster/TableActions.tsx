@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import TableDetails from './TableDetails';
 import MaterialTable from 'material-table';
@@ -7,6 +7,7 @@ import { AppActionContext } from '../AppAction/AppActionStore';
 import { AppAction, IAppAction } from '../AppAction/AppAction';
 import { AppStatusListContext } from '../AppStatusList/AppStatusListStore';
 import { AppFlowContext } from '../AppFlow/AppFlowStore';
+import TableButton from '../../app/common/form/TableButton';
 
 interface DetailParms {
     tableId: string;
@@ -16,6 +17,7 @@ interface DetailParms {
 const TableActions: React.FC = () => {
 
     const { tableId, id } = useParams<DetailParms>();
+    let history = useHistory();
 
     const AppActionStore = useContext(AppActionContext);       
     const AppStatusListStore = useContext(AppStatusListContext);
@@ -39,7 +41,7 @@ const TableActions: React.FC = () => {
     };
 
     const TableColumns = [
-        { title: "Id", field: "Id", hidden: true },
+        { title: "Id", field: "Id", editable: 'never', },
         { title: "FlowId", field: "FlowId", hidden: true },
         { title: "TableId", field: "TableId", hidden: true },
         {
@@ -50,8 +52,7 @@ const TableActions: React.FC = () => {
          // width: "5%"
         },
         {
-          title: "Action",
-          field: "Action",          
+          title: "Action", field: "Action",          
           //editable: "never",  
           render : (values: any) => { return <NavLink to={ `/TableActionItemEdit/${tableId}/${values.FlowId}/${values.Id}` } >{values.Action}</NavLink> },
           //render : (values: IAppAction) => { return <NavLink to={"/AppNavigationItemEdit/" + values.Id } >{values.Title}</NavLink> }
@@ -61,22 +62,19 @@ const TableActions: React.FC = () => {
           
         },
         {
-          title: "From Status",
-          field: "FromStatus",       
+          title: "From Status", field: "FromStatus",       
           render : (values: IAppAction) => { return values.FromStatusList.map( (fs, i, arr) =>(<span key={fs.Id} >{fs.Title}{i !== (arr.length-1) ? ',' : ''} </span>) )  },
           //width: "10%"
           editable: 'never',  
         },  
         {
-          title: "To Status",
-          field: "FromStatus",       
+          title: "To Status", field: "FromStatus",       
           render : (values: IAppAction) => { return  AppStatusListStore.AppStatusList.find( u => u.Id === values.ToStatusId )?.Title },
           //width: "10%",
           editable: 'never',  
         },     
         {
-          title: "ActionType",
-          field: "ActionType",
+          title: "ActionType",  field: "ActionType",
           //render : rend
           //render : (values: IAppHistory) => { return AppStatusListStore.itemList.find( u => u.Id ==values.FromStage )?.Title },
           //width: "10%",
@@ -113,6 +111,22 @@ const TableActions: React.FC = () => {
         // },
       ];
 
+    const TableActions = [
+        {          
+            icon: (values: any) => { return <TableButton  label="Add New" path={`/TableActionItemEdit/${tableId}/${id}`}  /> },
+            tooltip: 'Add New',
+            isFreeAction: true,
+            //onClick: (event:any) =>{ history.push(`/TableActionItemEdit/${tableId}/${id}`) },   
+            iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
+        },
+        {          
+            icon: (values: any) => { return <TableButton label="Refresh"  /> },
+            tooltip: 'Refresh',
+            isFreeAction: true,
+            onClick: (event:any) =>{AppActionStore.flowActions(Number(id));},   
+            iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
+          }
+        ];  
     // if(AppActionStore.loading){
     //     return <LinearProgress color="secondary"  className="loaderStyle" />     
     // }
@@ -127,6 +141,8 @@ const TableActions: React.FC = () => {
                     data={AppActionStore.flowList}
                     columns={TableColumns as any}
                     options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "fixed" }}    
+                    actions={TableActions as any}
+                    
                     
                     cellEditable={{
                         onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
@@ -148,10 +164,7 @@ const TableActions: React.FC = () => {
                             action.TableId =  rowData.TableId;
                             action.ToStatusId =  rowData.ToStatusId;
                             action.WhenXml =  rowData.WhenXml;
-
   
-
-
                             AppActionStore.editItem(action).then((val) =>{ 
                                 if((val as any).errors){
                                     alert((val as any).errors.Error);                         

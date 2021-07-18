@@ -61,9 +61,12 @@ const TableActionItemEdit: React.FC = () => {
 
 
     const onItemSubmit = (values: any) => {  
-        
+        debugger;
         setLoading(true);
-        values.FromStatusList = fromStatusList;               
+        values.FromStatusList = fromStatusList;        
+        values.FlowId = Number(flowId);    
+        values.TableId = Number(tableId); 
+
         AppActionStore.editItem(values).then((val) => {
             history.push(`/TableActions/${tableId}/${flowId}`);
         });

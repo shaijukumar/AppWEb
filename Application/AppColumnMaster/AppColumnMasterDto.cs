@@ -6,6 +6,7 @@ namespace Application._AppColumnMaster
     public class AppColumnMasterDto
     {
 		public int Id { get; set; }
+		public int Order { get; private set; }
 		public string TableID { get; set; }
 		public string Title { get; set; }
 		public string Type { get; set; }

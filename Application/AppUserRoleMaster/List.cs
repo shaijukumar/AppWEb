@@ -42,14 +42,14 @@ namespace Application._AppUserRoleMaster
                 
                 List<IdentityRole> roles = await  _context.AspNetRoles.ToListAsync();
 
-                List<AppUserRoleMasterDto> v ;
+                //List<AppUserRoleMasterDto> v ;
                 try{
-                    v = _mapper.Map<List<IdentityRole>, List<AppUserRoleMasterDto>>(roles);
+                    return _mapper.Map<List<IdentityRole>, List<AppUserRoleMasterDto>>(roles);
                 }catch(Exception ex){
                       throw new RestException(HttpStatusCode.OK, new { Error = $" {ex.Message}. {ex.InnerException.Message}." });
                 }
 					
-                return v;
+                //return v;
                 
             }
         }

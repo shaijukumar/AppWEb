@@ -35,8 +35,9 @@ interface DetailParms {
       AppFlowStore.getFlowList(Number(id));
     }, [id,AppFlowStore.getFlowList]);
 
-    const TableColumns = [                
-        { title: "Title", field: "Title"},                  
+    const TableColumns = [   
+        { title: "Id", field: "Id"},                
+        { title: "Title", field: "Title"},                        
       ];
    
     const openModel = (col: AppColumnMaster) => {  

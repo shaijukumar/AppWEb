@@ -1,5 +1,6 @@
 export interface IAppColumnMaster {
 	Id: number
+	Order: number
 	TableID: number
 	Title: string
 	Type: string
@@ -12,6 +13,7 @@ export interface IAppColumnMaster {
 
 export class AppColumnMaster implements IAppColumnMaster {
 	Id: number = 0;
+	Order: number = 0;
 	TableID: number = 0;
 	Title: string = '';
 	Type: string = '';

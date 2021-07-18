@@ -56,6 +56,15 @@ namespace Application._AppColumnMaster
                     colCount =5;
                     colText = "Long";
                     break;
+                 case "9": //Users
+                    colCount =3;
+                    colText = "User";
+                    break;
+                case "10": //Groups
+                    colCount =3;
+                    colText = "Group";
+                    break;
+                
             }
 
             //Get all columns used
@@ -81,7 +90,7 @@ namespace Application._AppColumnMaster
 
         public class Command : IRequest<AppColumnMasterDto>
         {
-
+            public int Order { get; set; }
             public int TableID { get; set; }
             public string Title { get; set; }
             public string Type { get; set; }
@@ -118,13 +127,12 @@ namespace Application._AppColumnMaster
              
 
             public async Task<AppColumnMasterDto> Handle(Command request, CancellationToken cancellationToken)
-            {                       
-                                
+            {                                                                       
                 string newColText = await GetNewColText ( _context, request.Type, request.TableID);
-
-                
+                               
                 var appColumnMaster = new AppColumnMaster
                 {
+                    Order = request.Order,
 					TableID  = request.TableID,
 					Title  = request.Title,
 					Type  = request.Type,

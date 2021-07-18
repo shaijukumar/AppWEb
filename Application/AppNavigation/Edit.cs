@@ -9,21 +9,20 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using Domain;
-
-
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application._AppNavigation
 {
     public class Edit
     {
         public class Command : IRequest<AppNavigationDto>
-        {            
-            
-		public int Id { get; set; }
-		public string Title { get; set; }
-		public string Path { get; set; }
-		public string Icon { get; set; }
-		public int Access { get; set; }
+        {                        
+            public int Id { get; set; }
+            public string Title { get; set; }
+            public string Path { get; set; }
+            public string Icon { get; set; }            
+            public string RoleId {get; set;}
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -46,11 +45,13 @@ namespace Application._AppNavigation
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
+            private RoleManager<IdentityRole> _roleManager;
+            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper, RoleManager<IdentityRole> roleMgr)
             {
                 _mapper = mapper;
                 _context = context;
                 _userAccessor = userAccessor;
+                _roleManager = roleMgr;
             }
 
             public async Task<AppNavigationDto> Handle(Command request, CancellationToken cancellationToken)
@@ -64,8 +65,10 @@ namespace Application._AppNavigation
 
 				appNavigation.Title  = request.Title ?? appNavigation.Title;
 				appNavigation.Path  = request.Path ?? appNavigation.Path;
-				appNavigation.Icon  = request.Icon ?? appNavigation.Icon;
-				appNavigation.Access  = request.Access; // ?? appNavigation.Access;
+				appNavigation.Icon  = request.Icon ?? appNavigation.Icon;				
+
+                var role = await _roleManager.FindByIdAsync(request.RoleId);
+                appNavigation.Role = role;
 				
 				
 				// _context.Entry(cl).State = EntityState.Modified;  //.Entry(user).State = EntityState.Added; /

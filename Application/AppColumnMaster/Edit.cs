@@ -18,7 +18,7 @@ namespace Application._AppColumnMaster
     {
         public class Command : IRequest<AppColumnMasterDto>
         {            
-            
+            public int Order { get; set; }
             public int Id { get; set; }
             public int TableID { get; set; }
             public string Title { get; set; }
@@ -69,7 +69,8 @@ namespace Application._AppColumnMaster
                     appColumnMaster.AppDataFiled = await Create.GetNewColText( _context, request.Type, request.TableID);
                 }
 
-				appColumnMaster.TableID  = request.TableID; // ?? appColumnMaster.TableID;
+				appColumnMaster.Order  = request.Order;
+                appColumnMaster.TableID  = request.TableID; // ?? appColumnMaster.TableID;
 				appColumnMaster.Title  = request.Title ?? appColumnMaster.Title;
 				appColumnMaster.Type  = request.Type ?? appColumnMaster.Type;
 				appColumnMaster.UserAccess  = request.UserAccess ?? appColumnMaster.UserAccess; 

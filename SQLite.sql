@@ -1,5 +1,6 @@
 -- SQLite
---SELECT Id, TableId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, Num1, StatusId, TableId, Txt1, Txt2 FROM AppDatas;
+SELECT Id, TableId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, Num1, StatusId, TableId, Txt1, Txt2 FROM AppDatas;
+where Id=59
 
 --SELECT Id, Title FROM AppUserRoleMasters;
 --delete from AppUserRoleMasters where Title = 't1'
@@ -29,8 +30,7 @@
 
 --UPDATE AppDatas set Num1 = null  WHERE TableId = 7
 
-SELECT Txt2 from AppDatas
-where Txt2 != 0 and TableId = 7
+--ELECT Txt2 from AppDatas where Txt2 != 0 and TableId = 7
 
 
 
