@@ -96,6 +96,41 @@ export interface IAppStatusList {
 	TableId: number
 }
 
+export interface IAppStatusList {
+	Id: number
+	Title: string
+	Order: number
+	TableId: number
+}
+
+export class AppStatusList implements IAppStatusList {
+	Id: number = 0;
+	Title: string = '';
+	Order: number = 0;
+	TableId: number = 0;
+  
+  constructor(init?: IAppStatusList) {
+    Object.assign(this, init);
+  }
+}
+
+export interface IAppUserRoleMaster {
+	Id: string
+	Name: string
+}
+
+export class AppUserRoleMaster implements IAppUserRoleMaster {
+	Id: string = '';
+	Name: string = '';
+  
+  constructor(init?: IAppUserRoleMaster) {
+    Object.assign(this, init);
+  }
+  
+}
+
+
+
 //==============================================
 
 const IAppApiAPI = "/AppApi";
@@ -118,9 +153,44 @@ const DBFun = {
   delete: (Id: number) => agent.requests.del(`${IAppApiAPI}/${Id}`),
 };
 
-export default class ApiImpl {
+	export default class ApiImpl {	
+
+	rolesFromArray(rolesList: AppUserRoleMaster[], strRoleArray: string) : AppUserRoleMaster[] {
+
+		let roles : AppUserRoleMaster[] = [];
+		if(strRoleArray && rolesList && rolesList.length > 0){
+			strRoleArray.split(',').forEach( r => {
+				let role = new AppUserRoleMaster();
+				role.Id = r;
+				var RoleName = rolesList.find(x => x.Id == r)?.Name;
+				role.Name = RoleName ? RoleName : '' ;
+				roles.push(role);
+			});
+		}
+		
+		return roles;			
+	}
+
+	rolesName(rolesList: AppUserRoleMaster[], strRoleArray:string):string{
+		let strRoleNames = '';
+
+		if(strRoleArray && rolesList && rolesList.length > 0){
+			strRoleArray.split(',').forEach( r => {
+				var RoleName = rolesList.find(x => x.Id == r)?.Name;
+				if(strRoleNames){
+					strRoleNames += ", "
+				}
+				strRoleNames += RoleName;				
+			});
+		}
+
+		return strRoleNames;
+	}
 
 	
+
+
+
 	getStatusList = async (id: number) => {		
 		try {      		 
 			return await DBFun.StatusList(id); 		  

@@ -1,3 +1,5 @@
+import { AppUserRoleMaster } from "../Api/Api";
+
 export interface IAppNavigation {
 	Id: number
 	Order: number
@@ -5,7 +7,7 @@ export interface IAppNavigation {
 	Path: string
 	Icon: string	
 	Selected: boolean 
-	UserAccessRoles : string
+	UserAccessRoles : AppUserRoleMaster[]
 }
 
 export class AppNavigation implements IAppNavigation {
@@ -15,7 +17,7 @@ export class AppNavigation implements IAppNavigation {
 	Path: string = '';
 	Icon: string = '';	
 	Selected: boolean = false;
-	UserAccessRoles : string= '';
+	UserAccessRoles : AppUserRoleMaster[]= [];
   
   constructor(init?: IAppNavigation) {
     Object.assign(this, init);

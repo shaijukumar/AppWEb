@@ -62,7 +62,7 @@ namespace Application._AppColumnMaster
                     break;
                 case "10": //Groups
                     colCount =3;
-                    colText = "Group";
+                    colText = "Role";
                     break;
                 
             }

@@ -1,6 +1,9 @@
 -- SQLite
-SELECT Id, TableId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, Num1, StatusId, TableId, Txt1, Txt2 FROM AppDatas;
-where Id=59
+SELECT Id, TableId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, Num1, StatusId, TableId, Txt1, Txt2 FROM AppDatas 
+--WHERE TableId = 61;
+--where Id=59
+
+--SELECT Id, * FROM AppDatas WHERE TableId = 20;
 
 --SELECT Id, Title FROM AppUserRoleMasters;
 --delete from AppUserRoleMasters where Title = 't1'
@@ -31,6 +34,18 @@ where Id=59
 --UPDATE AppDatas set Num1 = null  WHERE TableId = 7
 
 --ELECT Txt2 from AppDatas where Txt2 != 0 and TableId = 7
+
+--delete from AppColumnMasters WHERE Id = 38
+--update AppColumnMasters set AppDataFiled 
+
+ --SELECT Id, TableID, AppDataFiled FROM AppColumnMasters;
+ -- WHERE Id = 38
+
+--SELECT Id, TableID, Title, Type, AppDataFiled, UserAccess, AttachmentConfig, ConfigId, `Order` FROM AppColumnMasters;
+
+--SELECT Id, TableID, AppDataFiled  FROM AppColumnMasters WHERE Id = 40;
+
+--DELETE from AppColumnMasters WHERE Id = 40;
 
 
 

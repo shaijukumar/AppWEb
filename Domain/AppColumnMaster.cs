@@ -30,7 +30,7 @@ namespace Domain
 		public const string Attachment = "7";
 		public const string LongNumber = "8";
 		public const string User = "9";
-		public const string Group = "10";
+		public const string Role = "10";
 	}
 
 	 public class AppAttachmentConfig

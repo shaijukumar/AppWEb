@@ -15,7 +15,7 @@ export const ColumnDataType : SystemConstant[] =
     {Id : "7", value : 'Attachment', descriptyion : 'Attachment'},
     {Id : "8", value : 'LongNumber', descriptyion : 'Long Number'},
     {Id : "9", value : 'Users', descriptyion : 'User List'},
-    {Id : "10", value : 'Groups', descriptyion : 'Group List'},
+    {Id : "10", value : 'Roles', descriptyion : 'Group List'},
 ]
 
 export const ColumnAttachmentType : SystemConstant[] = 

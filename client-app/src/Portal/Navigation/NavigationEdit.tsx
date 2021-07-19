@@ -1,15 +1,14 @@
-import { Button, ButtonGroup, Container, LinearProgress, TextField } from '@material-ui/core';
+import { Button, ButtonGroup, Chip, Container, LinearProgress, TextField } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
+
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppNavigation } from './Navigation';
-import { ApiContext, AppApiAction } from '../Api/Api'
-import { AppStatusList } from '../../features/AppStatusList/AppStatusList';
+import { ApiContext, AppApiAction, AppStatusList, AppUserRoleMaster } from '../Api/Api'
 import { Autocomplete } from '@material-ui/lab';
-import { AppUserRoleMaster } from '../../features/AppUserRoleMaster/AppUserRoleMaster';
 
  
 
@@ -47,7 +46,7 @@ const NavigationEdit: React.FC = () => {
             }
             else{
                 setActions(res);
-            }            
+            }     
             setLoading(false);
         });
 
@@ -63,9 +62,14 @@ const NavigationEdit: React.FC = () => {
                   setError((res as any).errors.Error);         
                   return;
                 }
-                else{                 
+                else{                    
+                  setRoles(ApiStore.rolesFromArray(roleList as any, res.Result1[0].UserAccessRoles));            
                   setItem(res.Result1[0] as any);        
                 }  
+
+                debugger;
+               
+
                 setLoading(false);
             });
         }
@@ -78,7 +82,8 @@ const NavigationEdit: React.FC = () => {
     },[ApiStore, ApiStore.getActions, ApiStore, ApiStore.ExecuteAction]);
 
     const onItemSubmit = (values: any) => {
-
+        
+        values.UserAccessRoles = roles;
         let formData = new FormData();
         formData.append('ActionId', actionId.toString() )
         formData.append('Parm1', JSON.stringify(values) );
@@ -122,34 +127,19 @@ const NavigationEdit: React.FC = () => {
 
                
 
-                {/* <Autocomplete                                                                  
-                  id="UserAccessRoles"
-                  size="small"
-                  options={roleList as any[]}
-                  getOptionLabel={(option) =>  option.Name}                
-                  style={{ width: 300  }}
-                  renderInput={(params) => <TextField name="UserId"  {...params} label="User Id" variant="outlined" />}
-
-                  onChange={(event:any, newValue:any) => {
-                    // var u = new AddRole(); 
-                    // u.UserName = newValue.Username;
-                    // u.RoleName = item.Name;
-                    // setRole(u);              
-                    debugger;                     
-                  }}
-                />  */}
-
-            {/* <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple      
-                value={roles}  
-                options={roleList as any[]} getOptionLabel={(option:AppStatusList) => option.Name}                  
+            <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple    
+                size="small"  
+                value={roles as any}  
+                options={roleList as any[]} 
+                getOptionLabel={(option:AppUserRoleMaster) => option.Name}                  
                 freeSolo
                 renderTags={(value, getTagProps) =>
                   value.map((option:any, index) => (
-                    fromStatusList  && <Chip variant="outlined" label={option.Title} {...getTagProps({ index })} /> 
+                    roles  && <Chip variant="outlined" label={option.Name} {...getTagProps({ index })} /> 
                   ))
                 }
                 renderInput={(params) => (
-                  <TextField {...params} variant="outlined" label="From Status" placeholder="From Status" fullWidth />
+                  <TextField {...params} variant="outlined" label="Access Groups" placeholder="Access Groups" fullWidth />
                 )}
                 
                 onChange={(event:any, newValue:any) => {
@@ -162,10 +152,10 @@ const NavigationEdit: React.FC = () => {
                     }
                   }
                   if(unq){
-                    setFromStatusList(newValue); 
+                    setRoles(newValue); 
                   }                                          
                 }}
-              /> */}
+              />
 
 
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">

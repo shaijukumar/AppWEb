@@ -108,8 +108,8 @@ namespace AppWebCustom.Action
                             PropertyInfo ap1 = appDataType.GetProperty(key);
                             ap1.SetValue (ad.appData, Int32.Parse(value), null);                            
                         }
-                        else  if(reqCol.ContainsKey(key)) ///add only if rows are in AppData Required/Optional Columns action xml
-                        {
+                        else   ///add only if rows are in AppData Required/Optional Columns action xml
+                        {if(reqCol.ContainsKey(key))
                             reqCol[key]++;
                                             
                             if( key == "StatusId"){
@@ -132,10 +132,37 @@ namespace AppWebCustom.Action
                                     else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
                                         ap1.SetValue (ad.appData,  Int32.Parse(value), null);
                                     }
+                                    else if( col.Type == AppColumnType.Role ){    
+                                        string strGroups = string.Empty;        
+
+                                        List<object> groups = new List<object>();
+                                        JArray array = JArray.Parse(value);
+                                        foreach (JObject grpObject in array.Children<JObject>())
+                                        {
+                                            string grpId = grpObject["Id"].ToString();
+
+                                            var roleExists = await  _context.AspNetRoles
+                                                .Where( x => x.Id == grpId )
+                                                .AnyAsync();
+                                            if(roleExists){
+                                                 groups.Add(grpId);  
+                                            }
+                                            else{
+                                                throw new Exception( "Invalid user role ");
+                                            }
+                                                                                                             
+                                        }        
+                                        // string s = JsonConvert.SerializeObject(groups); 
+                                        strGroups = string.Join( ",", groups.ToArray() ) ; 
+
+                                        ap1.SetValue (ad.appData,  strGroups, null);
+
+                                    }
+
                                     else if( col.Type == AppColumnType.Attachment ){
                                         if(!string.IsNullOrEmpty(value)){
                                             List<AttachmentJson> att = JsonConvert.DeserializeObject<List<AttachmentJson>>(value);
-                                            foreach( var a in att){
+                                            foreach( var a in att){                                                
                                                 a.AppDataColumn = col.Id;
                                             }
                                             attachments.AddRange(att);   

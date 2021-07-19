@@ -104,9 +104,9 @@ namespace Domain
         public string User1 { get; set; }
         public string User2 { get; set; }
         public string User3 { get; set; }
-        public string Group1 { get; set; }
-        public string Group2 { get; set; }
-        public string Group3 { get; set; }
+        public string Role1 { get; set; }
+        public string Role2 { get; set; }
+        public string Role3 { get; set; }
         
         
         
