@@ -143,7 +143,7 @@ namespace AppWebCustom.Action
 
                                             var roleExists = await  _context.AspNetRoles
                                                 .Where( x => x.Id == grpId )
-                                                .AnyAsync();
+                                                .AnyAsync(); 
                                             if(roleExists){
                                                  groups.Add(grpId);  
                                             }

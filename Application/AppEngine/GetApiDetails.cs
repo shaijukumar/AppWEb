@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application._AppApi;
 using Application.Errors;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using static Application._AppApi.TakeAction;
@@ -13,9 +14,9 @@ namespace Application.AppEngine
     
     public class GetApiDetails
     {
-         public static async Task<ApiDetails> Execute( int ActionId, int ItemId, DataContext _context, string CurrentUserId)
+         public static async Task<ApiDetails> Execute( int ActionId, int ItemId, DataContext _context, string CurrentUserId, UserManager<AppUser> _userManager)
          {     
-             ApiDetails apiDetails = new ApiDetails(ActionId, ItemId, _context, CurrentUserId );
+             ApiDetails apiDetails = new ApiDetails(ActionId, ItemId, _context, CurrentUserId, _userManager );
              apiDetails.appData = new AppData();
 
              # region Get action details from db

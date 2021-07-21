@@ -63,18 +63,13 @@ namespace Application._AppApi
 
             public async Task<Dictionary<string, List<object>>> Handle(ActionCommand request, CancellationToken cancellationToken)
             {
-                   
-                // AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());                
-                // var rolesNames = await _userManager.GetRolesAsync(user);
-                // var roles1 = await  _context.AspNetRoles.Where( x => rolesNames.Contains(x.Name) ).ToListAsync();
-
-        
+                                     
                 # region get apiDetails and check security
 
-                ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() ); //request
+                ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager ); //request
 
                 try{
-                    apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() );                     
+                    apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );                     
                 } 
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
@@ -93,7 +88,7 @@ namespace Application._AppApi
                 if( apiDetails.appAction.ActionType == "Query" )
                 {          
                     try{
-                        res.Result =  await  ApiQuery.ExecuteQuery( apiDetails.appAction, apiDetails.appData, _context, request, _userManager, _userAccessor); 
+                        res.Result =  await  ApiQuery.ExecuteQuery(apiDetails, request); //, apiDetails.appAction, apiDetails.appData, _context, _userManager, _userAccessor); 
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });

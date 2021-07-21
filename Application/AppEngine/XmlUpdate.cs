@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -118,6 +119,37 @@ namespace Application.AppEngine
                                 throw new Exception("Filed " + att.Value + " not found. " + ex.Message );
                             }
                         }                        
+                    }
+                    else if(att.Name == "UserRolesToCheck"){
+
+                        var grps = att.Value;
+                        string strGroups = string.Empty;
+                        List<string> groups = new List<string>();
+                        string[] grpsArr = grps.Split(",");
+
+                        foreach( string gName in  grpsArr){
+                            if(!string.IsNullOrEmpty(gName)){
+                                if(UpdateId)
+                                {  
+                                    var role = await  _context.AspNetRoles
+                                        .Where( x => x.Name == gName.Trim() )
+                                        .FirstOrDefaultAsync();
+                                    if(role != null){
+                                        groups.Add(role.Id);
+                                    }                                                                                              
+                                }
+                                else{
+                                     var role = await  _context.AspNetRoles
+                                        .Where( x => x.Id == gName.Trim() )
+                                        .FirstOrDefaultAsync();
+                                    if(role != null){
+                                        groups.Add(role.Name);
+                                    }  
+                                }                                                                                                
+                                strGroups = string.Join( ",", groups.ToArray() ) ; 
+                            }                           
+                        }                         
+                        att.Value = strGroups;                        
                     }                  
                 }
             }

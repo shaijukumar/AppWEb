@@ -22,7 +22,7 @@ namespace Application.AppEngine
 {
     public class ApiQuery
     {
-        public static async Task<Dictionary<string, List<object>>> ExecuteQuery(AppAction appAction, AppData appData, DataContext _context, ActionCommand request, UserManager<AppUser> _userManager, IUserAccessor _userAccessor )
+        public static async Task<Dictionary<string, List<object>>> ExecuteQuery(ApiDetails apiDetails, ActionCommand request ) //, AppAction appAction, AppData appData, DataContext _context, ActionCommand request, UserManager<AppUser> _userManager, IUserAccessor _userAccessor )
         {
             List<object> tableData = new List<object>();
             var row = new Dictionary<string, object>();
@@ -39,21 +39,21 @@ namespace Application.AppEngine
 
             #region Get column details
 
-            var colList = await _context.AppColumnMasters
-                .Where(x => x.TableID ==  appAction.TableId ).ToListAsync();
+            var colList = await apiDetails._context.AppColumnMasters
+                .Where(x => x.TableID ==  apiDetails.appAction.TableId ).ToListAsync();
 
             #endregion Get column details
 
             #region Parse Action 
 
-             if( !string.IsNullOrEmpty(appAction.ActionXml)){
+             if( !string.IsNullOrEmpty(apiDetails.appAction.ActionXml)){
 
                 #region Load XML
 
                 XmlDocument xmlDoc = new XmlDocument();            
                 try
                 {
-                    xmlDoc.LoadXml(appAction.ActionXml);
+                    xmlDoc.LoadXml(apiDetails.appAction.ActionXml);
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +84,7 @@ namespace Application.AppEngine
 
                 //  ExecuteAction   
                 XmlNodeList qryNode = xmlDoc.GetElementsByTagName("Where");
-                SqlWhere = await GetSqlFromAction(qryNode.Item(0).FirstChild, colList, request, _context, _userManager, _userAccessor);          
+                SqlWhere = await GetSqlFromAction(apiDetails, qryNode.Item(0).FirstChild, colList, request); //, _context, _userManager, _userAccessor);          
             
             }
             
@@ -94,18 +94,18 @@ namespace Application.AppEngine
 
             if( string.IsNullOrEmpty(SqlWhere))
             {
-                SqlWhere = " where ( TableId  = " + appAction.TableId + " )";
+                SqlWhere = " where ( TableId  = " + apiDetails.appAction.TableId + " )";
             }
             else
             {
-                SqlWhere = " where ( TableId  = " + appAction.TableId + " )" + " and  " + SqlWhere;
+                SqlWhere = " where ( TableId  = " + apiDetails.appAction.TableId + " )" + " and  " + SqlWhere;
             }
 
              #endregion Update where
 
             #region Query AppDatas
 
-            var appDataList = await _context.AppDatas
+            var appDataList = await apiDetails._context.AppDatas
                 .FromSqlRaw( "SELECT " + SqlSelct + " FROM AppDatas " + SqlWhere )
                 .ToListAsync();
 
@@ -123,7 +123,7 @@ namespace Application.AppEngine
 
                 foreach(AppColumnMaster col in colList){  
                     if(col.Type == AppColumnType.Attachment){
-                        var appAttachments = await _context.AppAttachments
+                        var appAttachments = await apiDetails._context.AppAttachments
                             .Where( a => a.AppDataId ==  dataRow.Id && a.AppDataColumn == col.Id)
                             .ToListAsync();
                          row.Add(col.Title, appAttachments);
@@ -135,7 +135,7 @@ namespace Application.AppEngine
                 } 
 
                 if(retHist){
-                    var appAttach = await _context.AppHistorys
+                    var appAttach = await apiDetails._context.AppHistorys
                         .Where(x => x.AppDataId ==  dataRow.Id ).ToListAsync(); 
                     if(appAttach != null){
                        row.Add("AppHistory", appAttach);
@@ -156,7 +156,7 @@ namespace Application.AppEngine
         }
     
     
-        public static async Task<string> GetSqlFromAction(XmlNode item, List<AppColumnMaster> colList, ActionCommand request,  DataContext _context, UserManager<AppUser> _userManager, IUserAccessor _userAccessor)
+        public static async Task<string> GetSqlFromAction(ApiDetails apiDetails, XmlNode item, List<AppColumnMaster> colList, ActionCommand request) //, ActionCommand request,  DataContext _context, UserManager<AppUser> _userManager, IUserAccessor _userAccessor)
         {
             string result = string.Empty;
 
@@ -164,8 +164,8 @@ namespace Application.AppEngine
             if (itemName == "and" || itemName == "or")
             {
                 string res = " ( ##LEFT_COND## " + itemName + " ##RIGHT_COND## ) ";
-                res = res.Replace("##LEFT_COND##" , await GetSqlFromAction(item.ChildNodes[0], colList, request, _context, _userManager, _userAccessor) );
-                res = res.Replace("##RIGHT_COND##", await GetSqlFromAction(item.ChildNodes[1], colList, request, _context, _userManager, _userAccessor) );
+                res = res.Replace( "##LEFT_COND##" , await GetSqlFromAction(apiDetails,item.ChildNodes[0], colList, request)); //, request, _context, _userManager, _userAccessor) );
+                res = res.Replace("##RIGHT_COND##", await GetSqlFromAction(apiDetails, item.ChildNodes[1], colList, request)); //, request, _context, _userManager, _userAccessor) );
             
                 return res;
             }
@@ -235,18 +235,24 @@ namespace Application.AppEngine
                 else if (Operation.ToLower() == "incurrenuserorgroup"){
                     //Current user roles
 
-                    AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());                
-                    var rolesNames = await _userManager.GetRolesAsync(user);
-                    var rolesIDList = await  _context.AspNetRoles.Where( x => rolesNames.Contains(x.Name) ).ToListAsync();
+                    // AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());                
+                    // var rolesNames = await _userManager.GetRolesAsync(user);
+                    // var rolesIDList = await  _context.AspNetRoles.Where( x => rolesNames.Contains(x.Name) ).ToListAsync();
 
                     //string[] grpsArr = grps.Split(",");
-                    string grpSql= string.Empty;
 
+                    string UserRolesToCheck =  AppParm.GetAttributeValue( item, "UserRolesToCheck", true ) ; 
+                    
+
+                    string grpSql= string.Empty;
+                    var rolesIDList = await apiDetails.GetUserRolesIDList();
                     foreach( var g in  rolesIDList){
-                        if(!string.IsNullOrEmpty(grpSql)){
-                            grpSql += " or ";
-                        }
-                         grpSql += $" {Field} LIKE '%{g.Id}%' ";
+                        if(UserRolesToCheck.Contains(g.Id)){
+                            if(!string.IsNullOrEmpty(grpSql)){
+                                grpSql += " or ";
+                            }
+                            grpSql += $" {Field} LIKE '%{g.Id}%' ";
+                        }                        
                     }
                     res = $" ( {grpSql} )";
                 }
