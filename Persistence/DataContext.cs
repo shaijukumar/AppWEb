@@ -15,7 +15,7 @@ namespace Persistence
        // public DbSet<IdentityUserRole> test { get; set; }	
 
         public DbSet<Value> Values { get; set; }	
-        public DbSet<IdentityRole> AspNetRoles { get; set; }		
+        public DbSet<IdentityRole> AspNetRoles { get; set; }		       
 		public DbSet<AppUserRole> AppUserRoles { get; set; }		
 		public DbSet<AppUserAccess> AppUserAccesss { get; set; }
 		public DbSet<AppTableMaster> AppTableMasters { get; set; }

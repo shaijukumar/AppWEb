@@ -65,7 +65,11 @@ namespace Application._AppAction
             public async Task<AppActionDto> Handle(Command request, CancellationToken cancellationToken)
             {
                 try{
-                    request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );
+                    request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );                   
+                }
+                catch{}
+
+                 try{                    
                     request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, true );
                 }
                 catch{}

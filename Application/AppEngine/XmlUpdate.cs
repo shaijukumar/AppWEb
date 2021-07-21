@@ -15,6 +15,10 @@ namespace Application.AppEngine
     {        
         public static async Task<string> UpdateXml(string strXml, DataContext _context, bool UpdateId)
         {  
+            if(string.IsNullOrEmpty(strXml)){
+                return strXml;
+            }
+            
             strXml = HttpUtility.UrlDecode(strXml);
             XDocument xmlDoc = new XDocument();         
             try

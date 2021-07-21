@@ -15,12 +15,14 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Persistence;
 using AppWebCustom;
+using Microsoft.AspNetCore.Identity;
+using Application.Interfaces;
 
 namespace Application.AppEngine
 {
     public class ApiQuery
     {
-        public static async Task<Dictionary<string, List<object>>> ExecuteQuery(AppAction appAction, AppData appData, DataContext _context, ActionCommand request )
+        public static async Task<Dictionary<string, List<object>>> ExecuteQuery(AppAction appAction, AppData appData, DataContext _context, ActionCommand request, UserManager<AppUser> _userManager, IUserAccessor _userAccessor )
         {
             List<object> tableData = new List<object>();
             var row = new Dictionary<string, object>();
@@ -66,7 +68,7 @@ namespace Application.AppEngine
 
                     try{
                         if (selectNode.Attributes["history"] != null && selectNode.Attributes["history"].Value == "true" )
-                        {
+                        {                            
                             //retAttach = true;
                         }
                     }catch{ }
@@ -82,7 +84,7 @@ namespace Application.AppEngine
 
                 //  ExecuteAction   
                 XmlNodeList qryNode = xmlDoc.GetElementsByTagName("Where");
-                SqlWhere = GetSqlFromAction(qryNode.Item(0).FirstChild, colList, request);          
+                SqlWhere = await GetSqlFromAction(qryNode.Item(0).FirstChild, colList, request, _context, _userManager, _userAccessor);          
             
             }
             
@@ -154,7 +156,7 @@ namespace Application.AppEngine
         }
     
     
-        public static string GetSqlFromAction(XmlNode item, List<AppColumnMaster> colList, ActionCommand request)
+        public static async Task<string> GetSqlFromAction(XmlNode item, List<AppColumnMaster> colList, ActionCommand request,  DataContext _context, UserManager<AppUser> _userManager, IUserAccessor _userAccessor)
         {
             string result = string.Empty;
 
@@ -162,37 +164,37 @@ namespace Application.AppEngine
             if (itemName == "and" || itemName == "or")
             {
                 string res = " ( ##LEFT_COND## " + itemName + " ##RIGHT_COND## ) ";
-                res = res.Replace("##LEFT_COND##" , GetSqlFromAction(item.ChildNodes[0], colList, request) );
-                res = res.Replace("##RIGHT_COND##", GetSqlFromAction(item.ChildNodes[1], colList, request) );
+                res = res.Replace("##LEFT_COND##" , await GetSqlFromAction(item.ChildNodes[0], colList, request, _context, _userManager, _userAccessor) );
+                res = res.Replace("##RIGHT_COND##", await GetSqlFromAction(item.ChildNodes[1], colList, request, _context, _userManager, _userAccessor) );
             
                 return res;
             }
             else if (itemName == "datacomarison")
             {
                 string res = string.Empty;
-                string Filed =  AppParm.GetAttributeValue( item, "Filed", true ) ; 
+                string Field =  AppParm.GetAttributeValue( item, "Filed", true ) ; 
 
                 var dbCol = new AppColumnMaster();
 
                 # region Get col details from db
 
                 string Type = string.Empty; 
-                if(Filed == "Id" || Filed == "StatusId" )
+                if(Field == "Id" || Field == "StatusId" )
                 {                   
                     Type =AppColumnType.Number; 
                 } 
-                else if( Filed == "CreatedBy" || Filed == "ModifiedBy" )
+                else if( Field == "CreatedBy" || Field == "ModifiedBy" )
                 {
                     Type =AppColumnType.Text; 
                 }
-                else if(  Filed == "CreatedOn" ||  Filed == "ModifiedOn")
+                else if(  Field == "CreatedOn" ||  Field == "ModifiedOn")
                 {
                     Type =AppColumnType.DateTime; 
                 }
                 else
                 {
-                    dbCol = colList.Find( x => x.Id == Int32.Parse(Filed)  );
-                    Filed =  dbCol.AppDataFiled;
+                    dbCol = colList.Find( x => x.Id == Int32.Parse(Field)  );
+                    Field =  dbCol.AppDataFiled;
                     Type = dbCol.Type; 
                 } 
 
@@ -227,8 +229,26 @@ namespace Application.AppEngine
 
                     if (!string.IsNullOrEmpty(res))
                     {
-                        res = Filed + " in (" + res + " ) ";
+                        res = Field + " in (" + res + " ) ";
                     }
+                }
+                else if (Operation.ToLower() == "incurrenuserorgroup"){
+                    //Current user roles
+
+                    AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());                
+                    var rolesNames = await _userManager.GetRolesAsync(user);
+                    var rolesIDList = await  _context.AspNetRoles.Where( x => rolesNames.Contains(x.Name) ).ToListAsync();
+
+                    //string[] grpsArr = grps.Split(",");
+                    string grpSql= string.Empty;
+
+                    foreach( var g in  rolesIDList){
+                        if(!string.IsNullOrEmpty(grpSql)){
+                            grpSql += " or ";
+                        }
+                         grpSql += $" {Field} LIKE '%{g.Id}%' ";
+                    }
+                    res = $" ( {grpSql} )";
                 }
                 else 
                 { 
@@ -244,7 +264,7 @@ namespace Application.AppEngine
                     {
                         Value = "'" + Value + "'";
                     }
-                    res = Filed + " " + opr + " " + Value;
+                    res = Field + " " + opr + " " + Value;
                 }
 
                 return res;

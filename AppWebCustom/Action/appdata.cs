@@ -113,8 +113,8 @@ namespace AppWebCustom.Action
                             reqCol[key]++;
                                             
                             if( key == "StatusId"){
-                                PropertyInfo ap1 = appDataType.GetProperty(key);
-                                ap1.SetValue (ad.appData, Int32.Parse(value), null);                            
+                                // PropertyInfo ap1 = appDataType.GetProperty(key);
+                                // ap1.SetValue (ad.appData, Int32.Parse(value), null);                            
                             }
                             else
                             {                                

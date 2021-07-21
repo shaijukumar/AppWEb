@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using AppWebCustom;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application._AppApi
 { 
@@ -51,16 +52,23 @@ namespace Application._AppApi
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
+            private readonly UserManager<AppUser> _userManager;
+            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper, UserManager<AppUser> userManager)
             {
                 _mapper = mapper;
                 _context = context;
                 _userAccessor = userAccessor;
-
+                _userManager = userManager;
             }
 
             public async Task<Dictionary<string, List<object>>> Handle(ActionCommand request, CancellationToken cancellationToken)
             {
+                   
+                // AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());                
+                // var rolesNames = await _userManager.GetRolesAsync(user);
+                // var roles1 = await  _context.AspNetRoles.Where( x => rolesNames.Contains(x.Name) ).ToListAsync();
+
+        
                 # region get apiDetails and check security
 
                 ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername() ); //request
@@ -85,7 +93,7 @@ namespace Application._AppApi
                 if( apiDetails.appAction.ActionType == "Query" )
                 {          
                     try{
-                        res.Result =  await  ApiQuery.ExecuteQuery( apiDetails.appAction, apiDetails.appData, _context, request); 
+                        res.Result =  await  ApiQuery.ExecuteQuery( apiDetails.appAction, apiDetails.appData, _context, request, _userManager, _userAccessor); 
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });

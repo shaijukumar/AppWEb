@@ -36,9 +36,9 @@ const NavigationEdit: React.FC = () => {
         var IdVal =0;
         if (id) { IdVal=Number(id); }
 
-        ApiStore.getRoleList().then( res => {
-            setRoleList(res);
-        })
+        setLoading(true);
+
+        
 
         ApiStore.getActions(FlowId,IdVal).then( (res) => {             
             if((res as any).errors){          
@@ -46,40 +46,40 @@ const NavigationEdit: React.FC = () => {
             }
             else{
                 setActions(res);
-            }     
-            setLoading(false);
+            }                 
         });
 
-        setLoading(true);
-        if(id){
-            let formData = new FormData();
-            formData.append('ActionId', '35' );
-            formData.append('ItemId',  id );
-            formData.append('Parm1',  id );
-            ApiStore.ExecuteAction(formData).then( (res) => {      
-                //debugger;
-                if((res as any).errors){          
-                  setError((res as any).errors.Error);         
-                  return;
-                }
-                else{                    
-                  setRoles(ApiStore.rolesFromArray(roleList as any, res.Result1[0].UserAccessRoles));            
-                  setItem(res.Result1[0] as any);        
-                }  
-
-                debugger;
-               
-
-                setLoading(false);
-            });
-        }
-        else{
-            setItem(new AppNavigation()); 
-            setLoading(false);
+        ApiStore.getRoleList().then( resRoles => {
+          setRoleList(resRoles);        
+          if(id){
+              let formData = new FormData();
+              formData.append('ActionId', '35' );
+              formData.append('ItemId',  id );
+              formData.append('Parm1',  id );
+              ApiStore.ExecuteAction(formData).then( (res) => {      
+                  //debugger;
+                  if((res as any).errors){          
+                    setError((res as any).errors.Error);         
+                    return;
+                  }
+                  else{
+                    debugger;
+                    var rl = ApiStore.rolesFromArray(resRoles as any, res.Result1[0].UserAccessRoles);                    
+                    setRoles(rl);            
+                    setItem(res.Result1[0] as any);        
+                  }  
+                  //debugger;               
+                  setLoading(false);
+              });
           }
+          else{ 
+              setItem(new AppNavigation()); 
+              setLoading(false);
+          }
+        });
 
 
-    },[ApiStore, ApiStore.getActions, ApiStore, ApiStore.ExecuteAction]);
+    },[ApiStore, ApiStore.getActions, ApiStore, ApiStore.ExecuteAction, setRoles, setItem, ApiStore, ApiStore.rolesFromArray ]);
 
     const onItemSubmit = (values: any) => {
         
@@ -126,7 +126,7 @@ const NavigationEdit: React.FC = () => {
                 {/* <MyCustomTxt name="UserAccessRoles" label="UserAccessRoles" type="text" required={true}  />  */}
 
                
-
+            {
             <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple    
                 size="small"  
                 value={roles as any}  
@@ -143,7 +143,7 @@ const NavigationEdit: React.FC = () => {
                 )}
                 
                 onChange={(event:any, newValue:any) => {
-                  debugger;
+                  //debugger;
                   var unq = true;
                   for(let i=0;i<newValue.length-1;i++){
                     if( newValue[i].Id === newValue[newValue.length-1].Id){
@@ -155,7 +155,7 @@ const NavigationEdit: React.FC = () => {
                     setRoles(newValue); 
                   }                                          
                 }}
-              />
+              />}
 
 
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
@@ -164,18 +164,18 @@ const NavigationEdit: React.FC = () => {
                         onClick={ () => { setActionId( row.Id); }} > {row.Action}</Button>                     
                     ))}
                     <Button onClick={ () => { history.push('/Navigationlist');  }}>Back</Button> 
-                    <Button onClick={ () => { 
-                        debugger;
+                    {/* <Button onClick={ () => { 
+                        //debugger;
                           setLoading(true);
                           let act: AppApiAction = new AppApiAction()
                           act.ActionId = 36;
                           act.ItemId = item.Id;
                           ApiStore.ExecuteQuery(act).then( (res) => { 
-                            debugger;
+                            //debugger;
                             history.push('/Navigationlist');
                           });
                           
-                         } }>Delete</Button>
+                         } }>Delete</Button> */}
                 </ButtonGroup>               
             </Form>
 
