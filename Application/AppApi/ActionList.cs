@@ -74,7 +74,7 @@ namespace Application._AppApi
 
                  foreach( AppAction act in  appActions){  
 
-                    if (await ApiAppWhen.Execute(act, _context, _userAccessor.GetCurrentUsername() )){
+                    if (await ApiAppWhen.Execute(act, _context, _userAccessor.GetCurrentUsername(), _userManager )){
                         retAppActions.Add(act);
                     }                   
                 }            

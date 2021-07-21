@@ -1,4 +1,3 @@
-import { IAppUserRoleMaster } from "../AppUserRoleMaster/AppUserRoleMaster";
 
 export interface IAppNavigation {
 	Id: number

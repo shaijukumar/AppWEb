@@ -126,8 +126,7 @@ export default class AppUserRoleMasterStoreImpl {
     try {
       this.userList = await DBFun.RoleUserList(id);                
       this.loading = false;     
-      return this.userList; 
-      return this.item;     
+      return this.userList;  
       } catch (error) {
         console.log(error);
         this.loading = false;

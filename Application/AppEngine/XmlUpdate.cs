@@ -14,6 +14,36 @@ namespace Application.AppEngine
 {
     static class XmlUpdate
     {        
+        public static async Task<string> UpdateRole(string strXml, DataContext _context, bool UpdateId, string grps)
+        {          
+             string strGroups = string.Empty; 
+            List<string> groups = new List<string>();
+            string[] grpsArr = grps.Split(",");
+
+            foreach( string gName in  grpsArr){
+                if(!string.IsNullOrEmpty(gName)){
+                    if(UpdateId)
+                    {  
+                        var role = await  _context.AspNetRoles
+                            .Where( x => x.Name == gName.Trim() )
+                            .FirstOrDefaultAsync();
+                        if(role != null){
+                            groups.Add(role.Id);
+                        }                                                                                              
+                    }
+                    else{
+                            var role = await  _context.AspNetRoles
+                            .Where( x => x.Id == gName.Trim() )
+                            .FirstOrDefaultAsync();
+                        if(role != null){
+                            groups.Add(role.Name);
+                        }  
+                    }                                                                                                
+                    strGroups = string.Join( ",", groups.ToArray() ) ; 
+                }                           
+            }                         
+           return strGroups;  
+        }
         public static async Task<string> UpdateXml(string strXml, DataContext _context, bool UpdateId)
         {  
             if(string.IsNullOrEmpty(strXml)){
@@ -35,43 +65,44 @@ namespace Application.AppEngine
             foreach (XElement node in xmlDoc.Descendants())
             {                
                 if (node.Name == "UserRoles")
-                {                                                                
-                    string s = node.Value;
-                    string rs = string.Empty;
-                    string[] roleList = s.Split(",");
-                    foreach (string r in roleList)
-                    {
-                        if (!string.IsNullOrEmpty(rs))
-                        {
-                            rs += ", ";
-                        }
-                        if(UpdateId){
-                            var tableData = await _context.AppUserRoleMasters
-                                .Where( x => x.Title == r).FirstOrDefaultAsync();
+                {        
+                    node.Value = await UpdateRole(strXml, _context, UpdateId, node.Value);                                                     
+                    // string s = node.Value;
+                    // string rs = string.Empty;
+                    // string[] roleList = s.Split(",");
+                    // foreach (string r in roleList)
+                    // {
+                    //     if (!string.IsNullOrEmpty(rs))
+                    //     {
+                    //         rs += ", ";
+                    //     }
+                    //     if(UpdateId){
+                    //         var tableData = await _context.AppUserRoleMasters
+                    //             .Where( x => x.Title == r).FirstOrDefaultAsync();
 
-                            try{
-                                rs += tableData.Id;
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception("User Group " + r + " not found" + ex.Message);
-                            }
+                    //         try{
+                    //             rs += tableData.Id;
+                    //         }
+                    //         catch (Exception ex)
+                    //         {
+                    //             throw new Exception("User Group " + r + " not found" + ex.Message);
+                    //         }
                             
-                        }
-                        else{
-                            var tableData = await _context.AppUserRoleMasters
-                                .Where( x => x.Id == Int32.Parse(r) ).FirstOrDefaultAsync();
+                    //     }
+                    //     else{
+                    //         var tableData = await _context.AppUserRoleMasters
+                    //             .Where( x => x.Id == Int32.Parse(r) ).FirstOrDefaultAsync();
                             
-                            try{
-                                rs += tableData.Title;
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception("User Group id " + r + " not found" + ex.Message);
-                            }
-                        }                                               
-                    }
-                    node.Value = rs;
+                    //         try{
+                    //             rs += tableData.Title;
+                    //         }
+                    //         catch (Exception ex)
+                    //         {
+                    //             throw new Exception("User Group id " + r + " not found" + ex.Message);
+                    //         }
+                    //     }                                               
+                    // }
+                    // node.Value = rs;
                 }
 
 
@@ -122,34 +153,35 @@ namespace Application.AppEngine
                     }
                     else if(att.Name == "UserRolesToCheck"){
 
-                        var grps = att.Value;
-                        string strGroups = string.Empty;
-                        List<string> groups = new List<string>();
-                        string[] grpsArr = grps.Split(",");
+                        att.Value = await UpdateRole(strXml, _context, UpdateId, att.Value);
+                        // var grps = att.Value;
+                        // string strGroups = string.Empty;
+                        // List<string> groups = new List<string>();
+                        // string[] grpsArr = grps.Split(",");
 
-                        foreach( string gName in  grpsArr){
-                            if(!string.IsNullOrEmpty(gName)){
-                                if(UpdateId)
-                                {  
-                                    var role = await  _context.AspNetRoles
-                                        .Where( x => x.Name == gName.Trim() )
-                                        .FirstOrDefaultAsync();
-                                    if(role != null){
-                                        groups.Add(role.Id);
-                                    }                                                                                              
-                                }
-                                else{
-                                     var role = await  _context.AspNetRoles
-                                        .Where( x => x.Id == gName.Trim() )
-                                        .FirstOrDefaultAsync();
-                                    if(role != null){
-                                        groups.Add(role.Name);
-                                    }  
-                                }                                                                                                
-                                strGroups = string.Join( ",", groups.ToArray() ) ; 
-                            }                           
-                        }                         
-                        att.Value = strGroups;                        
+                        // foreach( string gName in  grpsArr){
+                        //     if(!string.IsNullOrEmpty(gName)){
+                        //         if(UpdateId)
+                        //         {  
+                        //             var role = await  _context.AspNetRoles
+                        //                 .Where( x => x.Name == gName.Trim() )
+                        //                 .FirstOrDefaultAsync();
+                        //             if(role != null){
+                        //                 groups.Add(role.Id);
+                        //             }                                                                                              
+                        //         }
+                        //         else{
+                        //              var role = await  _context.AspNetRoles
+                        //                 .Where( x => x.Id == gName.Trim() )
+                        //                 .FirstOrDefaultAsync();
+                        //             if(role != null){
+                        //                 groups.Add(role.Name);
+                        //             }  
+                        //         }                                                                                                
+                        //         strGroups = string.Join( ",", groups.ToArray() ) ; 
+                        //     }                           
+                        // }                         
+                        // att.Value = strGroups;                        
                     }                  
                 }
             }

@@ -45,8 +45,7 @@ const AppConfigList: React.FC = () => {
   
     useEffect(() => {       
       
-      AppConfigTypeStore.getList().then( (res : any) => {
-        
+      AppConfigTypeStore.getList().then( (res : any) => {        
         res.map( (row:IAppConfigType) => {
           types[ row.Id ] =  row.Title;                  
         });        

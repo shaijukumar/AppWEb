@@ -87,8 +87,7 @@ export default class AppTableMasterStoreImpl {
       var res = await DBFun.delete(id);    
       this.updating = false;   
       this.loading = false;
-      return res;
-      return res;
+      return res;    
     } catch (error) {    
       this.updating = false;  
       this.loading = false;             

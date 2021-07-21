@@ -53,16 +53,10 @@ const NavigationList: React.FC = () => {
         {          
             icon: (values: any) => { return <TableButton  label="Add New" path="/NavigationEdit" /> },
             tooltip: 'Add New',
-            isFreeAction: true,             
-            iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
-        },
-        // {          
-        //     icon: (values: any) => { return <TableButton label="Refresh"  /> },
-        //     tooltip: 'Refresh',
-        //     isFreeAction: true,
-        //     onClick: (event:any) =>{ AppColumnMasterStore.getColumnList(Number(id));},   
-        //     iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
-        //     }
+            isFreeAction: true, 
+            onClick: (event:any) =>{  },               
+            //iconProps: { style: { color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
+        }
         ]; 
 
     if(loading){

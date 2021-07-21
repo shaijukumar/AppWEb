@@ -16,7 +16,7 @@ const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,requir
     //const [field] = useField<{}>(props);
 
     const [field, meta] = useField<{}>(props);
-    const [txtMargin] = useField('normal');
+    //const [txtMargin] = useField('normal');
     const errorText = meta.error && meta.touched ? meta.error : "";
   //var multiline = true;
     return (      

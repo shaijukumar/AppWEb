@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { AppTableMasterContext } from './AppTableMasterStore';
 
-import TableButton from '../../app/common/form/TableButton';
+
 import MaterialTable from 'material-table';
 import TableDetails from './TableDetails';
 import { AppTableMaster } from './AppTableMaster';
@@ -13,9 +13,6 @@ const AppTableMasterList: React.FC = () => {
     const AppTableMasterStore = useContext(AppTableMasterContext);   
     const [open, setOpen] = React.useState(false);
     
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
   
     const handleClose = () => {
       setOpen(false);

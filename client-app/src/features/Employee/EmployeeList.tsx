@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, ButtonGroup, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { LinearProgress } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import { AppApiContext } from '../AppApi/AppApiStore';
 import { AppApiAction } from '../AppApi/AppApi';
 import { NavLink } from 'react-router-dom';
-import { IEmployee } from './Employee';
 import MaterialTable from 'material-table';
-import { green } from '@material-ui/core/colors';
 import TableButton from '../../app/common/form/TableButton';
 
 const EmployeeList: React.FC = () => {
@@ -59,7 +57,7 @@ const EmployeeList: React.FC = () => {
       ];
   
 
-    if(AppApiStore.loading){
+    if(loading){
         return <LinearProgress color="secondary"  className="loaderStyle" />     
     }
 

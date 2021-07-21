@@ -1,14 +1,8 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, Link } from '@material-ui/core';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import MyCustomTxt from '../../app/common/form/MyCustomTxt';
-import { AppTableMaster } from './AppTableMaster';
-import { AppTableMasterContext } from './AppTableMasterStore';
+import {  useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { AppColumnMasterContext } from '../AppColumnMaster/AppColumnMasterStore';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import AppColumn from '../AppColumnMaster/AppColumn';
 import { AppColumnMaster } from '../AppColumnMaster/AppColumnMaster';
 import { ColumnDataType } from '../../app/common/SystemConstants';
@@ -40,7 +34,7 @@ interface DetailParms {
     useEffect(() => {
         AppColumnMasterStore.getColumnList(Number(id));
 
-    }, [id,AppColumnMasterStore.getColumnList]);
+    }, [id, AppColumnMasterStore, AppColumnMasterStore.getColumnList]);
 
     const TableColumns = [
         {
@@ -119,7 +113,7 @@ interface DetailParms {
                           showDialogBox((val as any).errors.Error);                                                
                           resolve(true);                                                
                         }   
-                        else if((val as any).name == 'Error') {                             
+                        else if((val as any).name === 'Error') {                             
                             showDialogBox( (val as any).message );
                                 
                             resolve(true); 

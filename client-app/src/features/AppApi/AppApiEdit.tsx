@@ -84,7 +84,7 @@ const AppApiEdit: React.FC = () => {
       setItem(new Customer()); 
       setLoading(false);
     }
-  }, [id, AppApiStore.ExecuteAction , AppApiStore.getActions, AppApiStore, AppStatusListStore, attachFileList]);
+  }, [id, error, AppApiStore.ExecuteAction , AppApiStore.getActions, AppApiStore, AppStatusListStore, attachFileList]);
 
 
   const onItemSubmit = (values: any) => {    
@@ -281,7 +281,7 @@ const AppApiEdit: React.FC = () => {
       <TableBody>
       { attachFileList && attachFileList.map( (rr, index) => (
           <TableRow>       
-            <TableCell align="left"> <a  onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
+            <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
             <TableCell align="left">
               <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
             </TableCell>     

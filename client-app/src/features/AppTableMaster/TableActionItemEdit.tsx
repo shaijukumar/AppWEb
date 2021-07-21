@@ -57,7 +57,7 @@ const TableActionItemEdit: React.FC = () => {
           setLoading(false);     
         }
         
-      }, [id, AppTableMasterStore.loadItem, AppFlowStore, AppActionStore, AppFlowStore.loadItem, AppActionStore, AppActionStore.loadItem,  AppStatusListStore, AppStatusListStore.getStatusList]);
+      }, [id, flowId, tableId, AppTableMasterStore, AppTableMasterStore.loadItem, AppFlowStore, AppActionStore, AppFlowStore.loadItem, AppActionStore.loadItem,  AppStatusListStore, AppStatusListStore.getStatusList]);
 
 
     const onItemSubmit = (values: any) => {  

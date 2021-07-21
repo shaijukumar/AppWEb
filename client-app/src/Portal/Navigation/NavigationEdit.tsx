@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppNavigation } from './Navigation';
-import { ApiContext, AppApiAction, AppStatusList, AppUserRoleMaster } from '../Api/Api'
+import { ApiContext,  AppStatusList, AppUserRoleMaster } from '../Api/Api'
 import { Autocomplete } from '@material-ui/lab';
 
  
@@ -37,9 +37,7 @@ const NavigationEdit: React.FC = () => {
         if (id) { IdVal=Number(id); }
 
         setLoading(true);
-
         
-
         ApiStore.getActions(FlowId,IdVal).then( (res) => {             
             if((res as any).errors){          
                 setError( error + ", " + (res as any).errors.Error);                        
@@ -79,7 +77,7 @@ const NavigationEdit: React.FC = () => {
         });
 
 
-    },[ApiStore, ApiStore.getActions, ApiStore, ApiStore.ExecuteAction, setRoles, setItem, ApiStore, ApiStore.rolesFromArray ]);
+    },[id, error, ApiStore, ApiStore.getActions, ApiStore.ExecuteAction, setRoles, setItem, ApiStore.rolesFromArray ]);
 
     const onItemSubmit = (values: any) => {
         

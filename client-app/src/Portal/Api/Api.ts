@@ -1,7 +1,6 @@
 import { createContext } from "react";
-import { observable, action, runInAction, makeObservable } from "mobx";
 import agent from "../../app/api/agent";
-import { AnySrvRecord } from "dns";
+
 
 //==============================================
 
@@ -162,7 +161,7 @@ const DBFun = {
 			strRoleArray.split(',').forEach( r => {
 				let role = new AppUserRoleMaster();
 				role.Id = r;
-				var RoleName = rolesList.find(x => x.Id == r)?.Name;
+				var RoleName = rolesList.find(x => x.Id === r)?.Name;
 				role.Name = RoleName ? RoleName : '' ;
 				roles.push(role);
 			});
@@ -176,7 +175,7 @@ const DBFun = {
 
 		if(strRoleArray && rolesList && rolesList.length > 0){
 			strRoleArray.split(',').forEach( r => {
-				var RoleName = rolesList.find(x => x.Id == r)?.Name;
+				var RoleName = rolesList.find(x => x.Id === r)?.Name;
 				if(strRoleNames){
 					strRoleNames += ", "
 				}
@@ -232,8 +231,7 @@ const DBFun = {
 	}
 
 	ExecuteQuery = async (action: IApiAction) => {		
-		try {        	
-		  let itm = new ApiResult();
+		try {        			 
 		  return await DBFun.ExecuteQuery(action);  		   
 		} catch (error) {
 			return error;

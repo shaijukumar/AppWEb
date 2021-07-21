@@ -67,14 +67,13 @@ export default class AppFlowStoreImpl {
     try {
       this.itemList = await DBFun.list(); 
       this.item = await DBFun.details(id); 
-      return this.item;
-      
       this.loading = false;      
-      return this.item;     
-      } catch (error) {
+      return this.item;
+    
+    } catch (error) {
         console.log(error);
         this.loading = false;
-      }
+    }
   }
 
  editItem = async (item: IAppFlow) => {    

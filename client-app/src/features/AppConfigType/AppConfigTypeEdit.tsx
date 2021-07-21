@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, LinearProgress, Link, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Button, ButtonGroup, Container, LinearProgress, List, ListItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -48,14 +48,7 @@ const AppConfigTypeEdit: React.FC = () => {
     });
   };
 
-  const openModel = (col: AppConfigType) => {  
-    // if(!col.TableID){
-    //   col.TableID = item.Id;
-    // }
-    // setSelectedColumn(col);
-    // setOpen(true);
-  };
-
+  
   if(loading){
     return <LinearProgress color="secondary"  className="loaderStyle" /> 
   }

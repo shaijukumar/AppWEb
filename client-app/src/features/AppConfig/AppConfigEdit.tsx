@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Chip, Container, LinearProgress, TextField } from '@material-ui/core';
+import { Button, ButtonGroup, Chip, Container, LinearProgress } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -7,7 +7,6 @@ import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppConfig } from './AppConfig';
 import { AppConfigContext } from './AppConfigStore';
 import { observer } from 'mobx-react-lite';
-import { Autocomplete } from '@material-ui/lab';
 import { AppConfigTypeContext } from '../AppConfigType/AppConfigTypeStore';
 
 
@@ -46,7 +45,7 @@ const AppConfigEdit: React.FC = () => {
       setLoading(false);     
     }
     
-  }, [id, AppConfigStore, AppConfigStore.loadItem, AppConfigTypeStore]);
+  }, [id, typeid, AppConfigStore, AppConfigStore.loadItem, AppConfigTypeStore]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);

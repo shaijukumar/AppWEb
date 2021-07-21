@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { NavLink, useHistory, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import TableDetails from './TableDetails';
 import MaterialTable from 'material-table';
@@ -17,8 +17,7 @@ interface DetailParms {
 const TableActions: React.FC = () => {
 
     const { tableId, id } = useParams<DetailParms>();
-    let history = useHistory();
-
+    
     const AppActionStore = useContext(AppActionContext);       
     const AppStatusListStore = useContext(AppStatusListContext);
     const AppFlowStore = useContext(AppFlowContext);
@@ -28,7 +27,7 @@ const TableActions: React.FC = () => {
         AppFlowStore.loadItem(Number(id));
         AppActionStore.flowActions(Number(id));
         AppStatusListStore.getStatusList(Number(tableId));            
-      }, [id, tableId, AppActionStore, AppActionStore.flowActions, AppStatusListStore.getStatusList])
+      }, [id, tableId, AppActionStore, AppActionStore.flowActions,AppStatusListStore, AppStatusListStore.getStatusList, AppFlowStore])
 
     const ShowDesc = (text: string) => {        
         var res = "";

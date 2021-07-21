@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, DialogContentText, Link } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
@@ -22,7 +22,7 @@ interface DetailParms {
 
 
     const [open, setOpen] = useState(false);
-    const [selectedColumn, setSelectedColumn] = useState(new AppColumnMaster());
+    const [selectedColumn] = useState(new AppColumnMaster());
    
     const [dialogMessage, setDialogMessage] = useState('');
     const [timeStamp, setTimeStamp] = useState('');
@@ -34,26 +34,16 @@ interface DetailParms {
 
     useEffect(() => {
       AppStatusListStore.getStatusList(Number(id));
-    }, [id,AppStatusListStore.getStatusList]);
+    }, [id,AppStatusListStore, AppStatusListStore.getStatusList]);
 
-    const dataRefresh = (values: any) => {
         
-    }
-    
     const TableColumns = [        
         {title: "Id", field: "Id", type: 'numeric', editable: 'never'},
         {title: "Order", field: "Order", type: 'numeric', defaultSort: "asc",},
         { title: "Title", field: "Title"},                  
       ];
    
-    const openModel = (col: AppColumnMaster) => {  
-        if(!col.TableID){
-            col.TableID = Number(id);
-        }
-        setSelectedColumn(col);
-        setOpen(true);
-    };
-
+   
     const RefreshColumns = (col: AppColumnMaster) => {      
       AppStatusListStore.getStatusList(Number(id));
         setOpen(false);
@@ -74,8 +64,7 @@ interface DetailParms {
               editable={{
 
                 onRowAdd: newData => new Promise(resolve => { 
-                  debugger;
-                  var v = newData;
+
                   var tab = new AppStatusList();
                   tab.Title = (newData as any).Title;
                   tab.Order = (newData as any).Order;
@@ -123,7 +112,7 @@ interface DetailParms {
                           showDialogBox((val as any).errors.Error);                                                
                           resolve(true);                                                
                         }   
-                        else if((val as any).name == 'Error') {                             
+                        else if((val as any).name === 'Error') {                             
                             showDialogBox( (val as any).message );
                                 
                             resolve(true); 

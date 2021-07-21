@@ -49,7 +49,7 @@ const AppNavigationList: React.FC = () => {
       {
         title: "RoleId",
         field: "RoleId",   
-        render : (values: any) => { return AppUserRoleMasterStore.itemList.find( u => u.Id == values.RoleId )?.Name }
+        render : (values: any) => { return AppUserRoleMasterStore.itemList.find( u => u.Id === values.RoleId )?.Name }
       },
     ];
 

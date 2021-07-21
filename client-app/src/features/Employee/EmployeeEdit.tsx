@@ -1,13 +1,11 @@
 
-import { Button, ButtonGroup, Container, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,  } from '@material-ui/core';
+import { Button, ButtonGroup, Container, LinearProgress  } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import moment from 'moment';
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
-import AppStatusListStore from '../AppStatusList/AppStatusListStore';
 import { Employee } from './Employee';
 import { AppApiContext } from '../AppApi/AppApiStore';
 import { AppApiAction } from '../AppApi/AppApi';
@@ -71,7 +69,7 @@ const EmployeeEdit: React.FC = () => {
 
 
       
-    },[id, AppApiStore.ExecuteAction , AppApiStore.getActions]);
+    },[id, error, AppApiStore,  AppApiStore.ExecuteAction , AppApiStore.getActions]);
 
     const onItemSubmit = (values: any) => { 
 

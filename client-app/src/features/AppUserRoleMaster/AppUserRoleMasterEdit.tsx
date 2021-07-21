@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, Chip, Container, Grid, LinearProgress, TextField } from '@material-ui/core';
+import { Button,  Card,  Container,  LinearProgress, TextField } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
@@ -7,15 +7,11 @@ import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AddRole, AppUserRoleMaster } from './AppUserRoleMaster';
 import { AppUserRoleMasterContext } from './AppUserRoleMasterStore';
 import { observer } from 'mobx-react-lite';
-import { AppUserRoleContext } from '../AppUserRole/AppUserRoleStore';
 import { Autocomplete } from '@material-ui/lab';
 import { UserManagerContext } from '../user/UserManagerStore';
 import { AppUserRole } from '../AppUserRole/AppUserRole';
-import TableButton from '../../app/common/form/TableButton';
 import MaterialTable from 'material-table';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import { AnyAaaaRecord } from 'dns';
-import _ from 'lodash';
 
 interface DetailParms {
   id: string;
@@ -24,15 +20,14 @@ const AppUserRoleMasterEdit: React.FC = () => {
 
   const { id } = useParams<DetailParms>();
   const AppUserRoleMasterStore = useContext(AppUserRoleMasterContext);
-  const AppUserRoleStore = useContext(AppUserRoleContext); 
-  const UserManagerStore = useContext(UserManagerContext);
+    const UserManagerStore = useContext(UserManagerContext);
      
   
   let history = useHistory();
   const [item, setItem] = useState(new AppUserRoleMaster());  
   const [loading, setLoading] = useState(true);
 
-  const [userRole, setUserRole] = useState(new AppUserRole());
+  const [userRole] = useState(new AppUserRole());
   const [role, setRole] = useState(new AddRole());
   const [error, setError] = useState('');
 

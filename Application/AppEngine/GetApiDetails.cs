@@ -54,7 +54,7 @@ namespace Application.AppEngine
 
             # region check when
 
-            if (!await ApiAppWhen.Execute(apiDetails.appAction, _context, CurrentUserId )){
+            if (!await ApiAppWhen.Execute(apiDetails.appAction, _context, CurrentUserId, _userManager )){
                 throw new Exception("Unauthorized");
             }
 

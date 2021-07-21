@@ -52,7 +52,7 @@ const AppAttachmentList: React.FC = () => {
                     </TableCell>
                                              
                     <TableCell align="right" >
-                      <a onClick={ () => { download(row.Id, row.FileName)} } >{row.FileName}</a> 
+                      <a href="#" onClick={ () => { download(row.Id, row.FileName)} } >{row.FileName}</a> 
                     </TableCell>  
                     <TableCell align="right" >
                       <DeleteOutlinedIcon onClick={ () => { AppAttachmentStore.deleteItem(row.Id).then( () => {   AppAttachmentStore.getList(); })}}  />
