@@ -1,22 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml;
-using System.Xml.Linq;
-using Application._AppApi;
 using Domain;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Persistence;
 using AppWebCustom;
-using Microsoft.AspNetCore.Identity;
-using Application.Interfaces;
 
 namespace Application.AppEngine
 {
@@ -172,7 +162,7 @@ namespace Application.AppEngine
             else if (itemName == "datacomarison")
             {
                 string res = string.Empty;
-                string Field =  AppParm.GetAttributeValue( item, "Filed", true ) ; 
+                string Field =  AppParm.GetAttributeValue( item, "Field", true ) ; 
 
                 var dbCol = new AppColumnMaster();
 

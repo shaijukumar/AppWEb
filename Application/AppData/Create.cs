@@ -278,7 +278,7 @@ namespace Application._AppData
                 else if (itemName == "datacomarison")
                 {
                     string res = string.Empty;
-                    string Filed = item.Attributes["Filed"].Value;
+                    string Filed = item.Attributes["Field"].Value;
                     var dbCol = colList.Find( x => x.Title == Filed );
                     Filed = dbCol.AppDataFiled;
 

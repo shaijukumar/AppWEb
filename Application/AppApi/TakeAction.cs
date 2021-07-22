@@ -66,7 +66,7 @@ namespace Application._AppApi
                                      
                 # region get apiDetails and check security
 
-                ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager ); //request
+                ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );
 
                 try{
                     apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );                     
@@ -88,7 +88,7 @@ namespace Application._AppApi
                 if( apiDetails.appAction.ActionType == "Query" )
                 {          
                     try{
-                        res.Result =  await  ApiQuery.ExecuteQuery(apiDetails, request); //, apiDetails.appAction, apiDetails.appData, _context, _userManager, _userAccessor); 
+                        res.Result =  await  ApiQuery.ExecuteQuery(apiDetails, request);
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
