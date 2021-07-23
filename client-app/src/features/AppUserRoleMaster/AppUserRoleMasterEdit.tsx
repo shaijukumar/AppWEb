@@ -154,7 +154,7 @@ const AppUserRoleMasterEdit: React.FC = () => {
               />
 
               <Button type="submit" variant="contained" size="large" color="primary"  style={{  marginLeft:'25px', width: '100px', height: '100%', marginTop:'13px'}}>Save</Button> 
-                           
+              <Button variant="contained" size="large" color="primary"  style={{  marginLeft:'25px', width: '100px', height: '100%', marginTop:'13px'}} onClick={ () => { history.push('/AppUserRoleMasterList');  }}>Back</Button>             
               {/* <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group" size="small">
                 <Button type="submit" fullWidth variant="contained" color="primary" size="small">Save</Button>                 
                 <Button onClick={ () => { history.push('/AppUserRoleMasterlist');  }}>Back</Button>          

@@ -12,6 +12,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import AppColumn from '../AppColumnMaster/AppColumn';
 import { AppColumnMaster } from '../AppColumnMaster/AppColumnMaster';
 import { ColumnDataType } from '../../app/common/SystemConstants';
+import ErrorMessage from '../../app/common/common/ErrorMessage';
 
 interface DetailParms {
   id: string;
@@ -28,6 +29,7 @@ const AppTableMasterEdit: React.FC = () => {
 
   const [open, setOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(new AppColumnMaster());
+  const [error, setError] = useState('');
 
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -43,9 +45,15 @@ const AppTableMasterEdit: React.FC = () => {
     AppTableMasterStore.loadItem(Number(id));
     if (id) {      
       AppColumnMasterStore.getColumnList(Number(id));
-      AppTableMasterStore.loadItem(Number(id)).then((val) => {
-        setItem(val as any);     
-        setLoading(false);   
+      AppTableMasterStore.loadItem(Number(id)).then((res) => {
+
+        if((res as any).errors){          
+          setError( error + ", " + (res as any).errors.Error); 
+          setLoading(false);                       
+        }
+        else{
+          setItem(res as any); setLoading(false);  
+        }          
       });
     } else {
       setItem(new AppTableMaster()); 
@@ -84,6 +92,7 @@ const AppTableMasterEdit: React.FC = () => {
   
   return (
     <Container component="main" maxWidth="lg">  
+    <ErrorMessage message={error} /> 	
 
       <Formik
           initialValues={item}

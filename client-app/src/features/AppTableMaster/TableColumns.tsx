@@ -22,6 +22,7 @@ interface DetailParms {
     const AppColumnMasterStore = useContext(AppColumnMasterContext);
     const [open, setOpen] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState(new AppColumnMaster());
+    const [error, setError] = useState('');
    
     const [dialogMessage, setDialogMessage] = useState('');
     const [timeStamp, setTimeStamp] = useState('');

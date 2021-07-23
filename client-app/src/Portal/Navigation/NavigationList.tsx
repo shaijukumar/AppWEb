@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { Card, LinearProgress } from '@material-ui/core';
+import { LinearProgress } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import { ApiContext, AppApiAction, AppUserRoleMaster, IAppStatusList } from '../Api/Api';
 import { AppNavigation } from './Navigation';
@@ -18,7 +18,6 @@ const NavigationList: React.FC = () => {
 
     const ApiStore = useContext(ApiContext);
     useEffect(() => {    
-        debugger;
         setLoading(true); 
 
         ApiStore.getRoleList().then( res => {
@@ -29,6 +28,11 @@ const NavigationList: React.FC = () => {
             setStausList(res);
         })
 
+        RefreshData();
+        
+    },[ApiStore, ApiStore.ExecuteQuery]);
+
+    const RefreshData = () => {
         let act: AppApiAction = new AppApiAction()
         act.ActionId = 34;      
         ApiStore.ExecuteQuery(act).then( (res) => {  
@@ -40,10 +44,7 @@ const NavigationList: React.FC = () => {
                 setData(res.Result1); setLoading(false); 
             }                              
         });
-
-    },[ApiStore, ApiStore.ExecuteQuery]);
-
-
+    }
 
     const TableColumns = [     
         {title: "Order", field: "Order", defaultSort: "asc"},
@@ -64,6 +65,12 @@ const NavigationList: React.FC = () => {
                 tooltip: 'Add New',
                 isFreeAction: true, 
                 onClick: (event:any) =>{  },                                     
+            },
+            {          
+                icon: (values: any) => { return <TableButton  label="Refresh"  /> },
+                tooltip: 'Refresh',
+                isFreeAction: true, 
+                onClick: (event:any) =>{  RefreshData(); },                                     
             }
         ]; 
 

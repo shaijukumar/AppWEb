@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {  useHistory } from "react-router-dom";
 import { AppTheme } from "../../app/common/Theme";
 import { AppFlowContext } from "../AppFlow/AppFlowStore";
@@ -17,6 +17,7 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
 
    const AppTableMasterStore = useContext(AppTableMasterContext);
    const AppFlowStore = useContext(AppFlowContext);
+   const [error, setError] = useState('');
 
    
    let history = useHistory();

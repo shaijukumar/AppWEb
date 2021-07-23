@@ -19,9 +19,7 @@ const AppLeftNavBar: React.FC = () => {
     useEffect(() => {       
         AppNavigationStore.getList().then( () => {
             //AppNavigationStore.itemList[0].Selected = true;
-        });       
-        
-
+        });               
     }, [AppNavigationStore, AppNavigationStore.getList])  
 
     return (  

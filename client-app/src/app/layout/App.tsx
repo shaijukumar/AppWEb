@@ -43,7 +43,6 @@ import AppAttachmentEdit from '../../features/AppAttachment/AppAttachmentEdit';
 import clsx from 'clsx';
 import AppNavigationList from '../../features/AppNavigation/AppNavigationList';
 import AppNavigationEdit from '../../features/AppNavigation/AppNavigationEdit';
-import AppLeftNavBar from '../../features/nav/AppLeftNavBar';
 import AppNotificationsMasterList from '../../features/AppNotificationsMaster/AppNotificationsMasterList';
 import AppNotificationsMasterEdit from '../../features/AppNotificationsMaster/AppNotificationsMasterEdit';
 import AppNitificationTemplateList from '../../features/AppNitificationTemplate/AppNitificationTemplateList';
@@ -64,6 +63,7 @@ import TableActions from '../../features/AppTableMaster/TableActions';
 import TableActionItemEdit from '../../features/AppTableMaster/TableActionItemEdit';
 import NavigationEdit from '../../Portal/Navigation/NavigationEdit';
 import NavigationList from '../../Portal/Navigation/NavigationList';
+import LeftNavBar from '../../Portal/Navigation/LeftNavBar';
 //##FeatureImport##"
 
 const drawerWidth = 240;
@@ -219,7 +219,7 @@ const App = () => {
         <Divider />
         <List>{secondaryListItems}</List> */}
 
-        <AppLeftNavBar/>
+        <LeftNavBar/>
         
 
       </Drawer>

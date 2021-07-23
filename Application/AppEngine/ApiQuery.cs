@@ -224,16 +224,8 @@ namespace Application.AppEngine
                 }
                 else if (Operation.ToLower() == "incurrenuserorgroup"){
                     //Current user roles
-
-                    // AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());                
-                    // var rolesNames = await _userManager.GetRolesAsync(user);
-                    // var rolesIDList = await  _context.AspNetRoles.Where( x => rolesNames.Contains(x.Name) ).ToListAsync();
-
-                    //string[] grpsArr = grps.Split(",");
-
                     string UserRolesToCheck =  AppParm.GetAttributeValue( item, "UserRolesToCheck", true ) ; 
                     
-
                     string grpSql= string.Empty;
                     var rolesIDList = await apiDetails.GetUserRolesIDList();
                     foreach( var g in  rolesIDList){
@@ -244,6 +236,10 @@ namespace Application.AppEngine
                             grpSql += $" {Field} LIKE '%{g.Id}%' ";
                         }                        
                     }
+                    if(string.IsNullOrEmpty(grpSql)){
+                        grpSql += $" {Field} == 'NANANANA' ";
+                    }
+                    
                     res = $" ( {grpSql} )";
                 }
                 else 

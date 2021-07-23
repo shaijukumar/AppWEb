@@ -13,6 +13,7 @@ import { AppTableMasterContext } from '../AppTableMaster/AppTableMasterStore';
 import { AppFlowContext } from '../AppFlow/AppFlowStore';
 import { AppActionContext } from '../AppAction/AppActionStore';
 import { AppAction } from '../AppAction/AppAction';
+import ErrorMessage from '../../app/common/common/ErrorMessage';
 
 interface DetailParms {
     tableId: string;
@@ -33,6 +34,7 @@ const TableActionItemEdit: React.FC = () => {
     const [item, setItem] = useState(new AppAction());
     const [loading, setLoading] = useState(true);
     const [fromStatusList, setFromStatusList] = useState<AppStatusList[]>();
+    const [error, setError] = useState('');
 
     const ActionTypeList = [{Id: "Action", Title: 'Action'}, {Id: "Query", Title: 'Query'}, {Id: "FileDownload", Title: 'FileDownload'}];
 
@@ -68,7 +70,15 @@ const TableActionItemEdit: React.FC = () => {
         values.TableId = Number(tableId); 
 
         AppActionStore.editItem(values).then((val) => {
+          debugger;
+          if((val as any).errors){
+            setError((val as any).errors.Error);  
+            setLoading(false);              
+            return;
+          }
+          else{
             history.push(`/TableActions/${tableId}/${flowId}`);
+          }            
         });
     };
 
@@ -79,7 +89,7 @@ const TableActionItemEdit: React.FC = () => {
 
     return(
     <Container component="main" maxWidth="xl">  
-
+        <ErrorMessage message={error} /> 
         <Formik
             initialValues={item}
             validationSchema={Yup.object({

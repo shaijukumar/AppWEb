@@ -67,12 +67,16 @@ namespace Application._AppAction
                 try{
                     request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );                   
                 }
-                catch{}
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }
 
                  try{                    
                     request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, true );
                 }
-                catch{}
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}." });
+                }
 
                 var appAction = await _context.AppActions
                     .FindAsync(request.Id);

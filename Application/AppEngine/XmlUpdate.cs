@@ -16,7 +16,14 @@ namespace Application.AppEngine
     {        
         public static async Task<string> UpdateRole(string strXml, DataContext _context, bool UpdateId, string grps)
         {          
-             string strGroups = string.Empty; 
+
+            if(string.IsNullOrEmpty(grps)){
+                 throw new Exception("Empty group");
+            }
+
+            //throw new Exception("Invalid qury XML. " + ex.Message);
+
+            string strGroups = string.Empty; 
             List<string> groups = new List<string>();
             string[] grpsArr = grps.Split(",");
 
@@ -29,7 +36,10 @@ namespace Application.AppEngine
                             .FirstOrDefaultAsync();
                         if(role != null){
                             groups.Add(role.Id);
-                        }                                                                                              
+                        }     
+                        else{
+                             throw new Exception($"Invalid user group {gName}.");
+                        }                                                                                         
                     }
                     else{
                             var role = await  _context.AspNetRoles
@@ -115,8 +125,7 @@ namespace Application.AppEngine
                             }
                         }                        
                     }
-                    else if(att.Name == "UserRolesToCheck"){
-
+                    else if(att.Name == "UserRolesToCheck"){                        
                         att.Value = await UpdateRole(strXml, _context, UpdateId, att.Value);                                                
                     }                  
                 }

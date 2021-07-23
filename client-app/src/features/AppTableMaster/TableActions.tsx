@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import TableDetails from './TableDetails';
@@ -21,6 +21,7 @@ const TableActions: React.FC = () => {
     const AppActionStore = useContext(AppActionContext);       
     const AppStatusListStore = useContext(AppStatusListContext);
     const AppFlowStore = useContext(AppFlowContext);
+    const [error, setError] = useState('');
 
     useEffect(() => {     
         debugger;        

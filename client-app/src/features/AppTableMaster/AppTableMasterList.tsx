@@ -7,7 +7,8 @@ import MaterialTable from 'material-table';
 import TableDetails from './TableDetails';
 import { AppTableMaster } from './AppTableMaster';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
-  
+
+
 const AppTableMasterList: React.FC = () => {
     const [error, setError] = useState('');
     const AppTableMasterStore = useContext(AppTableMasterContext);   

@@ -161,22 +161,11 @@ const NavigationEdit: React.FC = () => {
                     <Button type="submit" fullWidth variant="contained" color="primary" key={row.Id}                         
                         onClick={ () => { setActionId( row.Id); }} > {row.Action}</Button>                     
                     ))}
-                    <Button onClick={ () => { history.push('/Navigationlist');  }}>Back</Button> 
-                    {/* <Button onClick={ () => { 
-                        //debugger;
-                          setLoading(true);
-                          let act: AppApiAction = new AppApiAction()
-                          act.ActionId = 36;
-                          act.ItemId = item.Id;
-                          ApiStore.ExecuteQuery(act).then( (res) => { 
-                            //debugger;
-                            history.push('/Navigationlist');
-                          });
-                          
-                         } }>Delete</Button> */}
-                </ButtonGroup>               
-            </Form>
+                    <Button onClick={ () => { history.push('/Navigationlist');  }}>Back</Button>                   
+                </ButtonGroup>    
 
+            </Form>
+            
             </Formik>
 
         </Container>

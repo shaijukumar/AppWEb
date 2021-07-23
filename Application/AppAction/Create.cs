@@ -63,12 +63,16 @@ namespace Application._AppAction
                 try{
                     request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );                   
                 }
-                catch{}
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }
 
                 try{                    
                     request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, true );
                 }
-                catch{}
+                catch(Exception ex){
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                }
 
                
 
@@ -102,14 +106,7 @@ namespace Application._AppAction
                     }
                 }
 
-                _context.AppActions.Add(appAction);
-                // var success = await _context.SaveChangesAsync() > 0;
-
-                // if (success)
-                // {
-                //     var toReturn = _mapper.Map <AppAction, AppActionDto>(appAction);
-                //     return toReturn;
-                // }  
+                _context.AppActions.Add(appAction);                
                 
                 try{
                     var success = await _context.SaveChangesAsync() > 0;          

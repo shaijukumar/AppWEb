@@ -25,6 +25,8 @@ interface DetailParms {
    
     const [dialogMessage, setDialogMessage] = useState('');
     const [timeStamp, setTimeStamp] = useState('');
+    const [error, setError] = useState('');
+    
     const showDialogBox = (message: string) => {  
         setDialogMessage(message);
         setTimeStamp(moment().toString());
