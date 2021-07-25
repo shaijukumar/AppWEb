@@ -1,27 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LinearProgress } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
-import { AppApiContext } from '../AppApi/AppApiStore';
-import { AppApiAction } from '../AppApi/AppApi';
+
+import { AppApiAction } from '../../features/AppApi/AppApi';
 import { NavLink } from 'react-router-dom';
 import MaterialTable from 'material-table';
 import TableButton from '../../app/common/form/TableButton';
 
 const EmployeeList: React.FC = () => {
     
-    const AppApiStore = useContext(AppApiContext);
+    //const AppApiStore = useContext(AppApiContext);
     const [loading, setLoading] = useState(true);
     const QueryActionId = 19;
       
     useEffect(() => {    
         //debugger        
-        setLoading(true);        
-        let act: AppApiAction = new AppApiAction()
-        act.ActionId = QueryActionId;      
-        AppApiStore.GetData(act).then( (res) => {                 
-            setLoading(false);              
-        });  
-      }, [AppApiStore.ExecuteAction, AppApiStore] ) 
+        // setLoading(true);        
+        // let act: AppApiAction = new AppApiAction()
+        // act.ActionId = QueryActionId;      
+        // AppApiStore.GetData(act).then( (res) => {                 
+        //     setLoading(false);              
+        // });  
+      }, [] ) 
 
 
     const TableColumns = [
@@ -51,7 +51,7 @@ const EmployeeList: React.FC = () => {
             icon: (values: any) => { return <TableButton label="Refresh"  /> },
             tooltip: 'Add User',
             isFreeAction: true,
-            onClick: (event:any) =>{AppApiStore.GetDataByActionId(QueryActionId);},   
+            onClick: (event:any) =>{},   
             iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
           }
       ];
@@ -69,7 +69,7 @@ const EmployeeList: React.FC = () => {
             <link rel="stylesheet" href="styles.css" ></link>
 
             <div className={"tabcontainers2"} >        
-                <MaterialTable                       
+                {/* <MaterialTable                       
                     title="List"
                     data={AppApiStore.dateResult.Result1}
                     columns={TableColumns}
@@ -77,7 +77,7 @@ const EmployeeList: React.FC = () => {
                         // , exportButton: false ,  actionsColumnIndex: -1, toolbarButtonAlignment:"left",                            
                     }}   
                     actions={TableActions}         
-                />
+                /> */}
             </div>
         </div>
     )

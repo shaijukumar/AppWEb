@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210723101449_c39")]
+    partial class c39
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,7 +155,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Title", "TableID")
+                    b.HasIndex("Title")
                         .IsUnique();
 
                     b.ToTable("AppColumnMasters");
@@ -728,20 +730,6 @@ namespace Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("AppStatusLists");
-                });
-
-            modelBuilder.Entity("Domain.AppTableCouter", b =>
-                {
-                    b.Property<int>("TableId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("counter")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TableId");
-
-                    b.ToTable("AppTableCouters");
                 });
 
             modelBuilder.Entity("Domain.AppTableMaster", b =>

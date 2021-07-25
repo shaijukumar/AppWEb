@@ -54,8 +54,6 @@ import AppNotificationsList from '../../features/AppNotifications/AppNotificatio
 import AppNotificationsEdit from '../../features/AppNotifications/AppNotificationsEdit';
 import UserProfile from '../../features/user/UserProfile';
 import ErrorPage from '../common/common/ErrorPage';
-import EmployeeList from '../../features/Employee/EmployeeList';
-import EmployeeEdit from '../../features/Employee/EmployeeEdit';
 import TableColumns from '../../features/AppTableMaster/TableColumns';
 import TableStatusList from '../../features/AppTableMaster/TableStatusList';
 import TableFlowList from '../../features/AppTableMaster/TableFlowList';
@@ -64,12 +62,13 @@ import TableActionItemEdit from '../../features/AppTableMaster/TableActionItemEd
 import NavigationEdit from '../../Portal/Navigation/NavigationEdit';
 import NavigationList from '../../Portal/Navigation/NavigationList';
 import LeftNavBar from '../../Portal/Navigation/LeftNavBar';
+
 //##FeatureImport##"
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  root: { 
     display: 'flex',
   },
   toolbar: {
@@ -221,7 +220,7 @@ const App = () => {
 
         <LeftNavBar/>
         
-
+  
       </Drawer>
 
       <main className={classes.content}>
@@ -285,8 +284,8 @@ const App = () => {
           <Route  path={['/AppNitificationTemplateItemEdit/:id', '/AppNitificationTemplateItemEdit/']} component={AppNitificationTemplateEdit} />
 
 
-          <Route path='/EmployeeList' component={EmployeeList} />
-          <Route  path={['/EmployeeEdit/:id', '/EmployeeEdit/']} component={EmployeeEdit} />
+          {/* <Route path='/EmployeeList' component={EmployeeList} />
+          <Route  path={['/EmployeeEdit/:id', '/EmployeeEdit/']} component={EmployeeEdit} /> */}
 
           <Route path='/AppAdminPage' component={AdminPage} />
 

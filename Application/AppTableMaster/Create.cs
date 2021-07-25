@@ -60,14 +60,23 @@ namespace Application._AppTableMaster
                 try{
                     var success = await _context.SaveChangesAsync() > 0;
                     if (success) 
+                    {
+                        var tableCouter = new AppTableCouter{
+                            TableId = appTableMaster.Id,
+                            counter = 0
+                        };
+                        _context.AppTableCouters.Add(tableCouter);
+                        var res = await _context.SaveChangesAsync();
+
                         return  _mapper.Map <AppTableMaster, AppTableMasterDto>(appTableMaster);
+                    }
                     else    
                         throw new RestException(HttpStatusCode.OK, new { Error = $"No dows updated." });
                 } 
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
                 } 
-              
+                              
                 throw new Exception("Problem saving changes");
             }
 

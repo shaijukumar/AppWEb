@@ -7,8 +7,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { Employee } from './Employee';
-import { AppApiContext } from '../AppApi/AppApiStore';
-import { AppApiAction } from '../AppApi/AppApi';
+
 
 interface DetailParms {
     id: string;
@@ -19,7 +18,7 @@ const EmployeeEdit: React.FC = () => {
     const FlowId = 5;
     const { id } = useParams<DetailParms>();
 
-    const AppApiStore = useContext(AppApiContext);
+    //const AppApiStore = useContext(AppApiContext);
     
     let history = useHistory();
     const [loading, setLoading] = useState(true);
@@ -32,16 +31,16 @@ const EmployeeEdit: React.FC = () => {
         debugger;
         var IdVal =0;
         if (id) {             
-            IdVal=Number(id); 
+            // IdVal=Number(id); 
 
-            let act: AppApiAction = new AppApiAction()
-            act.ActionId = 21;   
-            act.ItemId = IdVal;
-            act.Parm1 = id.toString();
-            AppApiStore.GetData(act).then( (res) => {  
-                setItem(res.Result1[0] as any);               
-                setLoading(false);              
-            }); 
+            // let act: AppApiAction = new AppApiAction()
+            // act.ActionId = 21;   
+            // act.ItemId = IdVal;
+            // act.Parm1 = id.toString();
+            // AppApiStore.GetData(act).then( (res) => {  
+            //     setItem(res.Result1[0] as any);               
+            //     setLoading(false);              
+            // }); 
 
             // let act: AppApiAction = new AppApiAction()
             // act.ActionId = 10;  
@@ -59,38 +58,38 @@ const EmployeeEdit: React.FC = () => {
             setLoading(false);
         }
             
-        AppApiStore.getActions(FlowId,IdVal).then( (res) => { 
-            //debugger;
-            if((res as any).errors){          
-                setError( error + ", " + (res as any).errors.Error);         
-                return;
-            }
-        });
+        // AppApiStore.getActions(FlowId,IdVal).then( (res) => { 
+        //     //debugger;
+        //     if((res as any).errors){          
+        //         setError( error + ", " + (res as any).errors.Error);         
+        //         return;
+        //     }
+        // });
 
 
       
-    },[id, error, AppApiStore,  AppApiStore.ExecuteAction , AppApiStore.getActions]);
+    },[id, error]);
 
     const onItemSubmit = (values: any) => { 
 
-        let act: AppApiAction = new AppApiAction()
-        act.ActionId = actionId;
-        let formData = new FormData();
-        formData.append('ActionId', actionId.toString() )
-        formData.append('Parm1', JSON.stringify(values) );
-        formData.append('ItemId',  values.Id );
+        // let act: AppApiAction = new AppApiAction()
+        // act.ActionId = actionId;
+        // let formData = new FormData();
+        // formData.append('ActionId', actionId.toString() )
+        // formData.append('Parm1', JSON.stringify(values) );
+        // formData.append('ItemId',  values.Id );
 
-        AppApiStore.ExecuteAction(formData).then( (res) => {      
-            //debugger;      
-            if((res as any).errors){
-              setError((res as any).errors.Error);
-              setLoading(false);
-              return;
-            }
-            else{
-              history.push('/Employeelist');
-            }
-          });
+        // AppApiStore.ExecuteAction(formData).then( (res) => {      
+        //     //debugger;      
+        //     if((res as any).errors){
+        //       setError((res as any).errors.Error);
+        //       setLoading(false);
+        //       return;
+        //     }
+        //     else{
+        //       history.push('/Employeelist');
+        //     }
+        //   });
     }
 
     if(loading){
@@ -123,7 +122,7 @@ const EmployeeEdit: React.FC = () => {
                 />
 
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-                    { AppApiStore.actionList.map( (row) => (                
+                    {/* { AppApiStore.actionList.map( (row) => (                
                     <Button
                         type="submit"
                         fullWidth
@@ -134,7 +133,7 @@ const EmployeeEdit: React.FC = () => {
                     >
                         {row.Action}
                     </Button> 
-                    ))}
+                    ))} */}
                     <Button onClick={ () => { history.push('/Employeelist');  }}>Back</Button>          
                 </ButtonGroup>
             </Form>

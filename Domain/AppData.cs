@@ -9,8 +9,9 @@ namespace Domain
     {
         [Key]
       	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-	  	public int Id { get; set; }
+	  	public int Id { get; set; }        
         public int TableId { get; set; }
+        public int TableItemId { get; set; }
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }

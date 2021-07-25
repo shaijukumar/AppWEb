@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { LinearProgress } from '@material-ui/core';
 import MaterialTable from 'material-table';
-import { ApiContext, AppApiAction, AppUserRoleMaster, IAppStatusList } from '../Api/Api';
+import { ActionConfig, ApiContext, AppApiAction, AppUserRoleMaster, IAppStatusList } from '../Api/Api';
 import { AppNavigation } from './Navigation';
 import TableButton from '../../app/common/form/TableButton';
 import ErrorMessage from '../../app/common/common/ErrorMessage';
@@ -24,28 +24,16 @@ const NavigationList: React.FC = () => {
             setRoleList(res);
         })
 
-        ApiStore.getStatusList(20).then( res => {
+        ApiStore.getStatusList(ActionConfig.NavigationTableID).then( res => {
             setStausList(res);
         })
 
-        RefreshData();
+        ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError );
+ 
         
-    },[ApiStore, ApiStore.ExecuteQuery]);
+    },[ApiStore, ApiStore.LoadDataList]);
 
-    const RefreshData = () => {
-        let act: AppApiAction = new AppApiAction()
-        act.ActionId = 34;      
-        ApiStore.ExecuteQuery(act).then( (res) => {  
-            if((res as any).errors){          
-                setError( error + ", " + (res as any).errors.Error); 
-                setLoading(false);                       
-            }
-            else{
-                setData(res.Result1); setLoading(false); 
-            }                              
-        });
-    }
-
+   
     const TableColumns = [     
         {title: "Order", field: "Order", defaultSort: "asc"},
         { title: "Title", field: "Title", defaultSort: "asc",
@@ -70,7 +58,7 @@ const NavigationList: React.FC = () => {
                 icon: (values: any) => { return <TableButton  label="Refresh"  /> },
                 tooltip: 'Refresh',
                 isFreeAction: true, 
-                onClick: (event:any) =>{  RefreshData(); },                                     
+                onClick: (event:any) =>{  ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError ); },                                     
             }
         ]; 
 

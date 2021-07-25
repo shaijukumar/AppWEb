@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using System.IO;
+using System.Net;
 
 namespace AppWebCustom.Action
 {
@@ -197,13 +198,21 @@ namespace AppWebCustom.Action
             {
                 #region Create 
 
+                ad.appData.TableItemId = await NextTableCouter(ad, _context); //Get next TableItemId
                 ad.appData.TableId = ad.appAction.TableId;               
                 ad.appData.CreatedBy = currentUserId;                                               
                 ad.appData.CreatedOn = DateTime.Now;                                    
 
                 _context.AppDatas.Add(ad.appData);
                 //var success = await _context.SaveChangesAsync() > 0;
-                await _context.SaveChangesAsync();
+
+                try{
+                    await _context.SaveChangesAsync();
+                }
+                catch(Exception ex){
+                   throw new Exception(ex.Message);
+                }
+               
                 
                 actionResult.Add(ad.appData);
 
@@ -214,8 +223,13 @@ namespace AppWebCustom.Action
             else
             {       
                 #region  Update
-                
-                var success = await _context.SaveChangesAsync() > 0; 
+                                
+                try{
+                    await _context.SaveChangesAsync();
+                }
+                catch(Exception ex){
+                   throw new Exception(ex.Message);
+                }
                 actionResult.Add(ad.appData);
                     
                 #endregion Update                                   
@@ -258,7 +272,12 @@ namespace AppWebCustom.Action
                                 Prop5  = a.Prop5                  
                             };
                             _context.AppAttachments.Add(appAttachment);
-                            var success = await _context.SaveChangesAsync() > 0;                            
+                            try{
+                                await _context.SaveChangesAsync();
+                            }
+                            catch(Exception ex){
+                                throw new Exception(ex.Message);
+                            }                            
                         }
                     }
                 }
@@ -266,10 +285,16 @@ namespace AppWebCustom.Action
 
             # endregion Add/Delete Attachment
            
-            // Dictionary<string, List<object>> result = new Dictionary<string, List<object> >();
-            // result.Add("Result"+ (result.Count+1).ToString(), actionResult );
-
             return true;
+        }
+
+        public static async Task<int>  NextTableCouter(ApiDetails ad, DataContext _context)
+        {                        
+            var tableCouter = await _context.AppTableCouters.Where(c => c.TableId == ad.appAction.TableId).FirstOrDefaultAsync();
+            tableCouter.counter += 1;
+            await _context.SaveChangesAsync();
+
+            return Convert.ToInt32(tableCouter.counter);
         }
     }
 }

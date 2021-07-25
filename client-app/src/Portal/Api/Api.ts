@@ -4,6 +4,17 @@ import agent from "../../app/api/agent";
 
 //==============================================
 
+
+export const ActionConfig : {[key: string]: number} = 
+{
+	NavigationFlowId : 11,
+	NavigationList : 34,
+	NavigationById : 35,
+    AllEmployees : 19,
+
+	NavigationTableID: 20,
+}
+
 export interface IAppApi {
 	Id: number
 	CustomerName: string
@@ -152,7 +163,8 @@ const DBFun = {
   delete: (Id: number) => agent.requests.del(`${IAppApiAPI}/${Id}`),
 };
 
-	export default class ApiImpl {	
+export default class ApiImpl {	
+
 
 	rolesFromArray(rolesList: AppUserRoleMaster[], strRoleArray: string) : AppUserRoleMaster[] {
 
@@ -185,11 +197,7 @@ const DBFun = {
 
 		return strRoleNames;
 	}
-
 	
-
-
-
 	getStatusList = async (id: number) => {		
 		try {      		 
 			return await DBFun.StatusList(id); 		  
@@ -222,12 +230,83 @@ const DBFun = {
 		}
 	}
 	
+	updateActions = async (flowId: number, id: number, setActions: any, setError: any ) => {	
+		try {  
+			await DBFun.ActionList(flowId, id).then( (res) => {             
+				if((res as any).errors){          
+					setError((res as any).errors.Error);                        
+				}
+				else{
+					setActions(res);
+				}                 
+			});												  		 			 		  
+		} catch (error) {
+			setError("Problem in updateActions."); 
+		}
+	}
+
 	getActions = async (flowId: number, id: number) => {		
 		try {      		 
 			return await DBFun.ActionList(flowId, id); 		  
 		} catch (error) {
 			return error;
-			}
+		}
+	}
+	//(): Promise<bool>
+
+	LoadItem = async (ActionId: number, ItemId: string, setError: any ) : Promise<any> => {	
+		let act: AppApiAction = new AppApiAction()
+        act.ActionId =ActionId;    
+		act.Parm1 = ItemId;
+		var ret = null;
+		try {        			 
+			await DBFun.ExecuteQuery(act).then((res) => {  
+				if((res as any).errors){          
+					setError((res as any).errors.Error); 					
+					ret = res;                   
+				}
+				else{
+					if(res.Result1[0]){
+						ret = res.Result1[0];
+					}
+					else{
+						setError("No Data");
+						ret =  false;
+					}															
+				}                              
+			});  		   
+		  } catch (error) {
+			setError("error in LoadItem");
+			ret =  false;
+		  }	
+		  return ret;
+	}
+
+
+	LoadDataList = async (ActionId: number, setData:any, setLoading: any, setError: any ) => {	
+		
+		let act: AppApiAction = new AppApiAction()
+        act.ActionId =ActionId;    
+		
+		try {        			 
+			await DBFun.ExecuteQuery(act).then((res) => {  
+				if((res as any).errors ){          
+					setError((res as any).errors.Error); 
+					setLoading(false);                       
+				}
+				else{
+					if(res.Result1){
+						setData(res.Result1); 
+					}
+					else{
+						setError("NoData");
+					}					
+					setLoading(false); 
+				}                              
+			});  		   
+		  } catch (error) {
+			setError("error in LoadData"); 
+		  }		
 	}
 
 	ExecuteQuery = async (action: IApiAction) => {		
@@ -238,12 +317,23 @@ const DBFun = {
 		}
 	}
 
-	ExecuteAction = async (action: FormData) => {    		
-		try {        		  
-			return await DBFun.Execute(action);  		
+	ExecuteAction = async (action: FormData, setError:any) => {
+		var ret = null;		    		
+		try {    			
+			await DBFun.Execute(action).then((res) => {  
+				if((res as any).errors){          
+					setError((res as any).errors.Error); 	
+					ret = false;				                
+				}
+				else{
+					ret = res; 
+				}                              
+			});  				
 		} catch (error) {
-			return error
+			setError("error in ExecuteAction"); ;
+			ret = false;
 		}
+		return ret;
 	}
 }
 

@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { AppNavigation } from './Navigation';
-import { ApiContext,  AppStatusList, AppUserRoleMaster } from '../Api/Api'
+import { ActionConfig, ApiContext,  AppStatusList, AppUserRoleMaster } from '../Api/Api'
 import { Autocomplete } from '@material-ui/lab';
 
  
@@ -29,46 +29,28 @@ const NavigationEdit: React.FC = () => {
     const [actions, setActions] = useState<AppStatusList[]>();
     const [roleList, setRoleList] = useState<AppUserRoleMaster[]>();
     const [roles, setRoles] = useState<AppUserRoleMaster[]>();
-
+    const [ref, Refresh] = useState(false);
     const ApiStore = useContext(ApiContext);
 
     useEffect(() => {
         var IdVal =0;
         if (id) { IdVal=Number(id); }
 
-        setLoading(true);
-        
-        ApiStore.getActions(FlowId,IdVal).then( (res) => {             
-            if((res as any).errors){          
-                setError( error + ", " + (res as any).errors.Error);                        
-            }
-            else{
-                setActions(res);
-            }                 
-        });
-
+        //setLoading(true);
+        ApiStore.updateActions(ActionConfig.NavigationFlowId, IdVal, setActions, setError);
+      
         ApiStore.getRoleList().then( resRoles => {
           setRoleList(resRoles);        
-          if(id){
-              let formData = new FormData();
-              formData.append('ActionId', '35' );
-              formData.append('ItemId',  id );
-              formData.append('Parm1',  id );
-              ApiStore.ExecuteAction(formData).then( (res) => {      
-                  //debugger;
-                  if((res as any).errors){          
-                    setError((res as any).errors.Error);         
-                    return;
-                  }
-                  else{
-                    debugger;
-                    var rl = ApiStore.rolesFromArray(resRoles as any, res.Result1[0].UserAccessRoles);                    
-                    setRoles(rl);            
-                    setItem(res.Result1[0] as any);        
-                  }  
-                  //debugger;               
-                  setLoading(false);
-              });
+          
+          if(id){            
+            ApiStore.LoadItem(ActionConfig.NavigationById,id, setError).then( res => {              
+              if(res){
+                setItem(res);
+                var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);                    
+                setRoles(roleArray);                                            
+              }
+              setLoading(false);   
+            });              
           }
           else{ 
               setItem(new AppNavigation()); 
@@ -77,25 +59,20 @@ const NavigationEdit: React.FC = () => {
         });
 
 
-    },[id, error, ApiStore, ApiStore.getActions, ApiStore.ExecuteAction, setRoles, setItem, ApiStore.rolesFromArray ]);
+    },[id, ApiStore, ApiStore.updateActions, , ApiStore.getRoleList, ApiStore.LoadItem, setRoles, setItem, ApiStore.rolesFromArray, Refresh ]);
 
     const onItemSubmit = (values: any) => {
         
         values.UserAccessRoles = roles;
         let formData = new FormData();
-        formData.append('ActionId', actionId.toString() )
+        formData.append('ActionId', actionId.toString() ); 
         formData.append('Parm1', JSON.stringify(values) );
         formData.append('ItemId',  values.Id );
 
-        ApiStore.ExecuteAction(formData).then( (res) => {            
-            if((res as any).errors){
-                setError((res as any).errors.Error);
-                setLoading(false);
-                return;
-            }
-            else{
-                history.push('/NavigationList');
-            }
+        ApiStore.ExecuteAction(formData, setError).then( (res) => {            
+            if(res){
+              history.push('/NavigationList');
+            }           
         });
     }
 
