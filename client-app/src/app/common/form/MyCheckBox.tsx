@@ -1,72 +1,30 @@
-import React from "react";
+
+import React, { useState } from "react";
 import {  
   useField,
-  FieldAttributes,
-  Field   
+  FieldAttributes,  
 } from "formik";
 
-import {        
-  Checkbox,
-    FormControlLabel,
-    TextField,    
-  } from "@material-ui/core";
+import FormControl from '@material-ui/core/FormControl';
+
+import { Checkbox, FormControlLabel } from "@material-ui/core";
 
 
-type CustomTxtProps = { label: string , handleChange?: any } & FieldAttributes<{}>;
+type CustomProps = { label?: string, width?: string  } & FieldAttributes<{}>;
 
-const MyCheckBox: React.FC<CustomTxtProps> = ({ label, handleChange, placeholder, type,required,autoComplete, autoFocus,...props }) => {
-
-  const [field, setFiled ] = useField(props.name);
-  const [value, setValue] = React.useState(field.value as boolean)
-    //const [field] = useField<{}>(props);
-
-    // const [field, meta] = useField<{}>(props);
-    // const [value, setValue] = React.useState(field.value as boolean)
-    // const errorText = meta.error && meta.touched ? meta.error : "";
-
-
-  //var multiline = true;
-    return (      
-
-        <FormControlLabel
-          
-          control={<Checkbox checked={value}  />}
-          label={label}    
-          {...field}
-          onChange={handleChange}
-          // onClick={ (d:any) => {
-          //   debugger;
-          //   setValue(!value );  } }           
-        />
-      //   <TextField
-      //       placeholder={placeholder}
-      //       {...field}
-      //       type={type}          
-      //       helperText={errorText}
-      //       error={!!errorText}
-      //       variant="outlined"
-      //       margin="normal"
-      //       required={required}
-      //      //autoComplete={autoComplete}
-      //       autoFocus={autoFocus}
-      //       fullWidth   
-      //       label={label}
-      //       multiline={multiline}                               
-      // />           
-    );  
+const MyCheckBox : React.FC<CustomProps> = ({ label, placeholder, type,required,autoComplete, autoFocus,  width, ...props }) => {
     
-    ;
+    const [field] = useField<{}>(props);
+    const [val, setVal] = useState(false);
+       
+    return (                  
+        <FormControl variant="outlined" fullWidth style={{ marginTop : 10 , marginBottom : 10, width:width,  display: 'block'}} >
+           <FormControlLabel  
+                control={<Checkbox {...field}  checked={val} onClick={ () => { setVal(!val);} }  />}
+                label={label}              
+          />
+        </FormControl>              
+    );
   };
 
 export default MyCheckBox;
-
-
-{/* <CheckBox
-checked={values.check}
-onPress={() => setFieldValue('check', !values.check)}
-/> */}
-
-{/* <FormControlLabel
-              control={<Checkbox id="IsActive" name="IsActive" checked={item.IsActive} onClick={ () => { item.IsActive = !item.IsActive; setItem(item) } }  />}
-              label="IsActive"              
-            /> */}

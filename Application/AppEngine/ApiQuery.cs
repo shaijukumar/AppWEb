@@ -107,6 +107,7 @@ namespace Application.AppEngine
 
                 row = new Dictionary<string, object>();
                 row.Add("Id", dataRow.Id.ToString() );
+                 row.Add("TableItemId", dataRow.TableItemId.ToString() );
 
                 //row = new Dictionary<string, object>();
                 row.Add("StatusId", dataRow.StatusId.ToString() );

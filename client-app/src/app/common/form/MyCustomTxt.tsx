@@ -34,7 +34,12 @@ const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,requir
             label={label}
             multiline={multiline}  
             style={{width: width, display: 'block'}}    
-            size='small'              
+            size='small'  
+            
+            InputLabelProps={{
+              shrink: true,
+            }}
+
                                       
       />           
     );        

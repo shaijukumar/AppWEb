@@ -117,7 +117,7 @@ export class AppApiAction implements IApiAction {
 	Parm7 : string = '';
 	Parm8 : string = '';
 	Parm9 : string = '';
-	Parm10  : string = '';
+	Parm10 : string = '';
 	
 
   

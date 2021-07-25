@@ -62,6 +62,8 @@ import TableActionItemEdit from '../../features/AppTableMaster/TableActionItemEd
 import NavigationEdit from '../../Portal/Navigation/NavigationEdit';
 import NavigationList from '../../Portal/Navigation/NavigationList';
 import LeftNavBar from '../../Portal/Navigation/LeftNavBar';
+import EmployeeList from '../../Portal/Employee/EmployeeList';
+import EmployeeEdit from '../../Portal/Employee/EmployeeEdit';
 
 //##FeatureImport##"
 
@@ -284,8 +286,8 @@ const App = () => {
           <Route  path={['/AppNitificationTemplateItemEdit/:id', '/AppNitificationTemplateItemEdit/']} component={AppNitificationTemplateEdit} />
 
 
-          {/* <Route path='/EmployeeList' component={EmployeeList} />
-          <Route  path={['/EmployeeEdit/:id', '/EmployeeEdit/']} component={EmployeeEdit} /> */}
+          <Route path='/EmployeeList' component={EmployeeList} /> 
+          <Route  path={['/EmployeeEdit/:id', '/EmployeeEdit/']} component={EmployeeEdit} />
 
           <Route path='/AppAdminPage' component={AdminPage} />
 

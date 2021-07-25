@@ -1,85 +1,82 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { LinearProgress } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-
-import { AppApiAction } from '../../features/AppApi/AppApi';
-import { NavLink } from 'react-router-dom';
+import { LinearProgress } from '@material-ui/core';
 import MaterialTable from 'material-table';
+import { ActionConfig, ApiContext, AppUserRoleMaster, IAppStatusList } from '../Api/Api';
 import TableButton from '../../app/common/form/TableButton';
+import ErrorMessage from '../../app/common/common/ErrorMessage';
+import { Employee } from './Employee';
 
 const EmployeeList: React.FC = () => {
     
-    //const AppApiStore = useContext(AppApiContext);
-    const [loading, setLoading] = useState(true);
-    const QueryActionId = 19;
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Employee[]>();
+  const [stausList, setStausList] = useState<IAppStatusList[]>();
+  const [roleList, setRoleList] = useState<AppUserRoleMaster[]>();
+  const [error, setError] = useState('');
+
+  const ApiStore = useContext(ApiContext);
       
-    useEffect(() => {    
-        //debugger        
-        // setLoading(true);        
-        // let act: AppApiAction = new AppApiAction()
-        // act.ActionId = QueryActionId;      
-        // AppApiStore.GetData(act).then( (res) => {                 
-        //     setLoading(false);              
-        // });  
-      }, [] ) 
+  useEffect(() => {    
+    setLoading(true); 
 
+    ApiStore.getRoleList().then( res => {
+        setRoleList(res);
+    })
+     
+    ApiStore.getStatusList(ActionConfig.EmployeeTableID).then( res => {
+        setStausList(res);
+    })
 
-    const TableColumns = [
-        {
-          title: "Id",
-          field: "Id",       
-          width: "10%"
-        },
-        {
-          title: "FirstName",
-          field: "FirstName",
-          render :  (values: any) => { return <NavLink to={"/EmployeeEdit/" + values.Id } >{values.FirstName}</NavLink> }
-          //render : (values: IAppAction) => { return <NavLink to={"/AppNavigationItemEdit/" + values.Id } >{values.Title}</NavLink> }
-          //lookup: { "Resubmit": 'Resubmit', "Approve": 'Approve', "New Request" : "New Request", "Reject" : "Reject"},
-        },
-    ];
+    ApiStore.LoadDataList(ActionConfig.EmployeeList, setData, setLoading, setError );
 
-    const TableActions = [
-        {          
-          icon: (values: any) => { return <TableButton path="EmployeeEdit/" label="Add New"  /> },
-          tooltip: 'Add User',
-          isFreeAction: true,
-          onClick: (event:any) =>{},   
-          iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
-        },
-        {          
-            icon: (values: any) => { return <TableButton label="Refresh"  /> },
-            tooltip: 'Add User',
-            isFreeAction: true,
-            onClick: (event:any) =>{},   
-            iconProps: { style: { fontSize: "34px", color: "green", borderRadius:"0%  !important" , backgroundColor:'rosybrown' } },            
-          }
-      ];
-  
+    
+  },[ApiStore, ApiStore.LoadDataList]);
 
-    if(loading){
-        return <LinearProgress color="secondary"  className="loaderStyle" />     
+  const TableColumns = [     
+    {title: "Id", field: "TableItemId", defaultSort: "asc"},
+    { title: "Name", field: "Name",
+      render :  (values: any) => { return <Link to={`/EmployeeEdit/${values.Id}`} >{values.Title}</Link> }  },   
+    { title: "StatusId", field: "StatusId",
+      render : (values: any) => {  return stausList &&  (stausList as IAppStatusList[]).find( u => u.Id === Number(values.StatusId) )?.Title }
+    },  
+    {title: "IsActive", field: "IsActive"},
+    {title: "Country", field: "Country"},
+    {title: "Manager", field: "Manager"}        
+  ];
+
+  const TableActions = [
+    {          
+        icon: (values: any) => { return <TableButton  label="Add New" path="/EmployeeEdit" /> },
+        tooltip: 'Add New',
+        isFreeAction: true, 
+        onClick: (event:any) =>{  },                                     
+    },
+    {          
+        icon: (values: any) => { return <TableButton  label="Refresh"  /> },
+        tooltip: 'Refresh',
+        isFreeAction: true, 
+        onClick: (event:any) =>{  ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError ); },                                     
     }
+  ];
+
+  if(loading){
+    return <LinearProgress color="secondary"  className="loaderStyle" />     
+  }
 
       return (
-        <div className={"tabcontainers1"}>
-            {/* <head>
-                <link rel="stylesheet" href="styles.css" ></link>
-            </head> */}
-            <link rel="stylesheet" href="styles.css" ></link>
-
-            <div className={"tabcontainers2"} >        
-                {/* <MaterialTable                       
-                    title="List"
-                    data={AppApiStore.dateResult.Result1}
-                    columns={TableColumns}
-                    options={{ search: true, paging: true, filtering: true, pageSize:10,  tableLayout: "auto"
-                        // , exportButton: false ,  actionsColumnIndex: -1, toolbarButtonAlignment:"left",                            
-                    }}   
-                    actions={TableActions}         
-                /> */}
-            </div>
-        </div>
+        <React.Fragment>       
+        <ErrorMessage message={error} />                           
+        { data &&          
+            <MaterialTable                    
+              title="Navigation List"
+              data={data as Employee[]}
+              columns={TableColumns as any}
+              actions={TableActions as any}
+              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}/>
+        }       
+        </React.Fragment>
     )
 }
 

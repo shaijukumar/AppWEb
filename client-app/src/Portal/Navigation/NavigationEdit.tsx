@@ -17,8 +17,7 @@ interface DetailParms {
 }
 
 const NavigationEdit: React.FC = () => { 
-  
-    const FlowId = 11;
+      
     const { id } = useParams<DetailParms>();
     let history = useHistory();
 
@@ -29,14 +28,13 @@ const NavigationEdit: React.FC = () => {
     const [actions, setActions] = useState<AppStatusList[]>();
     const [roleList, setRoleList] = useState<AppUserRoleMaster[]>();
     const [roles, setRoles] = useState<AppUserRoleMaster[]>();
-    const [ref, Refresh] = useState(false);
     const ApiStore = useContext(ApiContext);
 
     useEffect(() => {
         var IdVal =0;
         if (id) { IdVal=Number(id); }
 
-        //setLoading(true);
+        setLoading(true);
         ApiStore.updateActions(ActionConfig.NavigationFlowId, IdVal, setActions, setError);
       
         ApiStore.getRoleList().then( resRoles => {
@@ -58,8 +56,7 @@ const NavigationEdit: React.FC = () => {
           }
         });
 
-
-    },[id, ApiStore, ApiStore.updateActions, , ApiStore.getRoleList, ApiStore.LoadItem, setRoles, setItem, ApiStore.rolesFromArray, Refresh ]);
+    },[id, ApiStore, ApiStore.updateActions, , ApiStore.getRoleList, ApiStore.LoadItem, setRoles, setItem, ApiStore.rolesFromArray ]);
 
     const onItemSubmit = (values: any) => {
         

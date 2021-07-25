@@ -1,3 +1,4 @@
+import { makeObservable, observable } from "mobx";
 import { createContext } from "react";
 import agent from "../../app/api/agent";
 
@@ -7,12 +8,18 @@ import agent from "../../app/api/agent";
 
 export const ActionConfig : {[key: string]: number} = 
 {
+	ConfigCountries : 1,
+
 	NavigationFlowId : 11,
 	NavigationList : 34,
-	NavigationById : 35,
-    AllEmployees : 19,
-
+	NavigationById : 35,    
 	NavigationTableID: 20,
+
+	EmployeeFlowId : 5,
+	EmployeeList : 19,
+	EmployeeById : 21,    
+	EmployeeTableID: 7,
+
 }
 
 export interface IAppApi {
@@ -140,6 +147,65 @@ export class AppUserRoleMaster implements IAppUserRoleMaster {
 }
 
 
+export interface IAppUser {
+	Id: string
+	Name: string
+}
+
+export class AppUser implements IAppUser {
+	Id: string = '';
+	Name: string = '';
+  
+  constructor(init?: IAppUser) {
+    Object.assign(this, init);
+  }
+  
+}
+
+export interface IAttachmentDetails {
+	Action: string
+	FileArrayId?: number
+	Id?: number	
+	FileName: string	
+	Prop1?: string
+	Prop2?: string
+	Prop3?: string
+	Prop4?: string
+	Prop5?: string
+}
+
+export interface IAppConfig {
+	Id: number
+	Title: string
+	Order:number
+	// Type: number
+	ConfigTypeId : number;
+	Det1: string
+	Det2: string
+	Det3: string
+	Det4: string
+	Det5: string
+	//defaultSort: string
+}
+
+export class AppConfig implements IAppConfig {
+	Id: number = 0;
+	Title: string = '';
+	Order:number = 0;
+	// Type: number = 0;
+	ConfigTypeId: number = 0;
+	Det1: string = '';
+	Det2: string = '';
+	Det3: string = '';
+	Det4: string = '';
+	Det5: string = '';
+	//defaultSort: string= 'desc';
+  
+  constructor(init?: IAppConfig) {
+    Object.assign(this, init);
+  }
+}
+
 
 //==============================================
 
@@ -164,6 +230,13 @@ const DBFun = {
 };
 
 export default class ApiImpl {	
+
+	configList: IAppConfig[] = [];
+	constructor() {
+		makeObservable(this, {
+			configList: observable,			
+		});
+	  }
 
 
 	rolesFromArray(rolesList: AppUserRoleMaster[], strRoleArray: string) : AppUserRoleMaster[] {
@@ -222,9 +295,17 @@ export default class ApiImpl {
 		}
 	}
 
-	getConfigList = async (id: number) => {		
-		try {      		 
-			return await DBFun.ConfigList(id); 		  
+	getConfigList = async (id: number, setData:any) => {
+		//debugger;		
+		try {      		 			
+			var res = this.configList.filter(  x => x.ConfigTypeId == id )
+
+			if(res.length == 0){
+				res = await DBFun.ConfigList(id)
+				this.configList = [...this.configList, ...res]
+			}						
+			setData(res);
+			return res;
 		} catch (error) {
 			return error;
 		}
@@ -238,8 +319,8 @@ export default class ApiImpl {
 				}
 				else{
 					setActions(res);
-				}                 
-			});												  		 			 		  
+				}
+			});
 		} catch (error) {
 			setError("Problem in updateActions."); 
 		}
