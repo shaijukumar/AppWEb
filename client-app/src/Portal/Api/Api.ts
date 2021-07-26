@@ -232,9 +232,11 @@ const DBFun = {
 export default class ApiImpl {	
 
 	configList: IAppConfig[] = [];
+	roleList: IAppUserRoleMaster[] = [];
 	constructor() {
 		makeObservable(this, {
-			configList: observable,			
+			configList: observable,	
+			roleList: observable,			
 		});
 	  }
 
@@ -288,11 +290,16 @@ export default class ApiImpl {
 	}
 
 	getRoleList = async () => {		
-		try {      		 
-			return await DBFun.RoleList(); 		  
-		} catch (error) {
-			return error;
-		}
+debugger;
+		if(this.roleList.length == 0){
+			try {      		 
+				this.roleList =  await DBFun.RoleList(); 		  
+			} catch (error) {
+				return error;
+			}
+		}								
+		return this.roleList;
+		
 	}
 
 	getConfigList = async (id: number, setData:any) => {

@@ -99,7 +99,8 @@ const NavigationEdit: React.FC = () => {
 
                
             {
-            <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple    
+            <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple 
+                style={{width: '300'}}   
                 size="small"  
                 value={roles as any}  
                 options={roleList as any[]} 

@@ -1,6 +1,6 @@
 
 import { Button, ButtonGroup, Checkbox, Chip, Container, FormControlLabel, LinearProgress, TextField } from '@material-ui/core';
-import { Form, Formik } from 'formik';
+import { Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -8,12 +8,13 @@ import { observer } from 'mobx-react-lite';
 
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { ActionConfig, ApiContext,  AppConfig,  AppStatusList, AppUserRoleMaster } from '../Api/Api'
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { Employee } from './Employee';
 import ErrorMessage from '../../app/common/common/ErrorMessage';
 import ConfigDropDown from '../../app/common/form/ConfigDropDown';
 import MyCheckBox from '../../app/common/form/MyCheckBox';
-
+import RoleSelect from '../../app/common/form/RoleSelect';
+import MuiTextField from '@material-ui/core/TextField';
 
 interface DetailParms {
     id: string;
@@ -32,6 +33,7 @@ const EmployeeEdit: React.FC = () => {
     const [roleList, setRoleList] = useState<AppUserRoleMaster[]>();
     
     const [roles, setRoles] = useState<AppUserRoleMaster[]>();
+    
 
     const ApiStore = useContext(ApiContext);
 
@@ -96,21 +98,28 @@ const EmployeeEdit: React.FC = () => {
           <Formik
             initialValues={item}
             validationSchema={Yup.object({
-                Name: Yup.string().required('First Name required'),                     
+               // Name: Yup.string().required('First Name required'),                     
              })}
           onSubmit={onItemSubmit}
         >
-           
+            {({
+            handleChange,
+            values,
+        }) => (
             <Form >
 
            
                 <MyCheckBox name="IsActive" label="Is Active"  />
-                <MyCustomTxt name="Name" label="Name" type="text" required={true} width="300px" />
-                <MyCustomTxt name="DOB" label="DOB" type="date" required={true} width="300px"/>
+                <MyCustomTxt name="Name" label="Name" type="text" required={false} width="300px" />
+                <MyCustomTxt name="DOB" label="DOB" type="date" required={false} width="300px"/>
                 <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" /> 
-                <MyCustomTxt name="Salary" label="Salary" type="number" required={true} width="300px" />
+                <MyCustomTxt name="Salary" label="Salary" type="number" required={false} width="300px" />
+                <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
 
-                            
+                {/* Manager
+                Roles */}
+
+        
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                     { actions && (actions as any).map( (row:any) => (                    
                     <Button type="submit" fullWidth variant="contained" color="primary" key={row.Id}                         
@@ -120,6 +129,7 @@ const EmployeeEdit: React.FC = () => {
                 </ButtonGroup>
 
             </Form>
+            )}
         
         </Formik>
     
