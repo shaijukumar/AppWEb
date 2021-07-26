@@ -29,7 +29,6 @@ const RoleSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
             
       <FormControl variant="outlined"  size="small" style={{ marginTop : 10 , marginBottom : 10, width:width, display: 'block' }}>
         <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple={multiple}   
-
             {...field}
             size="small"              
             value={field.value as IAppUserRoleMaster[]}
@@ -42,7 +41,7 @@ const RoleSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
               ))
             }
             renderInput={(params) => (
-              <TextField {...params} variant="outlined" label="Access Groups" placeholder="Access Groups" fullWidth />
+              <TextField {...params} variant="outlined" label={label} placeholder={placeholder} fullWidth />
             )}
             
             onChange={(event:any, newValue:any) => {
@@ -64,7 +63,6 @@ const RoleSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
             }}
         />
       </FormControl>
-
     );
   };
 

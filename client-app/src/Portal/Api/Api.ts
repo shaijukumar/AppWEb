@@ -290,7 +290,7 @@ export default class ApiImpl {
 	}
 
 	getRoleList = async () => {		
-debugger;
+		//debugger;
 		if(this.roleList.length == 0){
 			try {      		 
 				this.roleList =  await DBFun.RoleList(); 		  
