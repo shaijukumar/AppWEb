@@ -37,7 +37,7 @@ const EmployeeList: React.FC = () => {
   const TableColumns = [     
     {title: "Id", field: "TableItemId", defaultSort: "asc"},
     { title: "Name", field: "Name",
-      render :  (values: any) => { return <Link to={`/EmployeeEdit/${values.Id}`} >{values.Title}</Link> }  },   
+      render :  (values: any) => { return <Link to={`/EmployeeEdit/${values.Id}`} >{values.Name}</Link> }  },   
     { title: "StatusId", field: "StatusId",
       render : (values: any) => {  return stausList &&  (stausList as IAppStatusList[]).find( u => u.Id === Number(values.StatusId) )?.Title }
     },  

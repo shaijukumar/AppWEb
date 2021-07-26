@@ -148,13 +148,23 @@ export class AppUserRoleMaster implements IAppUserRoleMaster {
 
 
 export interface IAppUser {
-	Id: string
-	Name: string
+	Username: string;
+    DisplayName: string;
+    Token: string;
+    image?: string;
+    Email?: string;
+    PhoneNumber?: string;
+    IsActive?:boolean;
 }
 
 export class AppUser implements IAppUser {
-	Id: string = '';
-	Name: string = '';
+	Username: string = '';
+    DisplayName: string= ''
+    Token: string= ''
+    image?: string= '';
+    Email?: string= '';
+    PhoneNumber?: string= '';
+    IsActive?:boolean = false;
   
   constructor(init?: IAppUser) {
     Object.assign(this, init);
@@ -233,10 +243,12 @@ export default class ApiImpl {
 
 	configList: IAppConfig[] = [];
 	roleList: IAppUserRoleMaster[] = [];
+	userList: IAppUser[] = [];
 	constructor() {
 		makeObservable(this, {
 			configList: observable,	
-			roleList: observable,			
+			roleList: observable,	
+			userList: observable,	
 		});
 	  }
 
@@ -282,16 +294,20 @@ export default class ApiImpl {
 	}
 
 	getUserList = async () => {		
-		try {      		 
-			return await DBFun.UserList(); 		  
-		} catch (error) {
-			return error;
-		}
+
+		if(this.userList.length === 0){
+			try {      		 
+				this.userList =  await DBFun.UserList(); 		  
+			} catch (error) {
+				return error;
+			}
+		}									
+		return this.userList;		
 	}
 
 	getRoleList = async () => {		
 		//debugger;
-		if(this.roleList.length == 0){
+		if(this.roleList.length === 0){
 			try {      		 
 				this.roleList =  await DBFun.RoleList(); 		  
 			} catch (error) {
@@ -305,9 +321,9 @@ export default class ApiImpl {
 	getConfigList = async (id: number, setData:any) => {
 		//debugger;		
 		try {      		 			
-			var res = this.configList.filter(  x => x.ConfigTypeId == id )
+			var res = this.configList.filter(  x => x.ConfigTypeId === id )
 
-			if(res.length == 0){
+			if(res.length === 0){
 				res = await DBFun.ConfigList(id)
 				this.configList = [...this.configList, ...res]
 			}						

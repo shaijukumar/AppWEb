@@ -1,4 +1,4 @@
-import { AppUser, AppUserRoleMaster, IAppUser, IAttachmentDetails } from "../Api/Api";
+import { AppConfig, AppUser, AppUserRoleMaster, IAppConfig, IAppUser, IAttachmentDetails } from "../Api/Api";
 
 export interface IEmployee {
 	Id: number
@@ -6,7 +6,7 @@ export interface IEmployee {
 	IsActive: boolean
 	Name: string
 	DOB:Date
-	Country:number
+	Country:IAppConfig
 	Passport?: IAttachmentDetails[]
 	Salary: number
 	Manager: IAppUser
@@ -19,7 +19,7 @@ export class Employee implements IEmployee {
 	IsActive: boolean = true;
 	Name: string= '';
 	DOB:Date = new Date();
-	Country:number = 0;
+	Country:IAppConfig = new AppConfig();
 	Passport?: IAttachmentDetails[]
 	Salary: number = 0;
 	Manager: IAppUser = new AppUser();

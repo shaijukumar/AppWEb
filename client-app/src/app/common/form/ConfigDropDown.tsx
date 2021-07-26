@@ -24,7 +24,7 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label
 
 
     useEffect(() => {
-      ApiStore.getConfigList(configId, setConfigList).then( res => { debugger; setConfigList(res)});
+      ApiStore.getConfigList(configId, setConfigList).then( res => { setConfigList(res)});
     },[ ApiStore.getConfigList, setConfigList]);
     
       

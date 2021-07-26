@@ -130,9 +130,18 @@ namespace AppWebCustom.Action
                                     else if( col.Type == AppColumnType.LongNumber ){
                                         ap1.SetValue (ad.appData,  Int64.Parse(value), null);
                                     }
-                                    else if( col.Type == AppColumnType.Number || col.Type == AppColumnType.Config ){
+                                    else if( col.Type == AppColumnType.Number  ){
                                         ap1.SetValue (ad.appData,  Int32.Parse(value), null);
                                     }
+                                    else if( col.Type == AppColumnType.Bool ){
+                                        ap1.SetValue (ad.appData,  bool.Parse(value), null);
+                                    }      
+                                    else if( col.Type == AppColumnType.Config ){
+                                        //ap1.SetValue (ad.appData,  bool.Parse(value), null);
+                                    }  
+                                    else if( col.Type == AppColumnType.User ){
+                                        //ap1.SetValue (ad.appData,  bool.Parse(value), null);
+                                    }                                   
                                     else if( col.Type == AppColumnType.Role ){    
                                         string strGroups = string.Empty;        
 
