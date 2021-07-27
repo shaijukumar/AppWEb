@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { LinearProgress } from '@material-ui/core';
 import MaterialTable from 'material-table';
+import moment from 'moment';
+
 import { ActionConfig, ApiContext, AppUserRoleMaster, IAppStatusList } from '../Api/Api';
 import TableButton from '../../app/common/form/TableButton';
 import ErrorMessage from '../../app/common/common/ErrorMessage';
@@ -42,6 +44,8 @@ const EmployeeList: React.FC = () => {
       render : (values: any) => {  return stausList &&  (stausList as IAppStatusList[]).find( u => u.Id === Number(values.StatusId) )?.Title }
     },  
     {title: "IsActive", field: "IsActive"},
+    {title: "DOB", field: "DOB",
+      render : (values: any) => { return moment(values.DOB).format("DD-MMM-YYYY")  }  },
     {title: "Country", field: "Country"},
     {title: "Manager", field: "Manager"}        
   ];

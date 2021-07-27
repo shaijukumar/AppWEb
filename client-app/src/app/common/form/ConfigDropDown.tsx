@@ -5,10 +5,8 @@ import {
 } from "formik";
 
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import { ApiContext, AppConfig, IAppConfig } from "../../../Portal/Api/Api";
-import { Chip, MenuItem, TextField } from "@material-ui/core";
+import { Chip, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
 type CustomProps = { multiple?:boolean, configId:number, label: string, width?: string  } & FieldAttributes<{}>;
@@ -26,7 +24,7 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label
     useEffect(() => {
       ApiStore.getConfigList(configId, setConfigList).then( res => { 
         
-        if((field.value as any).length > 0){
+        if(field.value && (field.value as any).length > 0){
           var roleArray = ApiStore.configFromArray(res, field.value as any);  
           if(!multiple && roleArray.length>0){
             setValue(roleArray[0]);
@@ -34,6 +32,9 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label
           else{
             setValue(roleArray);
           }        
+        }
+        else{
+          setValue(new AppConfig() );
         }
 
         setConfigList(res)

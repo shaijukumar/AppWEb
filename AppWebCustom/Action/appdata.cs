@@ -135,7 +135,14 @@ namespace AppWebCustom.Action
                                     }
                                     else if( col.Type == AppColumnType.Bool ){
                                         ap1.SetValue (ad.appData,  bool.Parse(value), null);
-                                    }      
+                                    }  
+                                    else if( col.Type == AppColumnType.DateTime ){
+                                        try{
+                                            ap1.SetValue (ad.appData, DateTime.Parse(value), null);
+                                        }catch(Exception ex){
+                                            throw new Exception( $"Invalid date {value} in {key}. Exception : {ex.Message}" );
+                                        }                                        
+                                    }     
                                     else if( col.Type == AppColumnType.Config ){
                                         string strArray = string.Empty;  
                                         if(!string.IsNullOrEmpty(value)){                                           
@@ -150,15 +157,19 @@ namespace AppWebCustom.Action
                                             foreach (JObject jObj in array.Children<JObject>())
                                             {
                                                 string itmId = jObj["Id"].ToString();
-                                                var exits = await  _context.AppConfigs
-                                                    .Where( x => x.Id == Int32.Parse(itmId) )
-                                                    .AnyAsync(); 
-                                                if(exits){
-                                                    lst.Add(itmId);  
+                                                if( !string.IsNullOrEmpty(itmId) && itmId != "0"){  
+
+                                                     var exits = await  _context.AppConfigs
+                                                        .Where( x => x.Id == Int32.Parse(itmId) )
+                                                        .AnyAsync(); 
+                                                    if(exits){
+                                                        lst.Add(itmId);  
+                                                    }
+                                                    else{
+                                                        throw new Exception( $"Invalid config id {itmId} in {key}");
+                                                    }
                                                 }
-                                                else{
-                                                    throw new Exception( $"Invalid config id {itmId} in {key}");
-                                                }
+                                               
                                             }
                                             strArray = string.Join( ",", lst.ToArray() ) ;                                            
                                         }
@@ -179,15 +190,16 @@ namespace AppWebCustom.Action
                                             foreach (JObject jObj in array.Children<JObject>())
                                             {
                                                 string itmId = jObj["Username"].ToString();
-
-                                                var user = await _context.Users.FirstOrDefaultAsync( u => u.UserName == itmId  ); 
+                                                if( !string.IsNullOrEmpty(itmId)){
+                                                    var user = await _context.Users.FirstOrDefaultAsync( u => u.UserName == itmId  ); 
  
-                                                if(user != null){
-                                                    lst.Add(itmId);  
-                                                }
-                                                else{
-                                                    throw new Exception( $"Invalid user id {itmId} in {key}");
-                                                }
+                                                    if(user != null){
+                                                        lst.Add(itmId);  
+                                                    }
+                                                    else{
+                                                        throw new Exception( $"Invalid user id {itmId} in {key}");
+                                                    }
+                                                }                                                
                                             }
                                             strArray = string.Join( ",", lst.ToArray() ) ;                                            
                                         }
@@ -210,14 +222,16 @@ namespace AppWebCustom.Action
                                             {
                                                 string grpId = grpObject["Id"].ToString();
 
-                                                var roleExists = await  _context.AspNetRoles
-                                                    .Where( x => x.Id == grpId )
-                                                    .AnyAsync(); 
-                                                if(roleExists){
-                                                    groups.Add(grpId);  
-                                                }
-                                                else{
-                                                    throw new Exception( "Invalid user role ");
+                                                 if( !string.IsNullOrEmpty(grpId)){
+                                                    var roleExists = await  _context.AspNetRoles
+                                                        .Where( x => x.Id == grpId )
+                                                        .AnyAsync(); 
+                                                    if(roleExists){
+                                                        groups.Add(grpId);  
+                                                    }
+                                                    else{
+                                                        throw new Exception( "Invalid user role ");
+                                                    }
                                                 }
                                                                                                                 
                                             }        

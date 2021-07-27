@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
+
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { ActionConfig, ApiContext, AppStatusList, AppUserRoleMaster } from '../Api/Api'
 import { Employee } from './Employee';
@@ -14,12 +15,16 @@ import ConfigDropDown from '../../app/common/form/ConfigDropDown';
 import MyCheckBox from '../../app/common/form/MyCheckBox';
 import RoleSelect from '../../app/common/form/RoleSelect';
 import UserSelect from '../../app/common/form/UserSelect';
+import MyDatePicker from '../../app/common/form/MyDatePicker';
+
+
 
 interface DetailParms {
     id: string;
 }
 
 const EmployeeEdit: React.FC = () => {
+    const [selectedDate, handleDateChange] = useState(new Date());
 
     const { id } = useParams<DetailParms>();
     let history = useHistory();
@@ -50,8 +55,11 @@ const EmployeeEdit: React.FC = () => {
           if(id){            
             ApiStore.LoadItem(ActionConfig.EmployeeById,id, setError).then( res => {              
               if(res){
+                debugger;
+  
                 setItem(res);
-                var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);                    
+                var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);  
+
                 setRoles(roleArray);                                            
               }
               setLoading(false);   
@@ -109,16 +117,12 @@ const EmployeeEdit: React.FC = () => {
            
                 <MyCheckBox name="IsActive" label="Is Active"  />
                 <MyCustomTxt name="Name" label="Name" type="text" required={false} width="300px" />
-                <MyCustomTxt name="DOB" label="DOB" type="date" required={false} width="300px"/>
+                <MyDatePicker name="DOB" label="DOB" required={false} width="300px" />
                 <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" /> 
                 <MyCustomTxt name="Salary" label="Salary" type="number" required={false} width="300px" />                
                 <UserSelect name="Manager" label="Manager" width="300px"  />
                 <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
-
-                {/* Manager
-                Roles */}
-
-        
+               
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                     { actions && (actions as any).map( (row:any) => (                    
                     <Button type="submit" fullWidth variant="contained" color="primary" key={row.Id}                         
@@ -131,6 +135,8 @@ const EmployeeEdit: React.FC = () => {
             )}
         
         </Formik>
+
+        
     
         </Container> 
     )    

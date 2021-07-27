@@ -7,7 +7,7 @@ import {
 } from "formik";
 
 import FormControl from '@material-ui/core/FormControl';
-import { ApiContext, AppUserRoleMaster, IAppUserRoleMaster } from "../../../Portal/Api/Api";
+import { ApiContext, AppUserRoleMaster } from "../../../Portal/Api/Api";
 import { Chip, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
@@ -25,8 +25,8 @@ const RoleSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
     useEffect(() => {
       ApiStore.getRoleList().then( res => {
             
-        debugger;
-        if((field.value as any).length > 0){
+        //debugger;
+        if(field.value && (field.value as any).length > 0){
           var roleArray = ApiStore.rolesFromArray(res, field.value as any);  
           if(!multiple && roleArray.length>0){
             setValue(roleArray[0]);
@@ -34,6 +34,10 @@ const RoleSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
           else{
             setValue(roleArray);
           }        
+        }
+        else{
+          var Roles: AppUserRoleMaster[] = [];
+          setValue( Roles as any );
         }
         
         setVal(res);

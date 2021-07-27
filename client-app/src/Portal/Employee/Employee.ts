@@ -16,7 +16,7 @@ export interface IEmployee {
 export class Employee implements IEmployee {
 	Id: number = 0;
 	TableItemId: number = 0;
-	IsActive: boolean = true;
+	IsActive: boolean = false;
 	Name: string= '';
 	DOB:Date = new Date();
 	Country:IAppConfig[] = [];
