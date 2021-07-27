@@ -110,10 +110,10 @@ const EmployeeEdit: React.FC = () => {
                 <MyCheckBox name="IsActive" label="Is Active"  />
                 <MyCustomTxt name="Name" label="Name" type="text" required={false} width="300px" />
                 <MyCustomTxt name="DOB" label="DOB" type="date" required={false} width="300px"/>
-                {/* <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" />  */}
-                <MyCustomTxt name="Salary" label="Salary" type="number" required={false} width="300px" />
+                <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" /> 
+                <MyCustomTxt name="Salary" label="Salary" type="number" required={false} width="300px" />                
+                <UserSelect name="Manager" label="Manager" width="300px"  />
                 <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
-                {/* <UserSelect name="Manager" label="Manager" width="300px"  /> */}
 
                 {/* Manager
                 Roles */}

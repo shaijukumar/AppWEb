@@ -137,34 +137,93 @@ namespace AppWebCustom.Action
                                         ap1.SetValue (ad.appData,  bool.Parse(value), null);
                                     }      
                                     else if( col.Type == AppColumnType.Config ){
-                                        //ap1.SetValue (ad.appData,  bool.Parse(value), null);
+                                        string strArray = string.Empty;  
+                                        if(!string.IsNullOrEmpty(value)){                                           
+                                            List<object> lst = new List<object>();
+
+                                             //IF SINGLE ITEM ADDD ARRAY
+                                            if( !value.StartsWith('[')){
+                                                value = $"[{value}]";
+                                            }
+
+                                            JArray array = JArray.Parse(value);
+                                            foreach (JObject jObj in array.Children<JObject>())
+                                            {
+                                                string itmId = jObj["Id"].ToString();
+                                                var exits = await  _context.AppConfigs
+                                                    .Where( x => x.Id == Int32.Parse(itmId) )
+                                                    .AnyAsync(); 
+                                                if(exits){
+                                                    lst.Add(itmId);  
+                                                }
+                                                else{
+                                                    throw new Exception( $"Invalid config id {itmId} in {key}");
+                                                }
+                                            }
+                                            strArray = string.Join( ",", lst.ToArray() ) ;                                            
+                                        }
+                                        ap1.SetValue (ad.appData,  strArray, null);                                        
                                     }  
                                     else if( col.Type == AppColumnType.User ){
-                                        //ap1.SetValue (ad.appData,  bool.Parse(value), null);
+                                        
+                                        string strArray = string.Empty;  
+                                        if(!string.IsNullOrEmpty(value)){                                           
+                                            List<object> lst = new List<object>();
+
+                                             //IF SINGLE ITEM ADDD ARRAY
+                                            if( !value.StartsWith('[')){
+                                                value = $"[{value}]";
+                                            }
+
+                                            JArray array = JArray.Parse(value);
+                                            foreach (JObject jObj in array.Children<JObject>())
+                                            {
+                                                string itmId = jObj["Username"].ToString();
+
+                                                var user = await _context.Users.FirstOrDefaultAsync( u => u.UserName == itmId  ); 
+ 
+                                                if(user != null){
+                                                    lst.Add(itmId);  
+                                                }
+                                                else{
+                                                    throw new Exception( $"Invalid user id {itmId} in {key}");
+                                                }
+                                            }
+                                            strArray = string.Join( ",", lst.ToArray() ) ;                                            
+                                        }
+                                        ap1.SetValue (ad.appData,  strArray, null); 
+
                                     }                                   
                                     else if( col.Type == AppColumnType.Role ){    
-                                        string strGroups = string.Empty;        
+                                        string strGroups = string.Empty;    
+                                        if(!string.IsNullOrEmpty(value)){    
 
-                                        List<object> groups = new List<object>();
-                                        JArray array = JArray.Parse(value);
-                                        foreach (JObject grpObject in array.Children<JObject>())
-                                        {
-                                            string grpId = grpObject["Id"].ToString();
+                                            List<object> groups = new List<object>();
 
-                                            var roleExists = await  _context.AspNetRoles
-                                                .Where( x => x.Id == grpId )
-                                                .AnyAsync(); 
-                                            if(roleExists){
-                                                 groups.Add(grpId);  
+                                            //IF SINGLE ITEM ADDD ARRAY
+                                            if( !value.StartsWith('[')){
+                                                value = $"[{value}]";
                                             }
-                                            else{
-                                                throw new Exception( "Invalid user role ");
-                                            }
-                                                                                                             
-                                        }        
-                                        // string s = JsonConvert.SerializeObject(groups); 
-                                        strGroups = string.Join( ",", groups.ToArray() ) ; 
+                                            
+                                            JArray array = JArray.Parse(value);
+                                            foreach (JObject grpObject in array.Children<JObject>())
+                                            {
+                                                string grpId = grpObject["Id"].ToString();
 
+                                                var roleExists = await  _context.AspNetRoles
+                                                    .Where( x => x.Id == grpId )
+                                                    .AnyAsync(); 
+                                                if(roleExists){
+                                                    groups.Add(grpId);  
+                                                }
+                                                else{
+                                                    throw new Exception( "Invalid user role ");
+                                                }
+                                                                                                                
+                                            }        
+                                            // string s = JsonConvert.SerializeObject(groups); 
+                                            strGroups = string.Join( ",", groups.ToArray() ) ; 
+                                        }
                                         ap1.SetValue (ad.appData,  strGroups, null);
 
                                     }

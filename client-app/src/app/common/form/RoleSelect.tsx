@@ -19,31 +19,40 @@ const RoleSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
 
     const ApiStore = useContext(ApiContext);
     const [field, , { setValue }] = useField<{}>(props);
-    const [val, setVal] =useState<AppUserRoleMaster[]>();
+    const [val, setVal] =useState<any>();
 
 
     useEffect(() => {
       ApiStore.getRoleList().then( res => {
             
-        //debugger;
-        var roleArray = ApiStore.rolesFromArray(res, field.value as any);      
-        setValue(roleArray);
+        debugger;
+        if((field.value as any).length > 0){
+          var roleArray = ApiStore.rolesFromArray(res, field.value as any);  
+          if(!multiple && roleArray.length>0){
+            setValue(roleArray[0]);
+          }
+          else{
+            setValue(roleArray);
+          }        
+        }
+        
         setVal(res);
 
       });  
     },[ ApiStore.getRoleList]);
-    
+     
       
     return ( 
             
       <FormControl variant="outlined"  size="small" style={{ marginTop : 10 , marginBottom : 10, width:width, display: 'block' }}>
         { val &&
         <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple={multiple}   
+          
             {...field}
             size="small"              
-            value={field.value as IAppUserRoleMaster[]}
+            value={field.value as any}
             options={val as any[]} 
-            getOptionLabel={(option:AppUserRoleMaster) => option.Name}                  
+            getOptionLabel={(option:any) => option.Name}                  
             freeSolo
             renderTags={(value, getTagProps) =>
               value.map((option:any, index) => (

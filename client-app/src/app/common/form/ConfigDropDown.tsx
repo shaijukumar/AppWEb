@@ -24,7 +24,21 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label
 
 
     useEffect(() => {
-      ApiStore.getConfigList(configId, setConfigList).then( res => { setConfigList(res)});
+      ApiStore.getConfigList(configId, setConfigList).then( res => { 
+        
+        if((field.value as any).length > 0){
+          var roleArray = ApiStore.configFromArray(res, field.value as any);  
+          if(!multiple && roleArray.length>0){
+            setValue(roleArray[0]);
+          }
+          else{
+            setValue(roleArray);
+          }        
+        }
+
+        setConfigList(res)
+      
+      });
     },[ ApiStore.getConfigList, setConfigList]);
     
       
@@ -46,7 +60,7 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label
       // </FormControl>
 
     
-
+ 
     <FormControl variant="outlined"  size="small" style={{ marginTop : 10 , marginBottom : 10, width:width, display: 'block' }}>
       {configList && 
         <Autocomplete id="UserAccessRoles" className="customFieldMargin" multiple={multiple}   

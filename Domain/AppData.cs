@@ -87,16 +87,16 @@ namespace Domain
         public DateTime DateTime13 { get; set; }
         public DateTime DateTime14 { get; set; }
         public DateTime DateTime15 { get; set; }
-        public int Config1 { get; set; }
-        public int Config2 { get; set; }
-        public int Config3 { get; set; }
-        public int Config4 { get; set; }
-        public int Config5 { get; set; }
-        public int Config6 { get; set; }
-        public int Config7 { get; set; }
-        public int Config8 { get; set; }
-        public int Config9 { get; set; }
-        public int Config10 { get; set; }
+        public string Config1 { get; set; }
+        public string Config2 { get; set; }
+        public string Config3 { get; set; }
+        public string Config4 { get; set; }
+        public string Config5 { get; set; }
+        public string Config6 { get; set; }
+        public string Config7 { get; set; }
+        public string Config8 { get; set; }
+        public string Config9 { get; set; }
+        public string Config10 { get; set; }
         public int Attachment1 { get; set; }
         public int Attachment2 { get; set; }        
         public int Attachment3 { get; set; }

@@ -304,6 +304,21 @@ export default class ApiImpl {
 		}									
 		return this.userList;		
 	}
+	userFromArray(list: AppUser[], strArray: string) : AppUser[] {
+
+		let objLst : AppUser[] = [];
+		if(strArray && list && list.length > 0){
+			strArray.split(',').forEach( r => {
+				let obj = new AppUser();
+				obj.Username = r;
+				var name = list.find(x => x.Username === r)?.Username;
+				obj.Username = name ? name : '' ;
+				objLst.push(obj);
+			});
+		}
+		
+		return objLst;			
+	}
 
 	getRoleList = async () => {		
 		//debugger;
@@ -332,6 +347,21 @@ export default class ApiImpl {
 		} catch (error) {
 			return error;
 		}
+	}
+	configFromArray(list: AppConfig[], strArray: string) : AppConfig[] {
+
+		let objLst : AppConfig[] = [];
+		if(strArray && list && list.length > 0){
+			strArray.split(',').forEach( r => {
+				let obj = new AppConfig();
+				obj.Id = Number(r);
+				var name = list.find(x => x.Id === Number(r))?.Title;
+				obj.Title = name ? name : '' ;
+				objLst.push(obj);
+			});
+		}
+		
+		return objLst;			
 	}
 	
 	updateActions = async (flowId: number, id: number, setActions: any, setError: any ) => {	

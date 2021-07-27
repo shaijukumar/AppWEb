@@ -23,6 +23,17 @@ const UserSelect: React.FC<CustomProps> = ({ multiple=false, label, placeholder,
 
     useEffect(() => {
       ApiStore.getUserList().then( res => {
+        debugger;
+        if(field.value && (field.value as any).length > 0){
+          var roleArray = ApiStore.userFromArray(res, field.value as any);  
+          if(!multiple && roleArray.length>0){
+            setValue(roleArray[0]);
+          }
+          else{
+            setValue(roleArray);
+          }        
+        }
+
         setVal(res);        
       }); 
     },[ ApiStore.getUserList]);

@@ -6,7 +6,7 @@ export interface IEmployee {
 	IsActive: boolean
 	Name: string
 	DOB:Date
-	Country:IAppConfig
+	Country:IAppConfig[]
 	Passport?: IAttachmentDetails[]
 	Salary: number
 	Manager: IAppUser
@@ -19,7 +19,7 @@ export class Employee implements IEmployee {
 	IsActive: boolean = true;
 	Name: string= '';
 	DOB:Date = new Date();
-	Country:IAppConfig = new AppConfig();
+	Country:IAppConfig[] = [];
 	Passport?: IAttachmentDetails[]
 	Salary: number = 0;
 	Manager: IAppUser = new AppUser();
