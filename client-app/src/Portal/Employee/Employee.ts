@@ -1,4 +1,5 @@
-import { AppConfig, AppUser, AppUserRoleMaster, IAppConfig, IAppUser, IAttachmentDetails } from "../Api/Api";
+import { Attachment, IAttachment, IAttachmentDetails } from "../../app/common/form/MyAttachment";
+import { AppConfig, AppUser, AppUserRoleMaster, IAppConfig, IAppUser } from "../Api/Api";
 
 export interface IEmployee {
 	Id: number
@@ -7,7 +8,7 @@ export interface IEmployee {
 	Name: string
 	DOB:Date
 	Country:IAppConfig[]
-	Passport?: IAttachmentDetails[]
+	Passport?: IAttachment[]
 	Salary: number
 	Manager: IAppUser
 	Roles: AppUserRoleMaster[]
@@ -20,7 +21,7 @@ export class Employee implements IEmployee {
 	Name: string= '';
 	DOB:Date = new Date();
 	Country:IAppConfig[] = [];
-	Passport?: IAttachmentDetails[]
+	Passport?: Attachment[] = [];
 	Salary: number = 0;
 	Manager: IAppUser = new AppUser();
 	Roles: AppUserRoleMaster[] = [];

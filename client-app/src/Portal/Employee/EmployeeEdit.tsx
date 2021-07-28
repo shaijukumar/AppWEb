@@ -16,6 +16,7 @@ import MyCheckBox from '../../app/common/form/MyCheckBox';
 import RoleSelect from '../../app/common/form/RoleSelect';
 import UserSelect from '../../app/common/form/UserSelect';
 import MyDatePicker from '../../app/common/form/MyDatePicker';
+import MyAttachment from '../../app/common/form/MyAttachment';
 
 
 
@@ -78,6 +79,12 @@ const EmployeeEdit: React.FC = () => {
         //values.UserAccessRoles = roles;
         debugger;
         let formData = new FormData();
+
+        (values.Passport as any).forEach( (f:any) => {
+            //values.InitAttachment.push(f.Details);
+            formData.append('FileList', f.file, f.Details.FileName);
+        });
+
         formData.append('ActionId', actionId.toString() ); 
         formData.append('Parm1', JSON.stringify(values) );
         formData.append('ItemId',  values.Id );
@@ -108,10 +115,7 @@ const EmployeeEdit: React.FC = () => {
              })}
           onSubmit={onItemSubmit}
         >
-            {({
-            handleChange,
-            values,
-        }) => (
+            
             <Form >
 
            
@@ -122,6 +126,8 @@ const EmployeeEdit: React.FC = () => {
                 <MyCustomTxt name="Salary" label="Salary" type="number" required={false} width="300px" />                
                 <UserSelect name="Manager" label="Manager" width="300px"  />
                 <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
+
+                <MyAttachment name="Passport" label="Passport" width="500px" />
                
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                     { actions && (actions as any).map( (row:any) => (                    
@@ -132,7 +138,7 @@ const EmployeeEdit: React.FC = () => {
                 </ButtonGroup>
 
             </Form>
-            )}
+        
         
         </Formik>
 
