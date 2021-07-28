@@ -1,4 +1,4 @@
-import { Attachment, IAttachment, IAttachmentDetails } from "../../app/common/form/MyAttachment";
+import { Attachment, IAttachment } from "../../app/common/form/MyAttachment";
 import { AppConfig, AppUser, AppUserRoleMaster, IAppConfig, IAppUser } from "../Api/Api";
 
 export interface IEmployee {

@@ -17,6 +17,7 @@ import RoleSelect from '../../app/common/form/RoleSelect';
 import UserSelect from '../../app/common/form/UserSelect';
 import MyDatePicker from '../../app/common/form/MyDatePicker';
 import MyAttachment from '../../app/common/form/MyAttachment';
+import { AnyCnameRecord } from 'dns';
 
 
 
@@ -79,11 +80,8 @@ const EmployeeEdit: React.FC = () => {
         //values.UserAccessRoles = roles;
         debugger;
         let formData = new FormData();
-
-        (values.Passport as any).forEach( (f:any) => {
-            //values.InitAttachment.push(f.Details);
-            formData.append('FileList', f.file, f.Details.FileName);
-        });
+        formData = ApiStore.updateAttachments(formData, values.Passport); 
+       
 
         formData.append('ActionId', actionId.toString() ); 
         formData.append('Parm1', JSON.stringify(values) );
@@ -127,7 +125,7 @@ const EmployeeEdit: React.FC = () => {
                 <UserSelect name="Manager" label="Manager" width="300px"  />
                 <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
 
-                <MyAttachment name="Passport" label="Passport" width="500px" />
+                <MyAttachment downloadActionID={ActionConfig.EmployeePassportDownload} name="Passport" label="Passport" width="500px" />
                
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                     { actions && (actions as any).map( (row:any) => (                    

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {  
   useField,
   FieldAttributes,  
@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import MaterialTable from "material-table";
 import { Button, ButtonGroup, Container, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,  } from '@material-ui/core';
 import TableButton from "./TableButton";
+import { ApiContext, AppApiAction } from "../../../Portal/Api/Api";
 
 export interface IAttachmentDetails {
 	Action: string
@@ -41,26 +42,48 @@ export class AttachmentDetails implements IAttachmentDetails {
 
 export interface IAttachment {
 	file: Blob
-	Details : AttachmentDetails
+	//Details : AttachmentDetails
+  Action: string
+	FileArrayId?: number
+	Id?: number	
+	FileName: string	
+  FilePath: string,
+	Prop1?: string
+	Prop2?: string
+	Prop3?: string
+	Prop4?: string
+	Prop5?: string
 }
 
 export class Attachment implements IAttachment {
 	file: Blob = new Blob();
-	Details : AttachmentDetails = new AttachmentDetails();
+	//Details : AttachmentDetails = new AttachmentDetails();
+  Action: string = '';
+	FileArrayId: number = -1;
+	Id: number = -1;	
+	FileName: string = '';	
+  FilePath: string = '';	
+	Prop1: string = '';
+	Prop2: string = '';
+	Prop3: string = '';
+	Prop4: string = '';
+	Prop5: string = '';
 	  
   constructor(init?: IAttachment) {
     Object.assign(this, init);
   }
 }
 
-type CustomProps = { checked?: boolean, label?: string, width?: string  } & FieldAttributes<{}>;
+type CustomProps = { downloadActionID: number, label?: string, width?: string  } & FieldAttributes<{}>;
 
-const MyAttachment : React.FC<CustomProps> = ({ checked, label, placeholder, type,required,autoComplete, autoFocus,  width, ...props }) => {
+const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeholder, type,required,autoComplete, autoFocus,  width, ...props }) => {
     
     const [field, meta , { setValue }] = useField<{}>(props);
     const [val, setVal] = useState(false);
 
     const [attachFileList, setFileList] =useState<Attachment[]>([]);
+
+    const ApiStore = useContext(ApiContext);
 
     useEffect(() => {
       // console.log('MyAttachment useEffect') ;
@@ -95,31 +118,47 @@ const MyAttachment : React.FC<CustomProps> = ({ checked, label, placeholder, typ
     //       onClick: (event:any) =>{ console.log(1); },                                     
     //   }
     // ];
+    const deleteAttachment = (att:Attachment) => { 
+
+      var attList: Attachment[] = (field.value as Attachment[]);
+      for(var i=0;i<attList.length;i++){
+        if(att == attList[i]){
+          if(att.Id != -1 ){            
+            attList[i].Action = "Delete";
+          }         
+          break;          
+        }
+      }
+      setValue(attList);
+    }
 
     const download = (id:number, fileName:string) => { 
-      // let act: AppApiAction = new AppApiAction()
-      // act.ActionId = 15;  
-      // act.ItemId = Number(id);
-      // act.Parm1 = id.toString();
+      
+      let act: AppApiAction = new AppApiAction()
+      act.ActionId = downloadActionID;  
+      act.ItemId = Number(id);
+      act.Parm1 = id.toString();
   
-      // AppApiStore.FileDownload(act).then( (fileSteam) => { 
-      //   debugger;
-      //   const downloadUrl = window.URL.createObjectURL(new Blob([fileSteam]));
-      //   const link = document.createElement('a');
-      //   link.href = downloadUrl;
-      //   link.setAttribute('download', fileName); //any other extension
-      //   document.body.appendChild(link);
-      //   link.click();
-      //   link.remove();
+      ApiStore.FileDownload(act).then( (fileSteam) => { 
+        debugger;
+        const downloadUrl = window.URL.createObjectURL(new Blob([fileSteam]));
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', fileName); //any other extension
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
   
-      //   debugger;
-      // });
+        debugger;
+      });
      
     }
 
     const prop1Change = (e:any, i:number) => { 
+      debugger;
       let files = [...(field.value as any)];
-      files[i].Details.Prop1 = e.target.value;
+      files[i].Prop1 = e.target.value;
+      files[i].Action = "Update";
       setValue(files);
   
     }
@@ -130,19 +169,16 @@ const MyAttachment : React.FC<CustomProps> = ({ checked, label, placeholder, typ
       for(var i=0;i<event.target.files.length;i++){
   
         var f =  event.target.files[i] as any;    
-        var filename = (field.value as any).length.toString() + "-" + f.name;
+        var filename = `${field.name}-${(field.value as any).length.toString()}-${f.name}`;
         var attch = new Attachment( { 
             file : f, 
-            Details : new  AttachmentDetails({  Action : 'Create', FileArrayId: i, Id : -1, FileName : filename,  Prop1 : 'Desc 1'  }) 
+            Action : 'Create', FileArrayId: i, Id : -1, FileName : f.name,  Prop1 : '', FilePath : filename,            
           });
-        
-        //setValue((currentArray:any) => [...(field.value as Attachment[]), attch]);
+                
         setValue([...(field.value as Attachment[]), attch]);
         setFileList(currentArray => [...currentArray, attch]);
         event.target.value = null;                        
-      }
-      //setFileList(attachFileList);
-  
+      }        
     }
 
        
@@ -175,12 +211,13 @@ const MyAttachment : React.FC<CustomProps> = ({ checked, label, placeholder, typ
                 </TableHead>
                 <TableBody>
                 { field.value && (field.value as Attachment[]).map( (rr:Attachment, index:any) => (
-                    <TableRow>       
-                      <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Details.Id,  rr.Details.FileName)} } >{rr.Details.FileName}</a> </TableCell>
+                    <TableRow key={index}>       
+                      <TableCell align="left"> <a href="#" onClick={ () => { download(rr.Id,  rr.FileName)} } >{rr.FileName}</a> </TableCell>
                       <TableCell align="left">
-                        <input type="text" value={rr.Details.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
+                        <input type="text" value={rr.Prop1}  onChange={ (e) => { prop1Change(e,index) } } /> 
+                        <div> {rr.Action}</div>
                       </TableCell>     
-                      <TableCell align="left"><a href="#">Delete</a></TableCell>      
+                      {rr.Action != "Delete" && <TableCell align="left"><a  href="#" onClick={() => { deleteAttachment(rr) }} >Delete</a></TableCell>  }
                     </TableRow>
                     ))
                 } 

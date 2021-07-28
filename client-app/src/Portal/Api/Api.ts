@@ -1,6 +1,7 @@
 import { makeObservable, observable } from "mobx";
 import { createContext } from "react";
 import agent from "../../app/api/agent";
+import { Attachment } from "../../app/common/form/MyAttachment";
 
 
 //==============================================
@@ -19,6 +20,7 @@ export const ActionConfig : {[key: string]: number} =
 	EmployeeList : 19,
 	EmployeeById : 21,    
 	EmployeeTableID: 7,
+	EmployeePassportDownload: 38,
 
 }
 
@@ -387,6 +389,16 @@ export default class ApiImpl {
 		
 		return objLst;			
 	}
+
+	updateAttachments(formData: FormData, attachList: Attachment[]) : FormData {
+		
+		attachList.forEach( (f:Attachment) => {
+            if( f.file){
+                formData.append('FileList', f.file, f.FilePath);
+            }            
+        });
+		return formData;					
+	}
 	
 	updateActions = async (flowId: number, id: number, setActions: any, setError: any ) => {	
 		try {  
@@ -474,6 +486,8 @@ export default class ApiImpl {
 			return error;
 		}
 	}
+	
+
 
 	ExecuteAction = async (action: FormData, setError:any) => {
 		var ret = null;		    		
@@ -493,6 +507,16 @@ export default class ApiImpl {
 		}
 		return ret;
 	}
+
+	FileDownload = async (action: IApiAction) => {		
+		try {        
+		  debugger;		 
+		  var itm = await DBFun.FileDownload(action);  		  
+		  return itm;		 
+		} catch (error) {
+		 return error;
+		}
+	  }
 }
 
 export const ApiContext = createContext(new ApiImpl());

@@ -24,6 +24,7 @@ namespace AppWebCustom.Action
             public int FileArrayId { get; set; }
             public int Id { get; set; }
             public string FileName { get; set; }
+            public string FilePath { get; set; }                        
             public string Prop1 { get; set; }
             public string Prop2 { get; set; }
             public string Prop3 { get; set; }
@@ -325,7 +326,7 @@ namespace AppWebCustom.Action
                 
                 if(a.Action == "Create"){
                     foreach(var file in request.FileList){
-                        if(file.FileName == a.FileName){     
+                        if(file.FileName == a.FilePath){     
 
                             var rootPath = @"C:\Attachments";
                             var path = Path.Combine( rootPath, ad.appData.TableId.ToString(), ad.appData.Id.ToString(), a.AppDataColumn.ToString());
@@ -345,7 +346,7 @@ namespace AppWebCustom.Action
                             {
                                 AppDataId  = ad.appData.Id,
                                 AppDataColumn = a.AppDataColumn,
-                                FileName  = file.FileName,
+                                FileName  = a.FileName,
                                 Path  = Path.GetRelativePath(rootPath, path),
                                 Prop1  = a.Prop1,
                                 Prop2  = a.Prop2,
@@ -362,6 +363,31 @@ namespace AppWebCustom.Action
                             }                            
                         }
                     }
+                }
+                else if(a.Action == "Delete"){
+
+                     var appAttach = await _context.AppAttachments
+                        .FindAsync(a.Id);
+
+                    if (appAttach != null){
+                         _context.Remove(appAttach);
+                         await _context.SaveChangesAsync();
+                    }                                  
+                }
+                 else if(a.Action == "Update"){
+
+                     var appAttach = await _context.AppAttachments
+                        .FindAsync(a.Id);
+
+                    if (appAttach != null){
+                        
+                        appAttach.Prop1  = a.Prop1 ?? appAttach.Prop1;
+                        appAttach.Prop2  = a.Prop2 ?? appAttach.Prop2;
+                        appAttach.Prop3  = a.Prop3 ?? appAttach.Prop3;
+                        appAttach.Prop4  = a.Prop4 ?? appAttach.Prop4;
+                        appAttach.Prop5  = a.Prop5 ?? appAttach.Prop5;
+                        await _context.SaveChangesAsync();
+                    }                                  
                 }
             }
 
