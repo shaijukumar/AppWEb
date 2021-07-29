@@ -144,7 +144,7 @@ const EmployeeEdit: React.FC = () => {
                 <UserSelect name="Manager" label="Manager" width="300px"  />
                 <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
 
-                <MyAttachment downloadActionID={ActionConfig.EmployeePassportDownload} name="Passport" label="Passport" width="500px" />
+                <MyAttachment downloadActionID={ActionConfig.EmployeePassportDownload} multipleFile={false} name="Passport" label="Upload Passport"  />
                
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                     { actions && (actions as any).map( (row:any) => (                    

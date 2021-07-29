@@ -7,9 +7,10 @@ import {
 
 import FormControl from '@material-ui/core/FormControl';
 import {v4 as uuid} from 'uuid';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 
 import MaterialTable from "material-table";
-import { Button, ButtonGroup, Container, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,  } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Container, Grid, LinearProgress, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,  } from '@material-ui/core';
 import TableButton from "./TableButton";
 import { ApiContext, AppApiAction } from "../../../Portal/Api/Api";
 
@@ -75,9 +76,9 @@ export class Attachment implements IAttachment {
   }
 }
 
-type CustomProps = { downloadActionID: number, label?: string, width?: string  } & FieldAttributes<{}>;
+type CustomProps = {  downloadActionID: number, multipleFile?: boolean, label?: string, width?: string  } & FieldAttributes<{}>;
 
-const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeholder, type,required,autoComplete, autoFocus,  width, ...props }) => {
+const MyAttachment : React.FC<CustomProps> = ({ multipleFile = false, downloadActionID, label, placeholder, type,required,autoComplete, autoFocus,  width, ...props }) => {
     /**
      * file limit
      * if single file replace file
@@ -123,6 +124,7 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
     //       onClick: (event:any) =>{ console.log(1); },                                     
     //   }
     // ];
+
     const deleteAttachment = (att:Attachment) => { 
       debugger;
       var attList: Attachment[] = (field.value as Attachment[]);
@@ -166,7 +168,11 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
       debugger;
       let files = [...(field.value as any)];
       files[i].Prop1 = e.target.value;
-      files[i].Action = "Update";
+      if(!files[i].Action){
+        
+        files[i].Action = "Update";
+      }
+      
       setValue(files);
   
     }
@@ -174,10 +180,23 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
     const onFileChange = (event:any) => { 
       debugger;
       
+      if(!multipleFile){
+        var attList: Attachment[] = (field.value as Attachment[]);
+        for(var i=0;i<attList.length;i++){
+          var att = attList[i];
+          if(att.Id != -1 ){            
+            attList[i].Action = "Delete";
+          }   
+          else{
+            attList.splice(i, 1);
+          }             
+        }
+      }
+
       for(var i=0;i<event.target.files.length;i++){
   
         var f =  event.target.files[i] as any;    
-        //var filename = `${field.name}-${(field.value as any).length.toString()}-${f.name}`;
+        
         var filename = `${uuid()}-${f.name}`;
         
         var attch = new Attachment( { 
@@ -195,6 +214,54 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
     return (                  
         <FormControl variant="outlined" fullWidth style={{ marginTop : 10 , marginBottom : 10, width:width,  display: 'block'}} >
 
+          {!multipleFile && 
+
+            <Box display="flex" flexDirection="row" p={1} m={1} style={{margin:'0px', padding:'0px', }} > 
+              <Box p={1} >
+                <Button  variant="contained" color="primary"  component="label" size="small" >
+                  {label} <input type="file" multiple={false} onChange={onFileChange}  id="raised-button-file" style={{display: "none",}} />
+                </Button> 
+
+                
+              </Box>
+             
+              { (field.value as Attachment[]).filter( x => x.Action != "Delete").map( at => (
+               <React.Fragment>
+                  <Box p={1} >
+                  <Link component="button" variant="body2"  onClick={ () => { download(at.Id,  at.FileName)} } >{at.FileName}</Link>
+
+                  
+                  </Box>
+                  <Box p={1} >
+                    {at.Action != "Delete" &&  <DeleteOutlinedIcon onClick={() => deleteAttachment(at)} />   }
+                  </Box>
+                 
+                
+                </React.Fragment>
+              ))}
+               
+            </Box>
+            // <Grid container spacing={1}>
+            //   <Grid item xs={4}>1</Grid>
+            //   <Grid item xs={4}>2</Grid>
+            //   <Grid item xs={4}>3</Grid>
+            // </Grid>
+          //  <React.Fragment>
+
+          //     <Button  color="primary"  component="label" size="small" >
+          //       {label} <input type="file" multiple={false} onChange={onFileChange}  id="raised-button-file" style={{display: "none",}} />
+          //     </Button> 
+
+          //    { (field.value as Attachment[]).filter( x => x.Action != "Delete").map( at => (
+          //      <React.Fragment>
+          //        <a href="#" onClick={ () => { download(at.Id,  at.FileName)} } > {at.FileName} --  </a>
+          //       {at.Action != "Delete" && <TableCell align="left"><a  href="#" onClick={() => { deleteAttachment(at) }} >Delete</a></TableCell>  }
+          //       </React.Fragment>
+          //     ))};
+             
+          //  </React.Fragment>
+            
+          }
           {/* <MaterialTable                    
               title={label}
               data={field.value as any}
@@ -206,12 +273,16 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
                 control={<Checkbox {...field}  checked={val} onClick={ () => { setVal(!val);} }  />}
                 label={label}              
           /> */}
-
+           {multipleFile && 
           <TableContainer component={Paper}>
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>             
-                    <TableCell align="left" colSpan={3}><input type="file" multiple={false} onChange={onFileChange} /></TableCell>  
+                    <TableCell align="left" colSpan={3}>                                                               
+                      <Button  color="primary"  component="label" >
+                      {label} <input type="file" multiple={false} onChange={onFileChange}  id="raised-button-file" style={{display: "none",}} />
+                      </Button> 
+                    </TableCell>  
                   </TableRow> 
                   <TableRow>       
                     <TableCell align="left">File Name</TableCell>
@@ -230,11 +301,11 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
                       {rr.Action != "Delete" && <TableCell align="left"><a  href="#" onClick={() => { deleteAttachment(rr) }} >Delete</a></TableCell>  }
                     </TableRow>
                     ))
-                } 
-                     
+                }                      
                 </TableBody>
               </Table>
             </TableContainer>
+            }
 
         </FormControl>              
     );
