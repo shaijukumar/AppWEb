@@ -6,6 +6,7 @@ import {
 } from "formik";
 
 import FormControl from '@material-ui/core/FormControl';
+import {v4 as uuid} from 'uuid';
 
 import MaterialTable from "material-table";
 import { Button, ButtonGroup, Container, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,  } from '@material-ui/core';
@@ -77,7 +78,11 @@ export class Attachment implements IAttachment {
 type CustomProps = { downloadActionID: number, label?: string, width?: string  } & FieldAttributes<{}>;
 
 const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeholder, type,required,autoComplete, autoFocus,  width, ...props }) => {
-    
+    /**
+     * file limit
+     * if single file replace file
+     * 
+     */
     const [field, meta , { setValue }] = useField<{}>(props);
     const [val, setVal] = useState(false);
 
@@ -119,13 +124,16 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
     //   }
     // ];
     const deleteAttachment = (att:Attachment) => { 
-
+      debugger;
       var attList: Attachment[] = (field.value as Attachment[]);
       for(var i=0;i<attList.length;i++){
         if(att == attList[i]){
           if(att.Id != -1 ){            
             attList[i].Action = "Delete";
-          }         
+          }   
+          else{
+            attList.splice(i, 1);
+          }      
           break;          
         }
       }
@@ -169,7 +177,9 @@ const MyAttachment : React.FC<CustomProps> = ({ downloadActionID, label, placeho
       for(var i=0;i<event.target.files.length;i++){
   
         var f =  event.target.files[i] as any;    
-        var filename = `${field.name}-${(field.value as any).length.toString()}-${f.name}`;
+        //var filename = `${field.name}-${(field.value as any).length.toString()}-${f.name}`;
+        var filename = `${uuid()}-${f.name}`;
+        
         var attch = new Attachment( { 
             file : f, 
             Action : 'Create', FileArrayId: i, Id : -1, FileName : f.name,  Prop1 : '', FilePath : filename,            

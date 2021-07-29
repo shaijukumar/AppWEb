@@ -328,7 +328,8 @@ namespace AppWebCustom.Action
                     foreach(var file in request.FileList){
                         if(file.FileName == a.FilePath){     
 
-                            var rootPath = @"C:\Attachments";
+                            string rootPath = await Config.GetCongfigAsync("ApplicationConfig", "AttachmentPath", _context, true ); 
+
                             var path = Path.Combine( rootPath, ad.appData.TableId.ToString(), ad.appData.Id.ToString(), a.AppDataColumn.ToString());
                                                         
                             if(!Directory.Exists(path)){
@@ -338,7 +339,7 @@ namespace AppWebCustom.Action
                             path = Path.Combine(path, file.FileName);
 
                             using (var fileStream = new FileStream(path,FileMode.Create))
-                            {
+                            {                                
                                 await file.CopyToAsync(fileStream);                     
                             }
 
@@ -365,11 +366,21 @@ namespace AppWebCustom.Action
                     }
                 }
                 else if(a.Action == "Delete"){
-
+                                             
                      var appAttach = await _context.AppAttachments
                         .FindAsync(a.Id);
 
                     if (appAttach != null){
+
+                        string rootPath = await Config.GetCongfigAsync("ApplicationConfig", "AttachmentPath", _context, true ); 
+                        var path = Path.Combine(rootPath, appAttach.Path);
+
+                        if (File.Exists(Path.Combine(path)))    
+                        {                                
+                            File.Delete(Path.Combine(path));                               
+                        }    
+
+
                          _context.Remove(appAttach);
                          await _context.SaveChangesAsync();
                     }                                  

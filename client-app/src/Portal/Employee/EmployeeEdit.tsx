@@ -57,7 +57,7 @@ const EmployeeEdit: React.FC = () => {
           if(id){            
             ApiStore.LoadItem(ActionConfig.EmployeeById,id, setError).then( res => {              
               if(res){
-                debugger;
+                //debugger;
   
                 setItem(res);
                 var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);  
@@ -77,12 +77,31 @@ const EmployeeEdit: React.FC = () => {
 
     const onItemSubmit = (values: any) => {
         
-        //values.UserAccessRoles = roles;
         debugger;
+        // Object.keys(values).forEach(function(key,index) {     
+            
+        //     var v = values[key];
+        //     type Data = typeof v;
+        //     console.log(typeof v);
+        //     //console.log(Data.na);
+        //     if(v === "Attachment[]"){
+        //         console.log(v);
+        //     }
+        //     if(v === "string"){
+        //         console.log(v);
+        //     }
+        //     // if( colMap.get(key) && values[key] ){        
+        //     //     dataParm[ colMap.get(key) as string ] =  values[key] ;
+        //     // }      
+        // });  
+
+        // return;
+
+        //values.UserAccessRoles = roles;
+        
         let formData = new FormData();
         formData = ApiStore.updateAttachments(formData, values.Passport); 
        
-
         formData.append('ActionId', actionId.toString() ); 
         formData.append('Parm1', JSON.stringify(values) );
         formData.append('ItemId',  values.Id );
@@ -91,7 +110,7 @@ const EmployeeEdit: React.FC = () => {
             debugger;        
             if(res){
               history.push('/EmployeeList');
-            }           
+            }
         });
     }
 
