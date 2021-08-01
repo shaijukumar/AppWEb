@@ -52,7 +52,7 @@ namespace Application._AppUserRoleMaster
 // r.Name = "1";
 // await _roleManager.UpdateAsync(r);
 
-
+ 
 
                 if (!await _roleManager.RoleExistsAsync( request.Name)) {
                     var role = new IdentityRole();    
