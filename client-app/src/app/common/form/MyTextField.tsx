@@ -19,11 +19,23 @@ const MyTextField: React.FC<FieldAttributes<{}>> = ({
   
 }) => {
   
-  const [field, meta] = useField<{}>(props);
+  const [field, meta, { setValue }] = useField<{}>(props);
   const errorText = meta.error && meta.touched ? meta.error : "";
+
+ 
+  
+  const onTextChange = (event: any) => {
+    debugger;
+    alert(1);
+  }
+
+  field.onChange = () => {
+    debugger;
+    alert(1);
+  }
   
   return (
-    <TextField
+    <TextField      
       placeholder={placeholder}
       {...field}
       type={type}
@@ -34,7 +46,9 @@ const MyTextField: React.FC<FieldAttributes<{}>> = ({
       margin="normal"
       required={required}
       autoComplete={autoComplete}
-      fullWidth      
+      fullWidth  
+
+      
     />  
   );
 };

@@ -10,11 +10,19 @@ import {
 
 import moment from 'moment';
 
-type CustomTxtProps = { label: string, multiline?: boolean, width?: string  } & FieldAttributes<{}>;
 
-const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,required,autoComplete, autoFocus,multiline, width, ...props }) => {
+
+type CustomTxtProps = { label: string, multiline?: boolean, width?: string, onChange?:any  } & FieldAttributes<{}>;
+
+const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,required,autoComplete, autoFocus,multiline, width, onChange, ...props }) => {
 
   const [field,meta , { setValue }] = useField<{}>(props);
+
+  const onTextChange = (event: any) => {
+    debugger;
+    //alert(event.target.value);
+    setValue(event.target.value);
+  }
   
   useEffect(() => {
     if( type == "date" ){
@@ -46,7 +54,8 @@ const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,requir
             label={label}
             multiline={multiline}  
             style={{width: width, display: 'block'}}    
-            size='small'  
+            size='small' 
+            onChange={onTextChange} 
             
             InputLabelProps={{
               shrink: true,

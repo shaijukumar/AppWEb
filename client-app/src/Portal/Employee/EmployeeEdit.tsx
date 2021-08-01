@@ -1,11 +1,10 @@
 
-import { Button, ButtonGroup, Container, LinearProgress } from '@material-ui/core';
+import { Button, ButtonGroup, Container, FormControl, LinearProgress, TextField, Typography } from '@material-ui/core';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-
 
 import MyCustomTxt from '../../app/common/form/MyCustomTxt';
 import { ActionConfig, ApiContext, AppStatusList, AppUserRoleMaster } from '../Api/Api'
@@ -17,8 +16,7 @@ import RoleSelect from '../../app/common/form/RoleSelect';
 import UserSelect from '../../app/common/form/UserSelect';
 import MyDatePicker from '../../app/common/form/MyDatePicker';
 import MyAttachment from '../../app/common/form/MyAttachment';
-import { AnyCnameRecord } from 'dns';
-
+import MyCurrencyInput from '../../app/common/form/MyCurrencyInput';
 
 
 interface DetailParms {
@@ -114,6 +112,11 @@ const EmployeeEdit: React.FC = () => {
         });
     }
 
+    const onTextChange = (event: any) => {
+        debugger;
+        alert(1);
+    }
+
 
 
     if(loading){
@@ -137,14 +140,21 @@ const EmployeeEdit: React.FC = () => {
 
            
                 <MyCheckBox name="IsActive" label="Is Active"  />
-                <MyCustomTxt name="Name" label="Name" type="text" required={false} width="300px" />
+                <MyCustomTxt name="Name" label="Name" type="text" required={true} width="300px"  />
                 <MyDatePicker name="DOB" label="DOB" required={false} width="300px" />
                 <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" /> 
-                <MyCustomTxt name="Salary" label="Salary" type="number" required={false} width="300px" />                
+                {/* <MyCustomTxt name="Salary" label="Salary1" type="number" required={false} width="300px"  onChange={onTextChange}/>  */}
+                <MyCurrencyInput name="Salary" label="Salary"  width="300px" CurrecySymbol="AED" />               
                 <UserSelect name="Manager" label="Manager" width="300px"  />
                 <RoleSelect name="Roles" label="Roles" width="300px" multiple={true} />
 
                 <MyAttachment downloadActionID={ActionConfig.EmployeePassportDownload} multipleFile={false} name="Passport" label="Upload Passport"  />
+
+
+                {/* <TextField      
+                   name="Name" label="Name" type="text" required={false} 
+                    onChange={onTextChange}    
+                />   */}
                
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
                     { actions && (actions as any).map( (row:any) => (                    
