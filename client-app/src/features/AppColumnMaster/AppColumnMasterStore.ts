@@ -55,7 +55,8 @@ export default class AppColumnMasterStoreImpl {
     this.loading = true;
     try {               
       this.columnList = await DBFun.ColumnList(id);       
-      this.loading = false;                   
+      this.loading = false;     
+      return this.columnList;              
     } catch (error) {
       runInAction( () => {
         this.loading = false;            

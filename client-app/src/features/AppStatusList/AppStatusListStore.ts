@@ -56,7 +56,8 @@ export default class AppStatusListStoreImpl {
     this.loading = true;
     try {               
       this.AppStatusList = await DBFun.AppStatusList(id);       
-      this.loading = false;                   
+      this.loading = false;     
+      return this.AppStatusList;              
     } catch (error) {
       runInAction( () => {
         this.loading = false;            

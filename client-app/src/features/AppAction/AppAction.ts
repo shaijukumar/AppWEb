@@ -31,4 +31,16 @@ export class AppAction implements IAppAction {
     Object.assign(this, init);
   }
 }
+
+export class AppExport	{
+	Order: number = 0;
+	ActionType: string = '';
+	InitStatus: string = '';
+	FromStatus : string = '';
+	Action: string = '';		
+	ToStatus: string = '';
+	WhenXml: string = '';
+	ActionXml: string = '';
+  
+}
 	

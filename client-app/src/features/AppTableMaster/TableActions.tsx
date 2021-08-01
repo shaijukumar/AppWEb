@@ -24,7 +24,7 @@ const TableActions: React.FC = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {     
-        debugger;        
+        //debugger;        
         AppFlowStore.loadItem(Number(id));
         AppActionStore.flowActions(Number(id));
         AppStatusListStore.getStatusList(Number(tableId));            
