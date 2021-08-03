@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.AppEngine;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
@@ -41,7 +42,15 @@ namespace Application._AppAction
                 var appAction = await _context.AppActions
                     .Where(x => x.FlowId == request.Id)
                     .ToListAsync();
-					
+
+                foreach(var act in appAction){
+                    try{
+                        act.WhenXml = await XmlUpdate.UpdateXml(act.WhenXml, _context, false );
+                        act.ActionXml = await XmlUpdate.UpdateXml(act.ActionXml, _context, false );
+                    }
+                    catch{}
+                }
+
                 return _mapper.Map<List<AppAction>, List<AppActionDto>>(appAction);
                 
             }

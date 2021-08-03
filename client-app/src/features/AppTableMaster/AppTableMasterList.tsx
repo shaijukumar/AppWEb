@@ -334,18 +334,54 @@ const AppTableMasterList: React.FC = () => {
                     action.InitStatus = false;
                   }
 
-                  // action.FlowId = actObj.FlowId;
+                  //FlowName
+                  var flFind:any =  flowList.find( (u:any) => u.Title === actObj.FlowName );
+                  if(flFind){
+                    action.FlowId = flFind.Id;
+                  }
+                  else{
+                    AddError(`Invlaid FlowName - ${actObj.FlowName}`);
+                  }
 
-   
-                  // action.FromStatusList = actObj.FromStatusList;
-                  // action.ToStatusId = actObj.ToStatusId;
+                  //ToStatusId
+                  var stFind:any =  statusList.find( (u:any) => u.Title === actObj.ToStatus );
+                  if(stFind){
+                    action.ToStatusId = stFind.Id;
+                  }
+                  else{
+                    AddError(`Invlaid ToStatus - ${actObj.ToStatus}`);
+                  }
+
+                  let FromStatusList : AppStatusList[] = [];
+
                   
+                  if(actObj.FromStatus){
+                    actObj.FromStatus.split(',').forEach(function (st:any) {
+                      st = st.trim();
+                      if(st){                        
+                        var stFind:any =  statusList.find( (u:any) => u.Title === st );
+                        if(!stFind){
+                          AddError(`Invlaid From Status ${st}`);                          
+                        }
+                        else{
+                          FromStatusList.push(stFind);
+                        }
+                      }
+                    });
+                    
+                  }
+                  action.FromStatusList = FromStatusList;
 
                   const resObj = await AppActionStore.editItem(action);
                   if(!CheckError(resObj)) return;
                   action.Id = resObj.Id;
                 } )                              
               );
+
+              if(err){
+                setError( err );
+                return;
+              }
 
 
 
@@ -385,26 +421,7 @@ const AppTableMasterList: React.FC = () => {
 
 
 
-    // var wait = false;
-    // const waitFor = (callback:any) => {
-    //   return new Promise((resolve, reject):any => {
-    //     // if(wait){
-    //     //   resolve(wait);
-    //     // }
-    //     // else{
-
-    //     // }     
-        
-    //     if(wait) {
-    //       console.log('waiting');
-    //       window.setTimeout(waitFor.bind(null, wait, callback), 100); /* this checks the flag every 100 milliseconds*/
-    //     } else {
-    //         console.log('done');
-    //         callback();
-    //     }
-
-    //   });      
-    // }
+   
 
 
     useEffect(() => {       
@@ -459,7 +476,7 @@ const AppTableMasterList: React.FC = () => {
               options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}
 
               cellEditable={{
-                onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
+                onCellEditApproved: (newValue:any, oldValue:any, rowData:any, columnDef:any) => {
                   debugger;       
                   //let filedName : any =  "Title"; //columnDef.field == null ? columnDef.field as string : "Title" 
                   return new Promise((resolve, reject) => {
@@ -481,7 +498,7 @@ const AppTableMasterList: React.FC = () => {
               }}
 
               editable={{
-                onRowAdd: newData => new Promise(resolve => { 
+                onRowAdd: (newData:any) => new Promise(resolve => { 
                   debugger;
                   var tab = new AppTableMaster();
                   tab.Title = newData.Title;
@@ -494,7 +511,7 @@ const AppTableMasterList: React.FC = () => {
                
 
                   
-                onRowDelete: oldData =>
+                onRowDelete: (oldData:any) =>
                   new Promise((resolve, reject) => {
                     
                     setTimeout(() => {

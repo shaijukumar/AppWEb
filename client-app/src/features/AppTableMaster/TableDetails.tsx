@@ -141,6 +141,7 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
 
                               var actRes:AppExport = new AppExport();                        
                               actRes.Order = act.Order;
+                              actRes.FlowName = value.Title;
                               actRes.ActionType = act.ActionType;
                               
                               if(act.FromStatusList ){                              
@@ -168,7 +169,7 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
                            });
                         
                            const actionList: XLSX.WorkSheet  = XLSX.utils.json_to_sheet(ActList);  
-                           var wscols = [ {wch:5}, {wch:9}, {wch:8}, {wch:20}, {wch:20}, {wch:20}, {wch:50}, {wch:50} ];                                              
+                           var wscols = [ {wch:5}, {wch:15}, {wch:9}, {wch:10}, {wch:20}, {wch:20}, {wch:20}, {wch:50}, {wch:50} ];                                              
                            actionList["!cols"] = wscols;        
                            XLSX.utils.book_append_sheet(wb, actionList, value.Title);
 

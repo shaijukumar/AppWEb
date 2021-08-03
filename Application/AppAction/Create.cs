@@ -64,14 +64,14 @@ namespace Application._AppAction
                     request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );                   
                 }
                 catch(Exception ex){
-                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Invalid WhenXml, {ex.Message}." });                    
                 }
 
                 try{                    
                     request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, true );
                 }
                 catch(Exception ex){
-                    throw new RestException(HttpStatusCode.OK, new { Error = $"Problem saving changes. {ex.Message}. {ex.InnerException.Message}." });
+                    throw new RestException(HttpStatusCode.OK, new { Error = $"Invalid ActionXml, {ex.Message}." });
                 }
 
                
