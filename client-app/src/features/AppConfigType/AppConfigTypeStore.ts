@@ -41,10 +41,7 @@ export default class AppConfigTypeStoreImpl {
       this.loading = false;         
       return this.itemList;          
     } catch (error) {
-      runInAction( () => {
-        this.loading = false;            
-        throw error;
-      });
+      return error;
     }
   }
 

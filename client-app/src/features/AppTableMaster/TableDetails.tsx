@@ -12,6 +12,10 @@ import { AppColumnMasterContext } from "../AppColumnMaster/AppColumnMasterStore"
 import { AppActionContext } from "../AppAction/AppActionStore";
 import { AppStatusListContext } from "../AppStatusList/AppStatusListStore";
 import { AppExport } from "../AppAction/AppAction";
+import { AppColumnExport, AppColumnMaster } from "../AppColumnMaster/AppColumnMaster";
+import { ColumnAttachmentType, ColumnDataType } from "../../app/common/SystemConstants";
+import { AppConfigTypeContext } from "../AppConfigType/AppConfigTypeStore";
+import { AppConfigType, IAppConfigType } from "../AppConfigType/AppConfigType";
 
 interface Parms {
     tableId : number;  
@@ -27,6 +31,7 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
    const AppColumnMasterStore = useContext(AppColumnMasterContext);
    const AppActionStore = useContext(AppActionContext); 
    const AppStatusListStore = useContext(AppStatusListContext);
+   const AppConfigTypeStore = useContext(AppConfigTypeContext);
 
    
    let history = useHistory();
@@ -62,113 +67,128 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
       var tabArr:AppTableMaster[] = [];
       tabArr.push(AppTableMasterStore.item);
       
-      var table = XLSX.utils.json_to_sheet(tabArr);            
+      const table: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tabArr);
+      var wscols = [ {wch:5}, {wch:30}, {wch:20} ]; 
+      table["!cols"] = wscols;            
       XLSX.utils.book_append_sheet(wb, table, 'Table') 
       
       
+      AppConfigTypeStore.getList().then( (configTyps:any) => { 
 
-      AppColumnMasterStore.getColumnList(AppTableMasterStore.item.Id).then( (colList:any) => {
+         AppColumnMasterStore.getColumnList(AppTableMasterStore.item.Id).then( (colList:any) => {
+            
+            var colLstRes:AppColumnExport[] = []; 
          
-         var wscols = [
-            {wch: 6}, // "characters"
-            {wpx: 50}, // "pixels"
-            ,
-            {hidden: true} // hide column
-         ];
-        
-         
-         colList.forEach(function (col:any) {
-            col.TableID = AppTableMasterStore.item.Title;
+            debugger;
+            colList.forEach(function (col:any) {
+
+               var colRes = new AppColumnExport();
+               colRes.Title = col.Title;
+               if(col.Type){
+                  var v = ColumnDataType.find( u => u.Id === col.Type );
+                  if(v){
+                     colRes.Type = (v as any).value ? (v as any).value : ''; 
+                  }              
+               }
+               if(col.ConfigId){
+                  var v1:any =  configTyps.find( (u:any) => u.Id === col.ConfigId ); //?.Title
+                  if(v1){
+                     colRes.Config = (v1 as any).Title ? (v1 as any).Title : ''; 
+                  }
+               }
+               if(col.AttachmentConfig){
+                  var v2 = ColumnAttachmentType.find( u => u.Id === col.AttachmentConfig.toString() );
+                  if(v2){
+                     colRes.AttachmentConfig = (v2 as any).value ? (v2 as any).value : ''; 
+                  }
+                  //colRes.AttachmentConfig = '##'; 
+                  //col.AttachmentConfig; ColumnAttachmentType.find( u => u.Id === item.AttachmentConfig.toString() )
+
+               }
+                           
+               colLstRes.push(colRes);
+            });
+                     
+            AppStatusListStore.getStatusList(AppTableMasterStore.item.Id).then( (statusList:any) => {
+
+               const statList: XLSX.WorkSheet = XLSX.utils.json_to_sheet(statusList);      
+               var wscols = [ {wch:5}, {wch:20}, {wch:20}, {wch:20}, {wch:20} ]; 
+               statList["!cols"] = wscols;      
+               XLSX.utils.book_append_sheet(wb, statList, 'StatusList');
+               
+               const columnList: XLSX.WorkSheet  = XLSX.utils.json_to_sheet(colLstRes);  
+               var wscols = [ {wch:5}, {wch:20}, {wch:30}, {wch:20}, {wch:20}, {wch:15}, {wch:15}, {wch:15} ];                                              
+               columnList["!cols"] = wscols; 
+               XLSX.utils.book_append_sheet(wb, columnList, 'ColumnList');
+
+               const flowList: XLSX.WorkSheet  = XLSX.utils.json_to_sheet(AppFlowStore.tableFlows); 
+               var wscols = [ {wch:5}, {wch:20}, {wch:20} ];         
+               flowList["!cols"] = wscols;     
+               XLSX.utils.book_append_sheet(wb, flowList, 'FlowList');
+
+               var flows = AppFlowStore.tableFlows;      
+               if(flows.length == 0){
+                  XLSX.writeFile(wb, FileName, {bookType:'xlsx', type: 'binary'});
+               }
+               else{
+                  var couter = 0;         
+                  AppFlowStore.tableFlows.forEach(function (value) {
+                     AppActionStore.flowActions(value.Id).then( (actions:any) => {
+
+                        if(actions){
+                           var ActList:any[] = [];
+                           actions.forEach(function (act:any) {
+
+                              var actRes:AppExport = new AppExport();                        
+                              actRes.Order = act.Order;
+                              actRes.ActionType = act.ActionType;
+                              
+                              if(act.FromStatusList ){                              
+                                 var strFrom = "";   
+                                 act.FromStatusList.forEach(function (fromAct:any) {
+                                    strFrom += fromAct.Title + ",";
+                                 });   
+                                 actRes.FromStatus = strFrom;
+                              } 
+
+                              actRes.Action = act.Action;
+                              if(act.ToStatusId ){
+                                 actRes.ToStatus = statusList.filter( (x:any) => x.Id === act.ToStatusId )[0].Title;
+                              }
+                              actRes.WhenXml = act.WhenXml;
+                              actRes.ActionXml = act.ActionXml;                           
+
+                              if(act.InitStatus ){
+                                 actRes.InitStatus = "Yes";
+                              }
+                              else{
+                                 actRes.InitStatus = "No";
+                              }                                
+                              ActList.push(actRes);                                                 
+                           });
+                        
+                           const actionList: XLSX.WorkSheet  = XLSX.utils.json_to_sheet(ActList);  
+                           var wscols = [ {wch:5}, {wch:9}, {wch:8}, {wch:20}, {wch:20}, {wch:20}, {wch:50}, {wch:50} ];                                              
+                           actionList["!cols"] = wscols;        
+                           XLSX.utils.book_append_sheet(wb, actionList, value.Title);
+
+                        }
+
+                        
+
+                        couter++;
+                        if( couter == flows.length){
+                           XLSX.writeFile(wb, FileName, {bookType:'xlsx', type: 'binary'}); 
+                        }
+                     });               
+                  }); 
+               }
+               
+            })
+            
          });
 
-         AppStatusListStore.getStatusList(AppTableMasterStore.item.Id).then( (statusList:any) => {
-
-            var statList = XLSX.utils.json_to_sheet(statusList);            
-            XLSX.utils.book_append_sheet(wb, statList, 'StatusList');
-
-            var columnList = XLSX.utils.json_to_sheet(colList);            
-            XLSX.utils.book_append_sheet(wb, columnList, 'ColumnList');
-
-            var flowList = XLSX.utils.json_to_sheet(AppFlowStore.tableFlows);            
-            XLSX.utils.book_append_sheet(wb, flowList, 'FlowList');
-
-            var flows = AppFlowStore.tableFlows;      
-            if(flows.length == 0){
-               XLSX.writeFile(wb, FileName, {bookType:'xlsx', type: 'binary'});
-            }
-            else{
-               var couter = 0;         
-               AppFlowStore.tableFlows.forEach(function (value) {
-                  AppActionStore.flowActions(value.Id).then( (actions:any) => {
-
-                     //var actions = [{...actionsRes}];
-
-                     if(actions){
-                        var ActList:any[] = [];
-                        actions.forEach(function (act:any) {
-
-                           var actRes:AppExport = new AppExport(); //{...actRes}                          
-                           actRes.Order = act.Order;
-                           actRes.ActionType = act.ActionType;
-                           
-                           if(act.FromStatusList ){                              
-                              var strFrom = "";   
-                              act.FromStatusList.forEach(function (fromAct:any) {
-                                 strFrom += fromAct.Title + ",";
-                              });   
-                              actRes.FromStatus = strFrom;
-                           } 
-
-                           actRes.Action = act.Action;
-                           if(act.ToStatusId ){
-                              actRes.ToStatus = statusList.filter( (x:any) => x.Id === act.ToStatusId )[0].Title;
-                           }
-                           actRes.WhenXml = act.WhenXml;
-                           actRes.ActionXml = act.ActionXml;                           
-
-                           if(act.InitStatus ){
-                              actRes.InitStatus = "Yes";
-                           }
-                           else{
-                              actRes.InitStatus = "No";
-                           }                                
-                           ActList.push(actRes);                                                 
-                        });
-                       
-                        const actionList: XLSX.WorkSheet  = XLSX.utils.json_to_sheet(ActList);  
-                        var wscols = [
-                           {wch:5},
-                           {wch:8},
-                           {wch:8},
-                           {wch:10},
-                           {wch:15},
-                           {wch:15},
-                           {wch:50},
-                           {wch:50}
-                       ];
-                       
-                       //ws['!cols'] = wscols;  
-                        actionList["!cols"] = wscols;        
-                        XLSX.utils.book_append_sheet(wb, actionList, value.Title);
-
-                     }
-
-                     
-
-                     couter++;
-                     if( couter == flows.length){
-                        XLSX.writeFile(wb, FileName, {bookType:'xlsx', type: 'binary'}); 
-                     }
-                  });               
-               }); 
-            }
-            
-         })
-
-         
-
       });
-
 
      
 

@@ -34,6 +34,7 @@ export class AppAction implements IAppAction {
 
 export class AppExport	{
 	Order: number = 0;
+	FlowName: string = '';
 	ActionType: string = '';
 	InitStatus: string = '';
 	FromStatus : string = '';

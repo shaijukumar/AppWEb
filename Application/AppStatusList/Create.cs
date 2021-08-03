@@ -27,7 +27,7 @@ namespace Application._AppStatusList
             public CommandValidator()
             {
                 RuleFor(x => x.Title).NotEmpty();
-				
+                RuleFor(x => x.TableId).NotEmpty();				
             }
         }
 

@@ -20,6 +20,7 @@ const LeftNavBar: React.FC = () => {
         let act: AppApiAction = new AppApiAction()
         act.ActionId = 34;      
         ApiStore.ExecuteQuery(act).then( (res) => {  
+            if(res.length >0)
             setData(res.Result1.sort((a:AppNavigation,b:AppNavigation) => a.Order - b.Order));                          
         });             
     }, [ApiStore, ApiStore.ExecuteQuery])  

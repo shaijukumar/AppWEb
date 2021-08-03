@@ -27,3 +27,13 @@ export class AppColumnMaster implements IAppColumnMaster {
   }
 }
 
+export class AppColumnExport {
+	Order: number = 0;
+	Title: string = '';
+	Type: string = '';
+	Config:  string = '';
+	AttachmentConfig: string = ''
+}
+
+
+
