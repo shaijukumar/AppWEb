@@ -11,10 +11,10 @@ export const ActionConfig : {[key: string]: number} =
 {
 	ConfigCountries : 1,
 
-	NavigationFlowId : 11,
-	NavigationList : 34,
-	NavigationById : 35,    
-	NavigationTableID: 20,
+	NavigationFlowId : 1,
+	NavigationList : 1,
+	NavigationById : 7,    
+	NavigationTableID: 1,
 
 	EmployeeFlowId : 5,
 	EmployeeList : 19,
@@ -251,7 +251,7 @@ const DBFun = {
   Execute: (action: FormData) => agent.requests.postForm(`${IAppApiAPI}/TakeAction`, action),  
   ExecuteQuery: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Query`, action),    
   FileDownload: (action: IApiAction) => agent.requests.downloadPost(`${IAppApiAPI}/Attachment`, action),
-  ActionList: (FlowId: number, Id: number) =>  agent.requests.get(`${IAppApiAPI}/ActionList/${FlowId}?ItemId=${Id}`),
+  ActionList: (FlowId: number, Id: number, tableName: string, flowName: string) =>  agent.requests.get(`${IAppApiAPI}/ActionList/${FlowId}?itemId=${Id}&tableName=${tableName}&flowName=${flowName}&`),
   StatusList: (TableId: number)  =>  agent.requests.get(`${IAppApiAPI}/GetStatusList/${TableId}`),
   ConfigList: (type: number)  =>  agent.requests.get(`${IAppApiAPI}/GetConfigList/${type}`),
   UserList: ()  =>  agent.requests.get(`${IAppApiAPI}/GetUserList`),
@@ -400,9 +400,9 @@ export default class ApiImpl {
 		return formData;					
 	}
 	
-	updateActions = async (flowId: number, id: number, setActions: any, setError: any ) => {	
+	updateActions = async (id: number, tableName: string, flowName: string, setActions: any, setError: any ) => {	
 		try {  
-			await DBFun.ActionList(flowId, id).then( (res) => {             
+			await DBFun.ActionList(0, id, tableName, flowName).then( (res) => {             
 				if((res as any).errors){          
 					setError((res as any).errors.Error);                        
 				}
@@ -415,9 +415,9 @@ export default class ApiImpl {
 		}
 	}
 
-	getActions = async (flowId: number, id: number) => {		
+	getActions = async (flowId: number, id: number, tableName: string, flowName: string) => {		
 		try {      		 
-			return await DBFun.ActionList(flowId, id); 		  
+			return await DBFun.ActionList(flowId, id, tableName, flowName); 		  
 		} catch (error) {
 			return error;
 		}

@@ -54,8 +54,15 @@ const AppTableMasterList: React.FC = () => {
       
     };
 
+    const delay = (ms: number) => {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     class ExcelToJSON {
       
+      
+      
+
       parseExcel = function(file:any) {
        
         
@@ -291,26 +298,31 @@ const AppTableMasterList: React.FC = () => {
                 } )                              
               );
 
-              await Promise.all(
-                columnList.map( async (column:AppColumnMaster) => {
-                  column.TableID = tableObj.Id;
-                  const resObj = await AppColumnMasterStore.editItem(column);
+              var colCouter = 0;
+              if(columnList.length>0)
+                do{
+                  columnList[colCouter].TableID = tableObj.Id;
+                  const resObj = await AppColumnMasterStore.editItem(columnList[colCouter]);
                   if(!CheckError(resObj)) return;
-                  column.Id = resObj.Id;
-                } )                              
-              );
+                  columnList[colCouter].Id = resObj.Id;
+                  colCouter++;
+                }while(colCouter < columnList.length )
+
+              // await Promise.all(
+              //   columnList.map( async (column:AppColumnMaster) => {
+              //     column.TableID = tableObj.Id;
+              //     const resObj = await AppColumnMasterStore.editItem(column);
+              //     if(!CheckError(resObj)) return;
+              //     column.Id = resObj.Id;
+              //   } )                              
+              // );
               
               await Promise.all(
                 flowList.map( async (flow:AppFlow) => {
                   flow.TableId = tableObj.Id;
                   const resObj = await AppFlowStore.editItem(flow);
                   if(!CheckError(resObj)) return;
-                  flow.Id = resObj.Id;
-
-                  // actionList.forEach(function(sheetName) {
-                  //   //FlowId
-                  // });
-                  
+                  flow.Id = resObj.Id;                  
                 } )                              
               );
 
@@ -344,13 +356,16 @@ const AppTableMasterList: React.FC = () => {
                   }
 
                   //ToStatusId
-                  var stFind:any =  statusList.find( (u:any) => u.Title === actObj.ToStatus );
-                  if(stFind){
-                    action.ToStatusId = stFind.Id;
+                  if(actObj.ToStatus){
+                      var stFind:any =  statusList.find( (u:any) => u.Title === actObj.ToStatus );
+                      if(stFind){
+                        action.ToStatusId = stFind.Id;
+                      }
+                      else{
+                        AddError(`Invlaid ToStatus - ${actObj.ToStatus}`);
+                      }
                   }
-                  else{
-                    AddError(`Invlaid ToStatus - ${actObj.ToStatus}`);
-                  }
+                  
 
                   let FromStatusList : AppStatusList[] = [];
 
@@ -382,11 +397,10 @@ const AppTableMasterList: React.FC = () => {
                 setError( err );
                 return;
               }
-
-
-
-               
-              
+              else{
+                alert( "Updated" );                
+              }
+              AppTableMasterStore.getList(); 
               //var data1 =   await AppFlowStore.getFlowList(1); 
               debugger;
             
@@ -418,11 +432,6 @@ const AppTableMasterList: React.FC = () => {
         return true;
       }
     };
-
-
-
-   
-
 
     useEffect(() => {       
       AppTableMasterStore.getList();                  
@@ -464,10 +473,11 @@ const AppTableMasterList: React.FC = () => {
   
     return (
       <React.Fragment>   
-        <ErrorMessage message={error} />            
+        <ErrorMessage message={error} /> 
+                
         <div className={"tabcontainers1"}>
           <div className={"tabcontainers2"} >     
-            {AppTableMasterStore.itemList.length > 0  &&   
+            {AppTableMasterStore.itemList  &&   
             <MaterialTable                    
               title="Table List"
               data={AppTableMasterStore.itemList}

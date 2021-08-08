@@ -1,0 +1,21 @@
+Order	Title	StatusId	Path	Icon	UserAccessRoles
+1	Home	25	/UserProfile	home	1f1bdfcd-fddf-400b-bbff-46fc55698ad2
+2	User List	25	/userlist	person	d4064ebc-9cfe-4785-bfad-dff0bd73d2f5
+3	User Roles	26	/AppUserRoleMasterList	groups	d4064ebc-9cfe-4785-bfad-dff0bd73d2f5
+4	Table	26	/AppTableMasterList	view_column	"d4064ebc-9cfe-4785-bfad-dff0bd73d2f5,1f1bdfcd-fddf-400b-bbff-46fc55698ad2"
+5	Config List	26	/AppConfigTypeList	dns	d4064ebc-9cfe-4785-bfad-dff0bd73d2f5
+5	Navigation List	25	/Navigationlist	bookmark	d4064ebc-9cfe-4785-bfad-dff0bd73d2f5
+9	Admin Page	26	/AppAdminPage	settings_suggest	d4064ebc-9cfe-4785-bfad-dff0bd73d2f5
+11	11	25	11	11	d4064ebc-9cfe-4785-bfad-dff0bd73d2f5
+					
+					
+					
+					
+1	Home	Draft	/UserProfile	home	All Users
+2	User List	Draft	/userlist	person	Admin
+3	User Roles	Published	/AppUserRoleMasterList	groups	Admin
+4	Table	Published	/AppTableMasterList	view_column	"Admin, All Users"
+5	Config List	Published	/AppConfigTypeList	dns	Admin
+5	Navigation List	Draft	/Navigationlist	bookmark	Admin
+9	Admin Page	Published	/AppAdminPage	settings_suggest	Admin
+11	11	Draft	11	11	Admin

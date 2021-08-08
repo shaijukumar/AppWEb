@@ -53,7 +53,7 @@ const Login: React.FC = () => {
         </Typography>
 
         <Formik
-          initialValues={{ email: 'shaiju@test.com', password: 'Pa$$w0rd'}}
+          initialValues={{ email: 'admin@test.com', password: 'Pa$$w0rd'}}
           validationSchema={Yup.object({
               email: Yup.string().email('Invalid email address').required('Required'),
               password: Yup.string().required('Required')        

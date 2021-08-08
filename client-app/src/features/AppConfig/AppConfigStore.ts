@@ -57,12 +57,10 @@ export default class AppConfigStoreImpl {
     this.loading = true;
     try {               
       this.AppConfigList = await DBFun.AppConfigList(id);       
-      this.loading = false;                   
+      this.loading = false;      
+      return this.AppConfigList;             
     } catch (error) {
-      runInAction( () => {
-        this.loading = false;            
-        throw error;
-      });
+      return error;
     }
   }
 

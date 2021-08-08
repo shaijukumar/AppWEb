@@ -19,7 +19,7 @@ const MyCustomTxt: React.FC<CustomTxtProps> = ({ label, placeholder, type,requir
   const [field,meta , { setValue }] = useField<{}>(props);
 
   const onTextChange = (event: any) => {
-    debugger;
+    //debugger;
     //alert(event.target.value);
     setValue(event.target.value);
   }

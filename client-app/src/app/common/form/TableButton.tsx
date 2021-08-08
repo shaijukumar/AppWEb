@@ -24,8 +24,7 @@ const TableButton: React.FC<Parms> = ({ label,path, BackgroundColor, TextColor }
             padding: '10px',          
         },
       });
-
-
+     
     let history = useHistory();
     const classes = useStyles();
 

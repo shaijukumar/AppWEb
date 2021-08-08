@@ -47,7 +47,7 @@ const EmployeeEdit: React.FC = () => {
         if (id) { IdVal=Number(id); }
 
         setLoading(true);
-        ApiStore.updateActions(ActionConfig.EmployeeFlowId, IdVal, setActions, setError);
+        ApiStore.updateActions(IdVal,'', '', setActions, setError);
       
         ApiStore.getRoleList().then( resRoles => {
           setRoleList(resRoles);        

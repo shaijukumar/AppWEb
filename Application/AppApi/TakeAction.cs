@@ -37,7 +37,7 @@ namespace Application._AppApi
             public string Prop3 { get; set; }
             public string Prop4 { get; set; }
             public string Prop5 { get; set; } 
-        }        
+        }         
 
         public class CommandValidator : AbstractValidator<ActionCommand>
         {

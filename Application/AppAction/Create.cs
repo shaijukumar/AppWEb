@@ -73,9 +73,7 @@ namespace Application._AppAction
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = $"Invalid ActionXml, {ex.Message}." });
                 }
-
                
-
                 //ActionXml
                 var appAction = new AppAction
                 {                    
@@ -87,14 +85,11 @@ namespace Application._AppAction
 					FlowId  = request.FlowId,
 					InitStatus  = request.InitStatus,
 					TableId  = request.TableId,
-					ActionXml  = request.ActionXml,     
-                                   
+					ActionXml  = request.ActionXml,                                        
                 };
 
-                if( request.FromStatusList != null ){
-                
+                if( request.FromStatusList != null ){                
                     appAction.FromStatusList = new List<AppStatusList>();
-
                     foreach(var f in  request.FromStatusList){
                         var status = await _context.AppStatusLists
                         .Where( x => x.Id == f.Id )
@@ -105,7 +100,6 @@ namespace Application._AppAction
                         }
                     }
                 }
-
                 _context.AppActions.Add(appAction);                
                 
                 try{

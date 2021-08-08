@@ -189,6 +189,8 @@ namespace Persistence
                 }
             }
             
+            
+
             if (!roleManager.Roles.Any())
             {
                  if (!await roleManager.RoleExistsAsync( "Admin")) {
@@ -196,9 +198,12 @@ namespace Persistence
                     role.Name = "Admin";    
                     await roleManager.CreateAsync(role);   
 
-                    var user = await context.Users.FirstOrDefaultAsync( u => u.UserName == "Admin"  );                     
+                    var user = await context.Users.FirstOrDefaultAsync( u => u.UserName == "admin"  );                     
                     if (user != null){
                       await userManager.AddToRoleAsync(user, "Admin" );
+
+                      var success = await context.SaveChangesAsync() > 0;
+
                     }                                                                                               
                 } 
 
@@ -207,7 +212,7 @@ namespace Persistence
                     role.Name = "All Users";    
                     await roleManager.CreateAsync(role);   
 
-                    var user = await context.Users.FirstOrDefaultAsync( u => u.UserName == "Admin"  );                     
+                    var user = await context.Users.FirstOrDefaultAsync( u => u.UserName == "admin"  );                     
                     if (user != null){
                       await userManager.AddToRoleAsync(user, "All Users" );
                     }

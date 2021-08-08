@@ -42,7 +42,7 @@ namespace Application._AppConfig
             public async Task<List<AppConfigDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var appConfig = await _context.AppConfigs
-                    .Where(x => x.Type == request.Id).ToListAsync();
+                    .Where(x => x.ConfigTypeId == request.Id).ToListAsync();
 
                 return _mapper.Map<List<AppConfig>, List<AppConfigDto>>(appConfig);
                 

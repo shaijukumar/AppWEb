@@ -23,6 +23,8 @@ namespace Application._AppApi
         {
             public int FlowId { get; set; }
             public int ItemId { get; set; }  
+            public string TableName { get; set; }
+            public string FlowName { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, List<AppApiActionsDto>>
@@ -46,29 +48,67 @@ namespace Application._AppApi
                 List<AppAction> retAppActions = new List<AppAction>();
                 List<AppAction> appActions = new List<AppAction>();
                 AppData appData = new AppData();
-
+                
                 if(request.ItemId == 0){
-                    appActions = await _context.AppActions
+
+                    # region by FlowName & TableName
+                    if(request.FlowId == 0){
+
+                        appActions = await _context.AppActions
+                        .Where(
+                                x => x.FlowId ==  _context.AppFlows.Where(f => f.Title == request.FlowName ).FirstOrDefault().Id 
+                                &&
+                                x.TableId == _context.AppTableMasters.Where(t => t.Title == request.TableName).FirstOrDefault().Id
+                                && x.InitStatus == true )
+                        .ToListAsync();
+                    
+                        if(appActions == null){
+                            throw new RestException(HttpStatusCode.OK, new { Error = "Invalid appFlow : " + request.FlowName });
+                        }                    
+                    }
+                    else{
+                        appActions = await _context.AppActions
                         .Where(x => x.FlowId == request.FlowId && x.InitStatus == true  ).ToListAsync();
+                    }   
+                    #endregion                
                 }
                 else{
+
+                    # region by action id
+                    
                     appData = await _context.AppDatas
                             .Where(x => x.Id ==  request.ItemId ).FirstOrDefaultAsync(); 
 
                     if( appData == null ){
                         throw new RestException(HttpStatusCode.OK, new { Error = "Invalid ItemId" });
-                    }                                     
+                    }
 
-                    appActions = await _context.AppActions                                                
-                        .Where(x => x.FlowId == request.FlowId &&  x.FromStatusList.Any(s => s.Id ==  appData.StatusId )  ).ToListAsync();
-                                    
-                   
+                    if(request.FlowId == 0){
+
+                        appActions = await _context.AppActions
+                        .Where(
+                                x => x.FlowId ==  _context.AppFlows.Where(f => f.Title == request.FlowName ).FirstOrDefault().Id 
+                                &&
+                                x.TableId == _context.AppTableMasters.Where(t => t.Title == request.TableName).FirstOrDefault().Id 
+                                &&  x.FromStatusList.Any(s => s.Id ==  appData.StatusId )
+                                )
+                        .ToListAsync();
+                    
+                        if(appActions == null){
+                            throw new RestException(HttpStatusCode.OK, new { Error = "Invalid appFlow : " + request.FlowName });
+                        }
+                    }
+                    else{
+                        appActions = await _context.AppActions                                                
+                            .Where(x => x.FlowId == request.FlowId &&  x.FromStatusList.Any(s => s.Id ==  appData.StatusId )  ).ToListAsync();
+                    }  
+
+                    # endregion                                                                          
                 }
 
                 if( appActions == null ){
                     throw new RestException(HttpStatusCode.OK, new { Error = "Invalid FlowId : " + request.FlowId });
                 }
-
                 
                  #region When
 

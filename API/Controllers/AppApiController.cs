@@ -22,7 +22,7 @@ namespace API.Controllers
         // {
         //     return await Mediator.Send(new List.Query());
         // } 
-       
+        
         [HttpGet("{id}", Name = "UserList")]
         [Route("UserList")]
 		public async Task<ActionResult<List<UserDTO>>>  UserList( string Type = null, string Value = null)
@@ -33,9 +33,9 @@ namespace API.Controllers
 		//[HttpGet("{id}")]
         [HttpGet("{id}", Name = "ActionList")]
         [Route("[action]/{id}")]
-		public async Task<ActionResult<List<AppApiActionsDto>>>  ActionList(int id, int ItemId)
+		public async Task<ActionResult<List<AppApiActionsDto>>>  ActionList(int id, int itemId, string tableName, string flowName)
         {
-            return await Mediator.Send(new ActionList.Query { FlowId = id, ItemId = ItemId });
+            return await Mediator.Send(new ActionList.Query { FlowId = id, ItemId = itemId, TableName = tableName, FlowName = flowName }); 
         }
               
         [HttpPost("TakeAction")]

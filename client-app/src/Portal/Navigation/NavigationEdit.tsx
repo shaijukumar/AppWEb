@@ -30,12 +30,14 @@ const NavigationEdit: React.FC = () => {
     const [roles, setRoles] = useState<AppUserRoleMaster[]>();
     const ApiStore = useContext(ApiContext);
 
+    
+
     useEffect(() => {
         var IdVal =0;
         if (id) { IdVal=Number(id); }
 
         setLoading(true);
-        ApiStore.updateActions(ActionConfig.NavigationFlowId, IdVal, setActions, setError);
+        ApiStore.updateActions(IdVal,'Navigation','NavigationFlow', setActions, setError);
       
         ApiStore.getRoleList().then( resRoles => {
           setRoleList(resRoles);        

@@ -1,0 +1,111 @@
+﻿"Id","Order","Action","From Status","To Status","ActionType","WhenXml","ActionXml"
+5,0,"Save",,,"Action","<Access>
+  <Desc>Role : Admin</Desc>
+  <When>
+    <UserRoles>Admin</UserRoles>
+  </When>
+</Access>","<ActionList>
+  <Desc>Save as Draft</Desc>
+  <AppData
+    InPutParm=""Parm1"">
+    <col
+      req=""true"">Title</col>
+    <col
+      req=""true"">Path</col>
+    <col
+      req=""true"">Icon</col>
+    <col>Order</col>
+    <col>UserAccessRoles</col>
+  </AppData>
+</ActionList>"
+2,1,"Save",,,"Action","<Access>
+  <Desc>Role : Admin</Desc>
+  <When>
+    <UserRoles>Admin</UserRoles>
+  </When>
+</Access>","<ActionList>
+  <Desc>Save as Draft</Desc>
+  <AppData
+    InPutParm=""Parm1"">
+    <col
+      req=""true"">Title</col>
+    <col
+      req=""true"">Path</col>
+    <col
+      req=""true"">Icon</col>
+  </AppData>
+</ActionList>"
+3,2,"Publish",,,"Action","<Access>
+  <Desc>Role : Admin</Desc>
+  <When>
+    <UserRoles>Admin</UserRoles>
+  </When>
+</Access>","<ActionList>
+  <Desc>Save as Draft</Desc>
+  <AppData
+    InPutParm=""Parm1"">
+    <col
+      req=""true"">Title</col>
+    <col
+      req=""true"">Path</col>
+    <col
+      req=""true"">Icon</col>
+  </AppData>
+</ActionList>"
+4,3,"Make Draft",,,"Action","<Access>
+  <Desc>Role : Admin</Desc>
+  <When>
+    <UserRoles>Admin</UserRoles>
+  </When>
+</Access>","<ActionList>
+  <Desc>Save as Draft</Desc>
+  <AppData
+    InPutParm=""Parm1"">
+    <col
+      req=""true"">Title</col>
+    <col
+      req=""true"">Path</col>
+    <col
+      req=""true"">Icon</col>
+  </AppData>
+</ActionList>"
+1,4,"GetNavigationList",,,"Query","","<ActionList>
+  <Desc>Current user in UserAccessRoles</Desc>
+  <Select
+    history=""true""
+    attachment=""true"">*</Select>
+  <Where>
+    <DataComarison
+      Field=""UserAccessRoles""
+      Operation=""InCurrenUserOrGroup""
+      UserRolesToCheck=""All Users,Admin"" />
+  </Where>
+</ActionList>"
+7,5,"Navigation by Id",,,"Query","<ActionList>
+  <Desc>Id: Parm1</Desc>
+  <Select
+    history=""true""
+    attachment=""true"">*</Select>
+  <Where>
+    <And>
+      <DataComarison
+        Field=""Id""
+        Operation=""Eq""
+        ValueParm=""Parm1"" />
+      <DataComarison
+        Field=""UserAccessRoles""
+        Operation=""InCurrenUserOrGroup""
+        UserRolesToCheck=""All Users,Admin"" />
+    </And>
+  </Where>
+</ActionList>",""
+6,6,"Delete",,,"Action","<Access>
+  <Desc>Role : Admin</Desc>
+  <When>
+    <UserRoles>Admin</UserRoles>
+  </When>
+</Access>","<ActionList>
+  <Desc>Delete Item</Desc>
+  <DeleteItem
+    IdParm=""Parm1""></DeleteItem>
+</ActionList>"

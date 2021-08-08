@@ -65,8 +65,10 @@ import LeftNavBar from '../../Portal/Navigation/LeftNavBar';
 import EmployeeList from '../../Portal/Employee/EmployeeList';
 import EmployeeEdit from '../../Portal/Employee/EmployeeEdit';
 
+import TestOneList from '../../Portal/TestOne/TestOneList';
+import TestOneEdit from '../../Portal/TestOne/TestOneEdit';
 //##FeatureImport##"
-
+  
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -293,16 +295,18 @@ const App = () => {
 
           <Route path='/NavigationList' component={NavigationList}/>
           <Route path={['/NavigationEdit/:id', '/NavigationEdit']} component={NavigationEdit} />
-          
-          
-          {/*##Navigation##*/}
-          
+
+
+					<Route path='/TestOneList' component={TestOneList} />
+					<Route  path={['/TestOneEdit/:id', '/TestOneEdit/']} component={TestOneEdit} />
+					{/*##Navigation##*/} 
+           
           <div>
             <Typography variant="body2" color="textSecondary" align="center">              
               {'Copyright © '}Appweb {new Date().getFullYear()} {'.'}
             </Typography>
           </div>
-        </Container>
+        </Container> 
       </main>                             
       {/* <NavBar/> */}            
     </div>
@@ -310,6 +314,12 @@ const App = () => {
 }; 
 
 export default observer(App);
+
+
+
+
+
+
 
 
 

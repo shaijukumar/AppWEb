@@ -24,19 +24,21 @@ const AppConfigTypeEdit: React.FC = () => {
   
   useEffect(() => {
 
-    AppConfigTypeStore.loadItem(Number(id));
+    //AppConfigTypeStore.loadItem(Number(id));
     if (id) {
-      AppConfigStore.getConfigList(Number(id)); 
+     
       AppConfigTypeStore.loadItem(Number(id)).then((val) => {
-        setItem(val as any);     
-        setLoading(false);   
+        setItem(val as any);    
+        AppConfigStore.getConfigList(Number(id)).then( (configList) => {
+          setLoading(false);   
+        })        
       });
     } else {
       setItem(new AppConfigType()); 
       setLoading(false);     
     }
     
-  }, [id, AppConfigTypeStore, AppConfigTypeStore.loadItem, AppConfigStore]);
+  }, [id, AppConfigTypeStore, AppConfigTypeStore.loadItem, AppConfigStore, setItem]);
 
   const onItemSubmit = (values: any) => {    
     setLoading(true);
