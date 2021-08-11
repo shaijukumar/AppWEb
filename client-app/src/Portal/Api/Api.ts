@@ -411,7 +411,7 @@ export default class ApiImpl {
 		return formData;					
 	}
 	
-	updateActions = async (id: number, tableName: string, flowName: string, setActions: any, setError: any ) => {	
+	updateActions = async (id: number, tableName: string, flowName: string, setActions: any, setError: any ) => {			
 		try {  
 			await DBFun.ActionList(0, id, tableName, flowName).then( (res) => {             
 				if((res as any).errors){          
@@ -419,10 +419,10 @@ export default class ApiImpl {
 				}
 				else{
 					setActions(res);
-				}
+				}				
 			});
 		} catch (error) {
-			setError("Problem in updateActions."); 
+			setError("Problem in updateActions."); 			
 		}
 	}
 
@@ -450,7 +450,8 @@ export default class ApiImpl {
 	}
 	//(): Promise<bool>
 
-	LoadItem = async (ActionUniqName: string, ItemId: string, setActions: any, setError: any ) : Promise<any> => {	
+	LoadItem = async (ActionUniqName: string, ItemId: string, setActions: any, setItem: any, setError: any ) : Promise<any> => {	
+		
 		let act: AppApiAction = new AppApiAction()
         //act.ActionId =ActionId;   
 		act.ActionUniqName =ActionUniqName;   
@@ -470,18 +471,19 @@ export default class ApiImpl {
 					
 					if(res.Actions[0]){
 						ret = res.Result1[0];
+						setItem(ret);						
 					}
 					else{
 						setError("No Data");
 						ret =  false;
 					}															
-				}                              
+				}				                        
 			});  		   
 		  } catch (error) {
 			setError("error in LoadItem");
-			ret =  false;
-		  }	
-		  return ret;
+			ret =  false;			   
+		}	
+		return ret;
 	}
 
 

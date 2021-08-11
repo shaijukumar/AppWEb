@@ -36,43 +36,35 @@ const TestOneEdit: React.FC = () => {
 
 
     useEffect(() => {
-      debugger;
-        var IdVal =0;
-        if (id) { IdVal=Number(id); }
-
-        setLoading(true);
-              
+        //debugger;
+        var IdVal =0;       
+        setLoading(true);              
         ApiStore.getRoleList().then( resRoles => {                     
-          if(id){           
-            ApiStore.LoadItem("TestOneNavigationById", id, setActions, setError).then( res => {              
-              if(res){                  
-                setItem(res);                                                                        
-              }
+          if(id){     
+            IdVal = Number(id);      
+            ApiStore.LoadItem("TestOneNavigationById", id, setActions, setItem, setError).then( res => {              
               setLoading(false);   
             });              
           }
           else{ 
-              ApiStore.updateActions(IdVal, 'TestOne','ActionFlow',setActions, setError);
+              ApiStore.updateActions(IdVal, 'TestOne','ActionFlow', setActions, setError);
               setItem(new TestOne()); 
               setLoading(false);
           }
         });
-
     },[id, ApiStore, ApiStore.updateActions, ApiStore.getRoleList, ApiStore.LoadItem, setItem ]);
 
     const onItemSubmit = (values: any) => {
-
+      debugger;
         let formData = new FormData();
-        formData = ApiStore.updateAttachments(formData, values.Passport); 
-       
         formData.append('ActionId', actionId.toString() ); 
         formData.append('Parm1', JSON.stringify(values) );
         formData.append('ItemId',  values.Id );
-
+                
         ApiStore.ExecuteAction(formData, setError).then( (res) => {    
             debugger;        
             if(res){
-              history.push('/EmployeeList');
+              history.push('/TestOneList');
             }
         });
     }
@@ -93,17 +85,8 @@ const TestOneEdit: React.FC = () => {
 	              Order: Yup.string().required().min(1).label('Order'),	               
               })}
             onSubmit={onItemSubmit}
-          > 
-            
-            <Form >      
-                    
-                {/* <MyCheckBox name="IsActive" label="Is Active" type="boolean"  />
-                <MyCustomTxt name="Name" label="Name" type="text" required={true} width="300px"  />
-                <MyDatePicker name="DOB" label="DOB" required={false} width="300px" />
-                <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" />                 
-                <MyCurrencyInput name="Salary" label="Salary"  width="300px" CurrecySymbol="AED" />                              
-                <MyAttachment downloadActionID={ActionConfig.EmployeePassportDownload} multipleFile={false} name="Passport" label="Upload Passport"  /> */}
-                
+          >             
+            <Form >                                          
 								<MyCustomTxt name='Title' label='Title' required={true} type="text" autoFocus={true} />
 								<MyCustomTxt name='Order' label='Order' required={true} type="number" />
 								<MyCheckBox name='IsActive' label='IsActive'   />
@@ -119,6 +102,7 @@ const TestOneEdit: React.FC = () => {
                     ))}
                     <Button onClick={ () => { history.push('/TestOneList');  }}>Back</Button>                   
                 </ButtonGroup>
+
             </Form>                
         </Formik>            
         </Container> 

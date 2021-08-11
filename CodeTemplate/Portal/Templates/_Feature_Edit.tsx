@@ -29,27 +29,47 @@ const _Feature_Edit: React.FC = () => {
     const ApiStore = useContext(ApiContext);
 
 
-    useEffect(() => {
-        var IdVal =0;
-        if (id) { IdVal=Number(id); }
-
-        setLoading(true);
-        ApiStore.updateActions(3, IdVal, setActions, setError);
+    // useEffect(() => {
+    //     var IdVal =0;        
+    //     setLoading(true);
+    //     ApiStore.updateActions(3, IdVal, setActions, setError);
       
-        ApiStore.getRoleList().then( resRoles => {                     
-          if(id){           
-            ApiStore.LoadItem(18,id, setError).then( res => {              
-              if(res){                  
-                setItem(res);                                                                        
-              }
-              setLoading(false);   
-            });              
-          }
-          else{ 
-              setItem(new _Feature_()); 
-              setLoading(false);
-          }
-        });
+    //     ApiStore.getRoleList().then( resRoles => {                     
+    //       if(id){   
+    //         IdVal=Number(id);        
+    //         ApiStore.LoadItem(18,id, setError).then( res => {              
+    //           if(res){                  
+    //             setItem(res);                                                                        
+    //           }
+    //           setLoading(false);   
+    //         });              
+    //       }
+    //       else{ 
+    //           setItem(new _Feature_()); 
+    //           setLoading(false);
+    //       }
+    //     });
+
+    // },[id, ApiStore, ApiStore.updateActions, ApiStore.getRoleList, ApiStore.LoadItem, setItem ]);
+
+    useEffect(() => {
+
+        var IdVal =0;
+       
+        setLoading(true);
+              
+        if(id){     
+          IdVal = Number(id);      
+          ApiStore.LoadItem("Get_Feature_ById", id, setActions, setError).then( res => {              
+            if(res){  setItem(res); }
+            setLoading(false);   
+          });              
+        }
+        else{ 
+            ApiStore.updateActions(IdVal, '_Feature_','ActionFlow',setActions, setError);
+            setItem(new _Feature_()); 
+            setLoading(false);
+        }
 
     },[id, ApiStore, ApiStore.updateActions, ApiStore.getRoleList, ApiStore.LoadItem, setItem ]);
 
@@ -65,7 +85,7 @@ const _Feature_Edit: React.FC = () => {
         ApiStore.ExecuteAction(formData, setError).then( (res) => {    
             debugger;        
             if(res){
-              history.push('/EmployeeList');
+              history.push('/_Feature_List');
             }
         });
     }

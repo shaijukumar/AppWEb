@@ -53,10 +53,9 @@ const EmployeeEdit: React.FC = () => {
           setRoleList(resRoles);        
           
           if(id){            
-            ApiStore.LoadItem("ActionConfig.EmployeeById",id, setActions, setError).then( res => {              
+            ApiStore.LoadItem("ActionConfig.EmployeeById",id, setActions, setItem, setError).then( res => {              
               if(res){
-                //debugger;
-  
+                //debugger;  
                 setItem(res);
                 var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);  
 

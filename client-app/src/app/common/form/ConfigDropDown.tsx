@@ -22,7 +22,7 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configType, lab
 
 
     useEffect(() => {
-      debugger;
+      //debugger;
       ApiStore.getConfigList(configType, setConfigList).then( res => { 
         
         if(field.value && (field.value as any).length > 0){

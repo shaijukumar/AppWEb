@@ -35,7 +35,7 @@ const NavigationEdit: React.FC = () => {
     useEffect(() => {
         var IdVal =0;
         if (id) { IdVal=Number(id); }
-
+debugger;
         setLoading(true);
         ApiStore.updateActions(IdVal,'Navigation','NavigationFlow', setActions, setError);
       
@@ -43,7 +43,7 @@ const NavigationEdit: React.FC = () => {
           setRoleList(resRoles);        
           
           if(id){            
-            ApiStore.LoadItem("NavigationNavigationById",id, setActions, setError).then( res => {              
+            ApiStore.LoadItem("NavigationNavigationById",id, setActions, setItem, setError).then( res => {              
               if(res){
                 setItem(res);
                 var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);                    
@@ -109,8 +109,9 @@ const NavigationEdit: React.FC = () => {
                 getOptionLabel={(option:AppUserRoleMaster) => option.Name}                  
                 freeSolo
                 renderTags={(value, getTagProps) =>
+
                   value.map((option:any, index) => (
-                    roles  && <Chip variant="outlined" label={option.Name} {...getTagProps({ index })} /> 
+                    <Chip variant="outlined" label={option.Name} {...getTagProps({ index })} />  
                   ))
                 }
                 renderInput={(params) => (

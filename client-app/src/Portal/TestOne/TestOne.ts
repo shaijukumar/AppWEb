@@ -2,6 +2,7 @@ import { IAttachment } from '../../app/common/form/MyAttachment';
 import { IAppConfig } from '../Api/Api';
 
 export interface ITestOne {
+	Id: number
 	Title: string
 	Order: number
 	IsActive: boolean
@@ -12,6 +13,7 @@ export interface ITestOne {
 }
 
 export class TestOne implements ITestOne {
+	Id: number = 0;
 	Title: string = '';
 	Order: number = 0;
 	IsActive: boolean = false;
