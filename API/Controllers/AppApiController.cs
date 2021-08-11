@@ -30,14 +30,21 @@ namespace API.Controllers
             return await Mediator.Send(new AppApiUser.Query { Type = Type, Value = Value});
         }
 
+        [HttpGet]
+        [Route("AppAllActionList")]
+		public async  Task<ActionResult<List<AppApiActionsDto>>> AppAllActionList()
+        {
+            return await Mediator.Send(new ActionList.Query { AllActions = true }); 
+        }
+
 		//[HttpGet("{id}")]
         [HttpGet("{id}", Name = "ActionList")]
         [Route("[action]/{id}")]
 		public async Task<ActionResult<List<AppApiActionsDto>>>  ActionList(int id, int itemId, string tableName, string flowName)
         {
-            return await Mediator.Send(new ActionList.Query { FlowId = id, ItemId = itemId, TableName = tableName, FlowName = flowName }); 
+            return await Mediator.Send(new ActionList.Query { AllActions = false, FlowId = id, ItemId = itemId, TableName = tableName, FlowName = flowName }); 
         }
-              
+        
         [HttpPost("TakeAction")]
 		public async Task<Dictionary<string, List<object>>> TakeAction([FromForm]ActionCommand command)
         {
@@ -57,17 +64,17 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetStatusList")]
-        [Route("GetStatusList/{id}")]
-		public async Task<ActionResult<List<AppStatusListDto>>>  GetStatusList(int id)
+        [Route("GetStatusList/{TableName}")]
+		public async Task<ActionResult<List<AppStatusListDto>>>  GetStatusList(string tableName)
         {
-            return await Mediator.Send(new DataStatusList.Query{Id = id} );
+            return await Mediator.Send(new DataStatusList.Query{TableName = tableName} );
         }
 
         [HttpGet("{id}", Name = "GetConfigList")]
-        [Route("GetConfigList/{id}")]
-		public async Task<ActionResult<List<AppConfigDto>>>  GetConfigList(int id)
+        [Route("GetConfigList/{configType}")]
+		public async Task<ActionResult<List<AppConfigDto>>>  GetConfigList(string configType)
         {
-            return await Mediator.Send(new DataConfigList.Query{Id = id} );
+            return await Mediator.Send(new DataConfigList.Query{ConfigType = configType} );
         }
 
         [HttpGet(Name = "GetRoleList")]

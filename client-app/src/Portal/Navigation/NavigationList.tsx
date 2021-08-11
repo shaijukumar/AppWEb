@@ -25,11 +25,11 @@ const NavigationList: React.FC = () => {
             setRoleList(res);
         })
 
-        ApiStore.getStatusList(ActionConfig.NavigationTableID).then( res => {
+        ApiStore.getStatusList("Navigation").then( res => {
             setStausList(res);
         })
 
-        ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError );
+        ApiStore.LoadDataList("NavigationGetNavigationList", setData, setLoading, setError );
  
         
     },[ApiStore, ApiStore.LoadDataList]);
@@ -140,7 +140,7 @@ const NavigationList: React.FC = () => {
                 icon: (values: any) => { return <TableButton  label="Refresh"  /> },
                 tooltip: 'Refresh',
                 isFreeAction: true, 
-                onClick: (event:any) =>{  ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError ); },                                     
+                onClick: (event:any) =>{  ApiStore.LoadDataList("NavigationGetNavigationList", setData, setLoading, setError ); },                                     
             },
             {          
                 icon: (values: any) => { 

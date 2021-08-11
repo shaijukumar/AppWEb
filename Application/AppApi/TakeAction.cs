@@ -30,7 +30,7 @@ namespace Application._AppApi
         public class ApiAttachment
         {
             public IFormFile File { get; set; }
-            public string FileName { get; set; }
+            public string FileName { get; set; }                                   
             public string Path { get; set; }
             public string Prop1 { get; set; }
             public string Prop2 { get; set; }
@@ -65,15 +65,19 @@ namespace Application._AppApi
             {
                                      
                 # region get apiDetails and check security
-
-                ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );
+                //string tableName, string flowName
+                ApiDetails apiDetails = new ApiDetails(request.ActionUniqName, request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );
 
                 try{
-                    apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );                     
-                } 
+                    apiDetails =  await  GetApiDetails.Execute(request.ActionUniqName, request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager );                     
+                     if(request.ActionId == 0){
+                        request.ActionId = apiDetails.appAction.Id;
+                        //apiDetails.appAction.FlowId
+                     }
+                }
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
-                } 
+                }
               
                 # endregion get apiDetails and check security
 
@@ -88,7 +92,7 @@ namespace Application._AppApi
                 if( apiDetails.appAction.ActionType == "Query" )
                 {          
                     try{
-                        res.Result =  await  ApiQuery.ExecuteQuery(apiDetails, request);
+                        res.Result =  await ApiQuery.ExecuteQuery(apiDetails, request);
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
@@ -101,8 +105,7 @@ namespace Application._AppApi
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });
-                    }  
-                                       
+                    }                                         
                 }
 
                 return res.Result;                             

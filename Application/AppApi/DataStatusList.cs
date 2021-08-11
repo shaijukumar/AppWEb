@@ -22,7 +22,7 @@ namespace Application._AppApi
     public class DataStatusList 
     {
         public class Query : IRequest<List<AppStatusListDto>> {
-             public int Id { get; set; }
+             public string TableName { get; set; }
          }
 
         public class Handler : IRequestHandler<Query, List<AppStatusListDto>>
@@ -44,7 +44,7 @@ namespace Application._AppApi
             public async Task<List<AppStatusListDto>> Handle(Query request, CancellationToken cancellationToken)
             {        
                  var appStatusList = await _context.AppStatusLists
-                    .Where(x => x.TableId == request.Id).ToListAsync();
+                    .Where(x => x.TableId == _context.AppTableMasters.Where(t => t.Title == request.TableName).FirstOrDefault().Id ).ToListAsync();
                     					
                 return _mapper.Map<List<AppStatusList>, List<AppStatusListDto>>(appStatusList);
             }

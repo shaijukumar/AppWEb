@@ -9,7 +9,7 @@ import { Attachment } from "../../app/common/form/MyAttachment";
 
 export const ActionConfig : {[key: string]: number} = 
 {
-	ConfigCountries : 1,
+	ConfigCountries : 3,
 
 	NavigationFlowId : 1,
 	NavigationList : 1,
@@ -40,7 +40,7 @@ export class AppApi implements IAppApi {
   }
 }
 
-export interface IApiAction {
+export interface IApiAction {	
 	ActionId : number 
 	ItemId : number
 	ReturnFlow : string 
@@ -58,8 +58,10 @@ export interface IApiAction {
 }
  
 export class AppApiAction implements IApiAction {
+	ActionUniqName: string = '';
 	ActionId : number = 0;
 	ItemId : number = 0;
+	ReturnActions : boolean = false;
 	ReturnFlow : string = '';
 	Parm1 : string = '';
 	Parm2 : string = '';
@@ -180,7 +182,8 @@ export interface IAppConfig {
 	Title: string
 	Order:number
 	// Type: number
-	ConfigTypeId : number;
+	ConfigTypeId : number;	
+	ConfigType: string;
 	Det1: string
 	Det2: string
 	Det3: string
@@ -195,6 +198,7 @@ export class AppConfig implements IAppConfig {
 	Order:number = 0;
 	// Type: number = 0;
 	ConfigTypeId: number = 0;
+	ConfigType: string = '';
 	Det1: string = '';
 	Det2: string = '';
 	Det3: string = '';
@@ -248,16 +252,19 @@ export class History implements IHistory {
 const IAppApiAPI = "/AppApi";
 
 const DBFun = { 
-  Execute: (action: FormData) => agent.requests.postForm(`${IAppApiAPI}/TakeAction`, action),  
+  
   ExecuteQuery: (action: IApiAction) => agent.requests.post(`${IAppApiAPI}/Query`, action),    
   FileDownload: (action: IApiAction) => agent.requests.downloadPost(`${IAppApiAPI}/Attachment`, action),
+
+  AppAllActionList: ()  =>  agent.requests.get(`${IAppApiAPI}/AppAllActionList`),	
+  Execute: (action: FormData) => agent.requests.postForm(`${IAppApiAPI}/TakeAction`, action),  
+  
   ActionList: (FlowId: number, Id: number, tableName: string, flowName: string) =>  agent.requests.get(`${IAppApiAPI}/ActionList/${FlowId}?itemId=${Id}&tableName=${tableName}&flowName=${flowName}&`),
-  StatusList: (TableId: number)  =>  agent.requests.get(`${IAppApiAPI}/GetStatusList/${TableId}`),
-  ConfigList: (type: number)  =>  agent.requests.get(`${IAppApiAPI}/GetConfigList/${type}`),
+  StatusList: (TableName: string)  =>  agent.requests.get(`${IAppApiAPI}/GetStatusList/${TableName}`),
+  ConfigList: (configType: string)  =>  agent.requests.get(`${IAppApiAPI}/GetConfigList/${configType}`),
   UserList: ()  =>  agent.requests.get(`${IAppApiAPI}/GetUserList`),
   RoleList: ()  =>  agent.requests.get(`${IAppApiAPI}/GetRoleList`),
   
-
   list: (): Promise<any[]> => agent.requests.get(IAppApiAPI),
   details: (Id: number) => agent.requests.get(`${IAppApiAPI}/${Id}`),
   create: (item: any) => agent.requests.post(IAppApiAPI, item),
@@ -266,19 +273,23 @@ const DBFun = {
 };
 
 export default class ApiImpl {	
-
+	AllActionList : IApiAction[] = [];
 	configList: IAppConfig[] = [];
 	roleList: IAppUserRoleMaster[] = [];
 	userList: IAppUser[] = [];
 	constructor() {
 		makeObservable(this, {
+			AllActionList: observable,
 			configList: observable,	
 			roleList: observable,	
 			userList: observable,	
 		});
-	  }
+	}
 
-
+	updateAllActionList = async () => {
+		this.AllActionList = await DBFun.AppAllActionList(); 
+	}
+	
 	rolesFromArray(rolesList: AppUserRoleMaster[], strRoleArray: string) : AppUserRoleMaster[] {
 
 		let roles : AppUserRoleMaster[] = [];
@@ -311,9 +322,9 @@ export default class ApiImpl {
 		return strRoleNames;
 	}
 	
-	getStatusList = async (id: number) => {		
+	getStatusList = async (TableName: string) => {		
 		try {      		 
-			return await DBFun.StatusList(id); 		  
+			return await DBFun.StatusList(TableName); 		  
 		} catch (error) {
 			return error;
 		}
@@ -359,13 +370,13 @@ export default class ApiImpl {
 		
 	}
 
-	getConfigList = async (id: number, setData:any) => {
+	getConfigList = async (configType: string, setData:any) => {
 		//debugger;		
 		try {      		 			
-			var res = this.configList.filter(  x => x.ConfigTypeId === id )
+			var res = this.configList.filter(  x => x.ConfigType === configType )
 
 			if(res.length === 0){
-				res = await DBFun.ConfigList(id)
+				res = await DBFun.ConfigList(configType)
 				this.configList = [...this.configList, ...res]
 			}						
 			setData(res);
@@ -422,21 +433,42 @@ export default class ApiImpl {
 			return error;
 		}
 	}
+
+	getActionsByTitle = async (id: number, tableName: string, flowName: string) => {		
+
+		if(this.AllActionList.length == 0)
+			this.AllActionList = await DBFun.AppAllActionList(); 
+
+		
+
+		var flowId = 0;
+		try {      		 
+			return await DBFun.ActionList(flowId, id, '', ''); 		  
+		} catch (error) {
+			return error;
+		}
+	}
 	//(): Promise<bool>
 
-	LoadItem = async (ActionId: number, ItemId: string, setError: any ) : Promise<any> => {	
+	LoadItem = async (ActionUniqName: string, ItemId: string, setActions: any, setError: any ) : Promise<any> => {	
 		let act: AppApiAction = new AppApiAction()
-        act.ActionId =ActionId;    
+        //act.ActionId =ActionId;   
+		act.ActionUniqName =ActionUniqName;   
 		act.Parm1 = ItemId;
+		act.ReturnActions = true;
 		var ret = null;
 		try {        			 
 			await DBFun.ExecuteQuery(act).then((res) => {  
 				if((res as any).errors){          
-					setError((res as any).errors.Error); 					
+					setError((res as any).errors.Error); 										
 					ret = res;                   
 				}
 				else{
-					if(res.Result1[0]){
+					if(res.Actions){
+						setActions(res.Actions)
+					}
+					
+					if(res.Actions[0]){
 						ret = res.Result1[0];
 					}
 					else{
@@ -453,10 +485,11 @@ export default class ApiImpl {
 	}
 
 
-	LoadDataList = async (ActionId: number, setData:any, setLoading: any, setError: any ) => {	
+	LoadDataList = async (ActionUniqName: string, setData:any, setLoading: any, setError: any ) => {	
 		
 		let act: AppApiAction = new AppApiAction()
-        act.ActionId =ActionId;    
+        //act.ActionId =ActionId;
+		act.ActionUniqName =ActionUniqName;    
 		
 		try {        			 
 			await DBFun.ExecuteQuery(act).then((res) => {  

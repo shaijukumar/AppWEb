@@ -10,6 +10,7 @@ using Persistence;
 public class ApiDetails
 {
     public int ActionId { get; set; }
+    public string ActionUniqName { get; set; }
     public int ItemId { get; set; }            
     public string CurrentUserId { get; set; } 
     public AppAction appAction { get; set; }
@@ -20,7 +21,8 @@ public class ApiDetails
     public UserManager<AppUser> _userManager { get; set; }
 
         
-    public ApiDetails(int ActionId , int ItemId, DataContext _context, string CurrentUserId, UserManager<AppUser> _userManager){
+    public ApiDetails(string ActionUniqName, int ActionId , int ItemId, DataContext _context, string CurrentUserId, UserManager<AppUser> _userManager){
+       this.ActionUniqName = ActionUniqName;
        this.ActionId = ActionId;
        this.ItemId = ItemId;
        this._context = _context;

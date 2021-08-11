@@ -53,7 +53,7 @@ const EmployeeEdit: React.FC = () => {
           setRoleList(resRoles);        
           
           if(id){            
-            ApiStore.LoadItem(ActionConfig.EmployeeById,id, setError).then( res => {              
+            ApiStore.LoadItem("ActionConfig.EmployeeById",id, setActions, setError).then( res => {              
               if(res){
                 //debugger;
   
@@ -142,7 +142,7 @@ const EmployeeEdit: React.FC = () => {
                 <MyCheckBox name="IsActive" label="Is Active"  />
                 <MyCustomTxt name="Name" label="Name" type="text" required={true} width="300px"  />
                 <MyDatePicker name="DOB" label="DOB" required={false} width="300px" />
-                <ConfigDropDown configId={ActionConfig.ConfigCountries} name="Country" label="Country" width="300px" /> 
+                <ConfigDropDown configType="Countries" name="Country" label="Country" width="300px" /> 
                 {/* <MyCustomTxt name="Salary" label="Salary1" type="number" required={false} width="300px"  onChange={onTextChange}/>  */}
                 <MyCurrencyInput name="Salary" label="Salary"  width="300px" CurrecySymbol="AED" />               
                 <UserSelect name="Manager" label="Manager" width="300px"  />

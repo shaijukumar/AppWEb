@@ -2,6 +2,7 @@ import { AppStatusList } from "../AppStatusList/AppStatusList";
 
 export interface IAppAction {
 	Id: number
+	UniqName: string
 	Order: number
 	Action: string
 	ActionType: string	
@@ -16,6 +17,7 @@ export interface IAppAction {
 
 export class AppAction implements IAppAction {
 	Id: number = 0;
+	UniqName: string = '';
 	Order: number = 0;
 	Action: string = '';
 	FromStatusList : AppStatusList[] = [];
@@ -33,6 +35,7 @@ export class AppAction implements IAppAction {
 }
 
 export class AppExport	{
+	UniqName: string = '';
 	Order: number = 0;
 	FlowName: string = '';
 	ActionType: string = '';
@@ -41,7 +44,6 @@ export class AppExport	{
 	Action: string = '';		
 	ToStatus: string = '';
 	WhenXml: string = '';
-	ActionXml: string = '';
-  
+	ActionXml: string = '';  
 }
 	

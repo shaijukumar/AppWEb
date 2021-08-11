@@ -41,11 +41,10 @@ const TestOneEdit: React.FC = () => {
         if (id) { IdVal=Number(id); }
 
         setLoading(true);
-        ApiStore.updateActions(IdVal, 'TestOne','ActionFlow',setActions, setError);
-      
+              
         ApiStore.getRoleList().then( resRoles => {                     
           if(id){           
-            ApiStore.LoadItem(18,id, setError).then( res => {              
+            ApiStore.LoadItem("TestOneNavigationById", id, setActions, setError).then( res => {              
               if(res){                  
                 setItem(res);                                                                        
               }
@@ -53,6 +52,7 @@ const TestOneEdit: React.FC = () => {
             });              
           }
           else{ 
+              ApiStore.updateActions(IdVal, 'TestOne','ActionFlow',setActions, setError);
               setItem(new TestOne()); 
               setLoading(false);
           }
@@ -90,8 +90,7 @@ const TestOneEdit: React.FC = () => {
               initialValues={item}
               validationSchema={Yup.object({
                 //Title: Yup.string().required().min(1).label('Title'),
-	Order: Yup.string().required().min(1).label('Order'),
-	               
+	              Order: Yup.string().required().min(1).label('Order'),	               
               })}
             onSubmit={onItemSubmit}
           > 
@@ -110,7 +109,7 @@ const TestOneEdit: React.FC = () => {
 								<MyCheckBox name='IsActive' label='IsActive'   />
 								<MyDatePicker name='DOB' label='DOB'   />
 								<MyAttachment name='Document' label='Add New Document'  downloadActionID={ActionConfig.EmployeePassportDownload} />
-								<ConfigDropDown name='Country' label='Country'  configId={ActionConfig.ConfigCountries} />
+								<ConfigDropDown name='Country' label='Country' configType="Countries" />
 								<MyCurrencyInput name='Salary' label='Salary'   CurrecySymbol="AED"  />
                
                 <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">

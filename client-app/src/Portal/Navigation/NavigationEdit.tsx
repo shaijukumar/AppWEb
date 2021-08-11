@@ -43,7 +43,7 @@ const NavigationEdit: React.FC = () => {
           setRoleList(resRoles);        
           
           if(id){            
-            ApiStore.LoadItem(ActionConfig.NavigationById,id, setError).then( res => {              
+            ApiStore.LoadItem("NavigationNavigationById",id, setActions, setError).then( res => {              
               if(res){
                 setItem(res);
                 var roleArray = ApiStore.rolesFromArray(resRoles as any, res.UserAccessRoles as any);                    

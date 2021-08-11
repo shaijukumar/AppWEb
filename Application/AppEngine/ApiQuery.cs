@@ -138,7 +138,42 @@ namespace Application.AppEngine
 
             Dictionary<string, List<object>> result = new Dictionary<string, List<object> >();
 
-            result.Add("Result" + (result.Count+1).ToString() , tableData );                                   
+            result.Add("Result" + (result.Count+1).ToString() , tableData );  
+
+            #region Return Actiions 
+
+            if(request.ReturnActions && appDataList.Count == 1 ){
+                
+                List<AppAction> retAppActions = new List<AppAction>();
+                List<object> actList = new List<object>();
+
+                var appActions = await apiDetails._context.AppActions                                                
+                            .Where(x => x.FlowId == apiDetails.appAction.FlowId  &&  x.FromStatusList.Any(s => s.Id == appDataList[0].StatusId )  ).ToListAsync();
+
+                
+                #region When
+
+                 foreach( AppAction act in  appActions){  
+                    if (await ApiAppWhen.Execute(act, apiDetails._context, apiDetails.CurrentUserId ,apiDetails._userManager )){
+                        row = new Dictionary<string, object>();
+                        row.Add("Id", act.Id );
+                        row.Add("Action", act.Action );
+                        actList.Add(row);
+                    }                   
+                }            
+
+                #endregion When
+
+
+                Dictionary<string, List<object>> result1 = new Dictionary<string, List<object> >();
+                //List<object> actList = new List<object>();
+                //actList.Add(apiDetails.appAction);
+                result.Add("Actions" , actList ); 
+            }
+
+             #endregion Return Actiions 
+            
+                                             
 
             return result; //JsonConvert.SerializeObject(result);
 

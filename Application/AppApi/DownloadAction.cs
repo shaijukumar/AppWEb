@@ -23,6 +23,7 @@ namespace Application._AppApi
        public class Command : IRequest<FileContentResult>
         {
 		    public int ActionId { get; set; }
+            public string ActionUniqName { get; set; }
             public int ItemId { get; set; }  
             public string RequestType { get; set; }                          
             public string ReturnFlow { get; set; }                    
@@ -65,10 +66,10 @@ namespace Application._AppApi
             {                
                 # region get apiDetails and check security
 
-                    ApiDetails apiDetails = new ApiDetails(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager);
+                    ApiDetails apiDetails = new ApiDetails(request.ActionUniqName, request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager);
                     
                     try{
-                        apiDetails =  await  GetApiDetails.Execute(request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager ); 
+                        apiDetails =  await  GetApiDetails.Execute(request.ActionUniqName, request.ActionId, request.ItemId, _context, _userAccessor.GetCurrentUsername(), _userManager ); 
                     } 
                     catch(Exception ex){
                         throw new RestException(HttpStatusCode.OK, new { Error = ex.Message });

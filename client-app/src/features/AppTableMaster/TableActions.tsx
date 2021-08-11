@@ -41,7 +41,8 @@ const TableActions: React.FC = () => {
     };
 
     const TableColumns = [
-        { title: "Id", field: "Id", editable: 'never', },
+        { title: "Id", field: "Id", editable: 'never', width:'20' },
+        { title: "UniqName", field: "UniqName"  },
         { title: "FlowId", field: "FlowId", hidden: true },
         { title: "TableId", field: "TableId", hidden: true },
         {
@@ -134,13 +135,14 @@ const TableActions: React.FC = () => {
     return(
         <React.Fragment>
             <TableDetails tableId={Number(tableId)} flowId={id} showTitle={true} />
-            <div className={"tabcontainers11"}>
+            <div className={"tabcontainers111"} >
             <div className={"tabcontainers2"} >        
                 <MaterialTable                       
                     title={`Action List for ${AppFlowStore.item.Title}`}
                     data={AppActionStore.flowList}
                     columns={TableColumns as any}
-                    options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "fixed" }}    
+                    options={{  sorting:true, filtering: true, search: true, paging: true, exportButton: true, pageSize:10 , tableLayout:'auto' }}     
+                    //sorting:true, filtering: true,
                     actions={TableActions as any}
                     
                     
@@ -164,6 +166,7 @@ const TableActions: React.FC = () => {
                             action.TableId =  rowData.TableId;
                             action.ToStatusId =  rowData.ToStatusId;
                             action.WhenXml =  rowData.WhenXml;
+                            action.UniqName =  rowData.UniqName;
   
                             AppActionStore.editItem(action).then((val) =>{ 
                                 if((val as any).errors){

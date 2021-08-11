@@ -20,7 +20,8 @@ namespace Application._AppAction
     {
         public class Command : IRequest<AppActionDto>
         {
-            public int Id { get; set; }          
+            public int Id { get; set; }      
+            public string UniqName { get; set; }    
             public int Order { get; set; }              
 		    public virtual ICollection<AppStatusList> FromStatusList { get; set; } 							
             public int ToStatusId { get; set; }						
@@ -40,8 +41,8 @@ namespace Application._AppAction
                 //RuleFor(x => x.FlowId).NotEmpty();
                 RuleFor(x => x.TableId).NotEmpty();
                 RuleFor(x => x.Action).NotEmpty();
-                RuleFor(x => x.ActionType).NotEmpty();                   
-				
+                RuleFor(x => x.ActionType).NotEmpty();    
+                RuleFor(x => x.UniqName).NotEmpty(); 				
             }
         }
 
@@ -55,11 +56,17 @@ namespace Application._AppAction
                 _mapper = mapper;
                 _context = context;
                 _userAccessor = userAccessor;
-
             }
 
             public async Task<AppActionDto> Handle(Command request, CancellationToken cancellationToken)
-            {        
+            {       
+                var unqName = await _context.AppActions
+                        .Where( x => x.UniqName == request.UniqName )
+                        .AnyAsync();
+                if(unqName){
+                    request.UniqName = "_" + Guid.NewGuid().ToString();
+                }
+                         
                 try{
                     request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );                   
                 }
@@ -85,7 +92,8 @@ namespace Application._AppAction
 					FlowId  = request.FlowId,
 					InitStatus  = request.InitStatus,
 					TableId  = request.TableId,
-					ActionXml  = request.ActionXml,                                        
+					ActionXml  = request.ActionXml,    
+                    UniqName = request.UniqName,                                   
                 };
 
                 if( request.FromStatusList != null ){                

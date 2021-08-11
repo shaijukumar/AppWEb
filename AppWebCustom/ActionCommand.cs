@@ -7,6 +7,7 @@ namespace AppWebCustom
     public class ActionCommand : IRequest<Dictionary<string, List<object>>>
     {
         public int ActionId { get; set; }
+        public string ActionUniqName { get; set; }
         public int ItemId { get; set; }  
         public string RequestType { get; set; }                          
         public string ReturnFlow { get; set; }                    
@@ -20,6 +21,7 @@ namespace AppWebCustom
         public string Parm8 { get; set; }
         public string Parm9 { get; set; }
         public string Parm10 { get; set; }        
-        public ICollection<IFormFile> FileList { get; set; }         
+        public ICollection<IFormFile> FileList { get; set; }    
+        public bool ReturnActions { get; set; }      
     }
 }

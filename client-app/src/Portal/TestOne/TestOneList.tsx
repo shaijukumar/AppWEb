@@ -19,7 +19,7 @@ const TestOneList: React.FC = () => {
       
   useEffect(() => {    
     setLoading(true); 
-    ApiStore.LoadDataList(15, setData, setLoading, setError );    
+    ApiStore.LoadDataList("TestOneGetNavigationList", setData, setLoading, setError );    
   },[ApiStore, ApiStore.LoadDataList]);
 
   const TableColumns = [     
@@ -51,7 +51,7 @@ const TestOneList: React.FC = () => {
         icon: (values: any) => { return <TableButton  label="Refresh"  /> },
         tooltip: 'Refresh',
         isFreeAction: true, 
-        onClick: (event:any) =>{  ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError ); },                                     
+        onClick: (event:any) =>{  ApiStore.LoadDataList("TestOneGetNavigationList", setData, setLoading, setError ); },                                     
     }
   ];
 

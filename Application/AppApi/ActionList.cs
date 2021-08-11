@@ -21,6 +21,7 @@ namespace Application._AppApi
     {
         public class Query : IRequest<List<AppApiActionsDto>>
         {
+            public bool AllActions { get; set; }                        
             public int FlowId { get; set; }
             public int ItemId { get; set; }  
             public string TableName { get; set; }
@@ -48,8 +49,11 @@ namespace Application._AppApi
                 List<AppAction> retAppActions = new List<AppAction>();
                 List<AppAction> appActions = new List<AppAction>();
                 AppData appData = new AppData();
-                
-                if(request.ItemId == 0){
+
+                if(request.AllActions){
+                    appActions = await _context.AppActions.ToListAsync();
+                }
+                else if(request.ItemId == 0){
 
                     # region by FlowName & TableName
                     if(request.FlowId == 0){

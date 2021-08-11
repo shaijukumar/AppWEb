@@ -67,6 +67,10 @@ namespace Persistence
             builder.Entity<AppData>(entity => {
                 entity.HasIndex(e => new  {e.TableId, e.TableItemId} ).IsUnique();
             });
+
+            builder.Entity<AppAction>(entity => {
+                 entity.HasIndex(e => e.UniqName).IsUnique();
+            });
                 
 
             //   builder.Entity<AppData>()

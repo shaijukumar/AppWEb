@@ -45,8 +45,9 @@ const AppActionList: React.FC = () => {
       {
         title: "Id",
         field: "Id",       
-        width: "10%"
+        width: "5%"
       },
+      { title: "UniqName", field: "UniqName"  },
       {
         title: "Action",
         field: "Action",

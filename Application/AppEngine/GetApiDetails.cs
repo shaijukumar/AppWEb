@@ -14,17 +14,25 @@ namespace Application.AppEngine
     
     public class GetApiDetails
     {
-         public static async Task<ApiDetails> Execute( int ActionId, int ItemId, DataContext _context, string CurrentUserId, UserManager<AppUser> _userManager)
+         public static async Task<ApiDetails> Execute( string ActionUniqName, int ActionId, int ItemId, DataContext _context, string CurrentUserId, UserManager<AppUser> _userManager)
          {     
-             ApiDetails apiDetails = new ApiDetails(ActionId, ItemId, _context, CurrentUserId, _userManager );
+             ApiDetails apiDetails = new ApiDetails(ActionUniqName, ActionId, ItemId, _context, CurrentUserId, _userManager );
              apiDetails.appData = new AppData();
 
              # region Get action details from db
 
-             apiDetails.appAction = await _context.AppActions
-                    .Where(x => x.Id == ActionId  ).FirstOrDefaultAsync();
-
-            if ( apiDetails.appAction == null )
+             if(string.IsNullOrEmpty(ActionUniqName))
+             {
+                apiDetails.appAction = await _context.AppActions
+                    .Where(x => x.Id == ActionId  ).FirstOrDefaultAsync();                     
+             }
+             else
+             {
+                apiDetails.appAction = await _context.AppActions
+                    .Where(x => x.UniqName == ActionUniqName  ).FirstOrDefaultAsync();                
+             }
+             
+             if ( apiDetails.appAction == null )
                 throw new Exception("invalid Action");
 
             # endregion Get action details from db

@@ -27,11 +27,11 @@ const EmployeeList: React.FC = () => {
         setRoleList(res);
     })
      
-    ApiStore.getStatusList(ActionConfig.EmployeeTableID).then( res => {
+    ApiStore.getStatusList("ActionConfig.EmployeeTableID").then( res => {
         setStausList(res);
     })
 
-    ApiStore.LoadDataList(ActionConfig.EmployeeList, setData, setLoading, setError );
+    ApiStore.LoadDataList("ActionConfig.EmployeeList", setData, setLoading, setError );
 
     
   },[ApiStore, ApiStore.LoadDataList]);
@@ -61,7 +61,7 @@ const EmployeeList: React.FC = () => {
         icon: (values: any) => { return <TableButton  label="Refresh"  /> },
         tooltip: 'Refresh',
         isFreeAction: true, 
-        onClick: (event:any) =>{  ApiStore.LoadDataList(ActionConfig.NavigationList, setData, setLoading, setError ); },                                     
+        onClick: (event:any) =>{  ApiStore.LoadDataList("ActionConfig.NavigationList", setData, setLoading, setError ); },                                     
     }
   ];
 

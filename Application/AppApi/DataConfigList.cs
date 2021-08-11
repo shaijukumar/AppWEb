@@ -23,7 +23,7 @@ namespace Application._AppApi
     public class DataConfigList 
     {
         public class Query : IRequest<List<AppConfigDto>> {
-             public int Id { get; set; }
+             public string ConfigType { get; set; }
          }
 
         public class Handler : IRequestHandler<Query, List<AppConfigDto>>
@@ -45,9 +45,14 @@ namespace Application._AppApi
             public async Task<List<AppConfigDto>> Handle(Query request, CancellationToken cancellationToken)
             {        
                  var appConfig = await _context.AppConfigs
-                    .Where(x => x.Type == request.Id).ToListAsync();
+                    .Where(x => x.ConfigTypeId == _context.AppConfigTypes.Where(t => t.Title == request.ConfigType).FirstOrDefault().Id ).ToListAsync();
 
-                return _mapper.Map<List<AppConfig>, List<AppConfigDto>>(appConfig);
+                var res = _mapper.Map<List<AppConfig>, List<AppConfigDto>>(appConfig);
+                foreach(var r in res){
+                    r.ConfigType = request.ConfigType;
+                }
+
+                return res;
             }
         }
     }

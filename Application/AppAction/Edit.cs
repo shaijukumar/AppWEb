@@ -20,7 +20,8 @@ namespace Application._AppAction
     {
         public class Command : IRequest<AppActionDto>
         {            
-            public int Id { get; set; }    
+            public int Id { get; set; }   
+            public string UniqName { get; set; } 
             public int Order { get; set; }                    
 		    public virtual ICollection<AppStatusList> FromStatusList { get; set; } 							
             public int ToStatusId { get; set; }						
@@ -41,7 +42,8 @@ namespace Application._AppAction
                 RuleFor(x => x.FlowId).NotEmpty();
                 RuleFor(x => x.TableId).NotEmpty();
                 RuleFor(x => x.Action).NotEmpty();
-                RuleFor(x => x.ActionType).NotEmpty();                              				
+                RuleFor(x => x.ActionType).NotEmpty();  
+                RuleFor(x => x.UniqName).NotEmpty();                            				
             }
 
             private object RRuleFor(Func<object, object> p)
@@ -93,6 +95,7 @@ namespace Application._AppAction
 				appAction.InitStatus  = request.InitStatus; // ?? appAction.InitStatus;
 				appAction.TableId  = request.TableId; // ?? appAction.TableId;
 				appAction.ActionXml  = request.ActionXml  ?? appAction.ActionXml;
+                appAction.UniqName = request.UniqName  ?? appAction.UniqName; 
 
                 appAction.FromStatusList.Clear();                
                 foreach(var f in  request.FromStatusList){

@@ -6,6 +6,7 @@ namespace Domain
     public class AppAction
     {
 		public int Id { get; set; }	
+		public string UniqName { get; set; }				
 		public int Order { get; set; }					
 		public virtual ICollection<AppStatusList> FromStatusList { get; set; } 							
 		public int ToStatusId { get; set; }						

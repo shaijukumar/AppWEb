@@ -9,11 +9,11 @@ import { ApiContext, AppConfig, IAppConfig } from "../../../Portal/Api/Api";
 import { Chip, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
-type CustomProps = { multiple?:boolean, configId:number, label: string, width?: string  } & FieldAttributes<{}>;
+type CustomProps = { multiple?:boolean, configType:string, label: string, width?: string  } & FieldAttributes<{}>;
 
 
 
-const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label, placeholder, type,required,autoComplete, autoFocus, width, ...props }) => {
+const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configType, label, placeholder, type,required,autoComplete, autoFocus, width, ...props }) => {
 
     const ApiStore = useContext(ApiContext);
 
@@ -22,7 +22,8 @@ const ConfigDropDown: React.FC<CustomProps> = ({ multiple=false, configId, label
 
 
     useEffect(() => {
-      ApiStore.getConfigList(configId, setConfigList).then( res => { 
+      debugger;
+      ApiStore.getConfigList(configType, setConfigList).then( res => { 
         
         if(field.value && (field.value as any).length > 0){
           var roleArray = ApiStore.configFromArray(res, field.value as any);  

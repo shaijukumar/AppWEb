@@ -101,7 +101,8 @@ const TableActionItemEdit: React.FC = () => {
             <Chip label={`Table : ${AppTableMasterStore.item.Title}`} color="primary" style={{margin:'5px'}}/>
             <Chip label={`Flow : ${AppFlowStore.item.Title}`}  color="primary"/><br/>
 
-            <MyCustomTxt width="200px"  name="Order" type="number"  autoFocus={true} required={true} label="Order" /> 
+            <MyCustomTxt  name="UniqName" type="text"  autoFocus={true} required={true} label="Uniq Name" /> 
+            <MyCustomTxt width="200px"  name="Order" type="number" required={true} label="Order" /> 
                                                   
             <FormControlLabel control={<Checkbox checked={item.InitStatus}  />} label="Init Status"            
                 onChange={ () => { item.InitStatus = item.InitStatus ? false : true; setItem(item);  }}           
