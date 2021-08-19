@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { LinearProgress  } from '@material-ui/core';
+import { LinearProgress, TextField  } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 
@@ -31,13 +31,24 @@ const TestOneList: React.FC = () => {
     // {title: "Country", field: "Country"},
     // {title: "Manager", field: "Manager"} 
     
-		{title: 'Title', field: 'Title', render :  (values: any) => { return <Link to={`/TestOneEdit/${values.Id}`} >{values.Title}</Link> } }, 
-		{title: 'Order', field: 'Order'}, 
+    {title: 'Order', field: 'Order'}, 
+		{title: 'Title', field: 'Title', render :  (values: any) => { return <Link to={`/TestOneEdit/${values.Id}`} >{values.Title}</Link> } }, 		
 		{title: 'IsActive', field: 'IsActive'}, 
-		{title: 'DOB', field: 'DOB'}, 
-		{title: 'Document', field: 'Document'}, 
+		{title: 'DOB', field: 'DOB', type: "date" }, 	
 		{title: 'Country', field: 'Country'}, 
 		{title: 'Salary', field: 'Salary'},        
+    {title: 'Test1', field: 'Title', 
+    
+    editComponent: (value: any, onChange: any,) => {
+      debugger;
+      return (
+        <TextField
+          onChange={e => onChange(e.target.value)}
+          value={value.value}
+          multiline
+        />
+      );
+    }},    
   ];
 
   const TableActions = [
@@ -68,7 +79,46 @@ const TestOneList: React.FC = () => {
               data={data as TestOne[]}
               columns={TableColumns as any}
               actions={TableActions as any}
-              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}/>
+              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}
+
+              editable={{
+
+                onRowAdd: newData => new Promise(resolve => { 
+                  resolve(true);  
+                }),
+
+                onRowUpdate: (newData, oldData) =>
+                new Promise((resolve, reject) => {                 
+                  resolve(true);                   
+                }),
+
+
+                onRowDelete: oldData =>
+                new Promise((resolve, reject) => {                  
+                  setTimeout(() => {
+                      debugger;                                     
+                    resolve(true);
+                  }, 10)
+                }),
+              }}
+
+              // cellEditable={{
+              //   onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
+              //     debugger;       
+              //     //let filedName : any =  "Title"; //columnDef.field == null ? columnDef.field as string : "Title" 
+              //     return new Promise((resolve, reject) => {
+                    
+              //       (rowData as any)[(columnDef as any).title] = newValue;                                                                                               
+              //       resolve();                                  
+              //     });
+              //   }
+              // }}
+
+              
+
+              />
+
+              
         }       
         </React.Fragment>
     )
