@@ -1,3 +1,5 @@
+Aug 22nd 2021
+
 dotnet ef migrations add AppData -p Persistence/ -s API/ 
 
 
