@@ -18,13 +18,11 @@ const LeftNavBar: React.FC = () => {
     
     useEffect(() => {       
         let act: AppApiAction = new AppApiAction()
-        act.ActionId = 1;      
+        act.ActionId = 13;      
         ApiStore.ExecuteQuery(act).then( (res) => {  
             if(res.Result1)
                 setData(res.Result1.sort((a:AppNavigation,b:AppNavigation) => a.Order - b.Order));              
-            //setData(res.Result1);
-            
-            
+            //setData(res.Result1);                    
         });             
     }, [ApiStore, ApiStore.ExecuteQuery, setData])  
 
