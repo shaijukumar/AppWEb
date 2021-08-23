@@ -142,7 +142,8 @@ const TableDetails: React.FC<Parms> = ({ tableId, showTitle = true, flowId }) =>
                               var actRes:AppExport = new AppExport();                        
                               actRes.Order = act.Order;
                               actRes.FlowName = value.Title;
-                              actRes.ActionType = act.ActionType;
+                              actRes.ActionType = act.ActionType;                              
+                              actRes.UniqName = act.UniqName
                               
                               if(act.FromStatusList ){                              
                                  var strFrom = "";   

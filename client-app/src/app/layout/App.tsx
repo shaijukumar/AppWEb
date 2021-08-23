@@ -303,7 +303,7 @@ const App = () => {
            
           <div>
             <Typography variant="body2" color="textSecondary" align="center">              
-              {'Copyright © '}Appweb {new Date().getFullYear()} {'.'}
+              {'Copyright © '}Appweb {new Date().getFullYear()}
             </Typography>
           </div>
         </Container> 

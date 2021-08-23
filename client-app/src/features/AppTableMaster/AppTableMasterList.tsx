@@ -236,6 +236,8 @@ const AppTableMasterList: React.FC = () => {
                     }
                     
                     action.Action = actionItm.Action;
+                    //actionItm.UniqName= actionItm.UniqName;
+                    action.UniqName = actionItm.UniqName;
                     if(actionItm.ToStatus){
                       actionItm.ToStatus = actionItm.ToStatus.trim();
                       var stFind:any =  statusList.find( (u:any) => u.Title === actionItm.ToStatus );
@@ -331,7 +333,7 @@ const AppTableMasterList: React.FC = () => {
                   var action:AppAction = new AppAction();
 
                   action.TableId = tableObj.Id;
-                  
+                  action.UniqName = actObj.UniqName;
                   
                   action.Order = actObj.Order;
                   action.Action = actObj.Action;                 
