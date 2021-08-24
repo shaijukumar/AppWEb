@@ -66,16 +66,16 @@ namespace Application._AppAction
                 if(unqName){
                     request.UniqName = "_" + Guid.NewGuid().ToString();
                 }
-                         
+                           
                 try{
-                    request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, true );                   
+                    request.WhenXml = await XmlUpdate.UpdateXml(request.WhenXml, _context, request.TableId, true );                   
                 }
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = $"Invalid WhenXml, {ex.Message}." });                    
                 }
 
                 try{                    
-                    request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, true );
+                    request.ActionXml = await XmlUpdate.UpdateXml(request.ActionXml, _context, request.TableId, true );
                 }
                 catch(Exception ex){
                     throw new RestException(HttpStatusCode.OK, new { Error = $"Invalid ActionXml, {ex.Message}." });

@@ -281,7 +281,7 @@ namespace AppWebCustom.Action
             {
                 #region Create 
 
-                ad.appData.TableItemId = await NextTableCouter(ad, _context); //Get next TableItemId
+                //ad.appData.TableItemId = await NextTableCouter(ad, _context); //Get next TableItemId
                 ad.appData.TableId = ad.appAction.TableId;               
                 ad.appData.CreatedBy = currentUserId;                                               
                 ad.appData.CreatedOn = DateTime.Now;                                    
@@ -290,7 +290,19 @@ namespace AppWebCustom.Action
                 //var success = await _context.SaveChangesAsync() > 0;
 
                 try{
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
+                    var success = await _context.SaveChangesAsync() > 0;
+                    if(success){
+                        ad.appData.TableItemId = await NextTableCouter(ad, _context);
+
+                        try{
+                            success = await _context.SaveChangesAsync() > 0;
+                        }
+                        catch(Exception ex){
+                            var m = ex.Message;
+                        }
+                        
+                    }
                 }
                 catch(Exception ex){
                    throw new Exception(ex.Message);
@@ -411,7 +423,7 @@ namespace AppWebCustom.Action
         {                        
             var tableCouter = await _context.AppTableCouters.Where(c => c.TableId == ad.appAction.TableId).FirstOrDefaultAsync();
             tableCouter.counter += 1;
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
             return Convert.ToInt32(tableCouter.counter);
         }

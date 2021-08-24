@@ -45,8 +45,8 @@ namespace Application._AppAction
 
                 foreach(var act in appAction){
                     try{
-                        act.WhenXml = await XmlUpdate.UpdateXml(act.WhenXml, _context, false );
-                        act.ActionXml = await XmlUpdate.UpdateXml(act.ActionXml, _context, false );
+                        act.WhenXml = await XmlUpdate.UpdateXml(act.WhenXml, _context, act.TableId, false );
+                        act.ActionXml = await XmlUpdate.UpdateXml(act.ActionXml, _context, act.TableId,   false );
                     }
                     catch{}
                 }

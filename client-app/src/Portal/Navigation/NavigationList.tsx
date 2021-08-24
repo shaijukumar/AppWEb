@@ -44,8 +44,9 @@ const NavigationList: React.FC = () => {
         },  
         {title: "Path", field: "Path"},
         {title: "Icon", field: "Icon"},
-        {title: "UserAccessRoles1", field: "UserAccessRoles", 
-         render : (values: any) => {  return ApiStore.rolesName(roleList as any, values.UserAccessRoles)   }},          
+        {title: "UserAccessRoles", field: "UserAccessRoles", 
+         render : (values: any) => {  return ApiStore.rolesName(roleList as any, values.UserAccessRoles)   }},  
+         {title: "TableItemId", field: "TableItemId"},        
     ];
 
     const ImportTable = (evt:any) => {
@@ -67,7 +68,7 @@ const NavigationList: React.FC = () => {
                 debugger;
                 var data = e.target.result;
                 var workbook = XLSX.read(data, {
-                type: 'binary'
+                    type: 'binary'
                 });
 
                 // workbook.SheetNames.forEach(function(sheetName) {
@@ -100,17 +101,17 @@ const NavigationList: React.FC = () => {
 
                             var roles:AppUserRoleMaster[] = [];
                             var role:AppUserRoleMaster = new AppUserRoleMaster();
-                            role.Id = "5fc020d1-4729-4bda-a2ae-1d4b3ca56c20";
+                            role.Id = "75b16339-3165-4af7-8718-b0558b96c6da";
                             role.Name = "All Users";
                             roles.push(role);
                             item.UserAccessRoles = roles;
 
                             let formData = new FormData();
-                            formData.append('ActionId', "3" ); 
+                            formData.append('ActionId', "10" ); 
                             formData.append('Parm1', JSON.stringify(item) );  
                             ApiStore.ExecuteAction(formData, setError).then( (res) => {
                                 console.log("res");
-                            });                            
+                            });
                         })
                     );
 
@@ -172,7 +173,46 @@ const NavigationList: React.FC = () => {
               data={data as AppNavigation[]}
               columns={TableColumns as any}
               actions={TableActions as any}
-              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}/>
+              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}
+              
+              editable={{
+                  
+                onRowDelete: (oldData:any) =>
+                  new Promise((resolve, reject) => {
+                    
+                    setTimeout(() => {
+                      debugger;
+                        var itemId = Number((oldData as any).Id);
+
+                        
+                        let formData = new FormData();
+                        formData.append('ActionId', "14" ); 
+                        formData.append('Parm1', JSON.stringify(oldData) );
+                        formData.append('ItemId',  (oldData as any).Id );
+
+                        ApiStore.ExecuteAction(formData, setError).then( (res) => {            
+                            if(res){
+                                ApiStore.LoadDataList("NavigationGetNavigationList", setData, setLoading, setError );                        
+                            }           
+                        });
+
+                        // AppTableMasterStore.deleteItem(itemId).then((val) =>{  
+                        //   debugger;
+
+                        //   if((val as any).errors){
+                        //     setError((val as any).errors.Error);   
+                        //     resolve(true);
+                        //     //alert(error);      
+                        //     setOpen(true);                                                     
+                        //   }                                                  
+                        //   AppTableMasterStore.getList().then( () => {resolve(true);});                                          
+                                                      
+                        // })                  
+                      resolve(true);
+                    }, 10)
+                  }),
+              }}  
+              />
         }       
         </React.Fragment>
         

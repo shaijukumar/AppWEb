@@ -37,8 +37,8 @@ namespace Application._AppAction
                     throw new RestException(HttpStatusCode.NotFound, new { AppAction = "Not found" });
 
                 try{
-                    appAction.WhenXml = await XmlUpdate.UpdateXml(appAction.WhenXml, _context, false );
-                    appAction.ActionXml = await XmlUpdate.UpdateXml(appAction.ActionXml, _context, false );
+                    appAction.WhenXml = await XmlUpdate.UpdateXml(appAction.WhenXml, _context, appAction.TableId, false );
+                    appAction.ActionXml = await XmlUpdate.UpdateXml(appAction.ActionXml, _context, appAction.TableId, false );
                 }
                 catch{}
 
