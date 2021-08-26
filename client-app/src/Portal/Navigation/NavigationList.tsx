@@ -182,9 +182,7 @@ const NavigationList: React.FC = () => {
                     
                     setTimeout(() => {
                       debugger;
-                        var itemId = Number((oldData as any).Id);
-
-                        
+                        var itemId = Number((oldData as any).Id);                        
                         let formData = new FormData();
                         formData.append('ActionId', "14" ); 
                         formData.append('Parm1', JSON.stringify(oldData) );
@@ -194,20 +192,7 @@ const NavigationList: React.FC = () => {
                             if(res){
                                 ApiStore.LoadDataList("NavigationGetNavigationList", setData, setLoading, setError );                        
                             }           
-                        });
-
-                        // AppTableMasterStore.deleteItem(itemId).then((val) =>{  
-                        //   debugger;
-
-                        //   if((val as any).errors){
-                        //     setError((val as any).errors.Error);   
-                        //     resolve(true);
-                        //     //alert(error);      
-                        //     setOpen(true);                                                     
-                        //   }                                                  
-                        //   AppTableMasterStore.getList().then( () => {resolve(true);});                                          
-                                                      
-                        // })                  
+                        });             
                       resolve(true);
                     }, 10)
                   }),

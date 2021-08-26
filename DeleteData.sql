@@ -1,0 +1,1 @@
+delete from AppDatas where TableID = 10

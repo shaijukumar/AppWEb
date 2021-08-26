@@ -21,6 +21,8 @@ interface DetailParms {
     id: string;
 }
 
+
+
 const TestOneEdit: React.FC = () => {
     
     const { id } = useParams<DetailParms>();
@@ -44,7 +46,10 @@ const TestOneEdit: React.FC = () => {
             IdVal = Number(id);      
             ApiStore.LoadItem("TestOneNavigationById", id, setActions, setItem, setError).then( res => {              
               setLoading(false);   
-            });              
+            });       
+            
+            
+
           }
           else{ 
               ApiStore.updateActions(IdVal, 'TestOne','ActionFlow', setActions, setError);
@@ -54,6 +59,37 @@ const TestOneEdit: React.FC = () => {
         });
     },[id, ApiStore, ApiStore.updateActions, ApiStore.getRoleList, ApiStore.LoadItem, setItem ]);
 
+    const dataUpload = (values: any, i:number) => {
+      
+      
+        ( async() => { 
+
+          let formData1 = new FormData();
+          formData1.append('ActionId', actionId.toString() ); 
+          values.Order = i;
+          values.Title = i + "-";
+          formData1.append('Parm1', JSON.stringify(values) );
+          formData1.append('ItemId',  values.Id );
+          console.log("Item-" + i)
+          await ApiStore.ExecuteAction(formData1, setError).then( (res) => {
+            console.log("insert");
+          });
+
+          i++;
+          if(i>=2000){
+            return;
+          }
+          else{
+            dataUpload(values,i);
+          }
+
+          
+        })();
+
+        
+      
+    }
+
     const onItemSubmit = (values: any) => {
       debugger;
         let formData = new FormData();
@@ -61,12 +97,15 @@ const TestOneEdit: React.FC = () => {
         formData.append('Parm1', JSON.stringify(values) );
         formData.append('ItemId',  values.Id );
                 
-        ApiStore.ExecuteAction(formData, setError).then( (res) => {    
-            debugger;        
-            if(res){
-              history.push('/TestOneList');
-            }
-        });
+        // ApiStore.ExecuteAction(formData, setError).then( (res) => {    
+        //     debugger;        
+        //     if(res){
+        //       //history.push('/TestOneList');
+        //     }
+        // });
+
+        dataUpload(values,1);
+                                                     
     }
     
     if(loading){

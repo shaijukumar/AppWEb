@@ -1,5 +1,8 @@
--- SQLite
-SELECT Id, TableId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, Num1, StatusId, TableId, Txt1, Txt2 FROM AppDatas 
+
+delete from AppDatas where TableID = 10
+
+--SQLite
+--SELECT Id, TableId, CreatedBy, CreatedOn, ModifiedBy, ModifiedOn, Num1, StatusId, TableId, Txt1, Txt2 FROM AppDatas 
 
 --SELECT Id, TableId, TableItemId  FROM AppDatas 
 --WHERE TableId = 61;
