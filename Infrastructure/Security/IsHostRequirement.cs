@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Infrastructure.Security
@@ -23,41 +24,31 @@ namespace Infrastructure.Security
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DataContext _context;
         private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<AppUser> _userManager;
         
-        public IsHostRequirementHandler(IHttpContextAccessor httpContextAccessor, DataContext context, IUserAccessor userAccessor)
+        public IsHostRequirementHandler(IHttpContextAccessor httpContextAccessor, DataContext context, IUserAccessor userAccessor, UserManager<AppUser> userManager)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _userAccessor = userAccessor;
-            
+            _userManager = userManager;
             
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
+        //async Task<Dictionary<string, List<object>>>
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
         {
-            // var currentUserId = _userAccessor.GetCurrentUsername();
+            AppUser user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());
+            var res =  await _userManager.IsInRoleAsync(user, "Admin");
+            if(res){
+                context.Succeed(requirement);
+            }
 
-            // var role =  _context.AppUserRoleMasters
-            //         .Where(x => x.Title == "Admin" ).FirstOrDefault();
-            // if(role == null){
-            //     throw new RestException(HttpStatusCode.OK, new { Error = "Admin user is null" });                
-            // }
-
-            // var appUserRole =  _context.AppUserRoles
-            //         .Where(x => x.UserId == currentUserId && x.AppUserRoleMasterId == role.Id )
-            //         .FirstOrDefault();
-
-            // if(appUserRole == null){
-            //     //throw new RestException(HttpStatusCode.Unauthorized, new { Error = "Unauthorized" });   
-            //     context.Fail();
-            // }
-            // else{
-            //      context.Succeed(requirement);
-            // }
-
-            context.Succeed(requirement);
-
-            return Task.CompletedTask;
+            var role = await _context.AspNetRoles
+                .Where( x => x.Name == "Admin" )
+                .FirstOrDefaultAsync();
+                
+            return;
         }
     }
 }

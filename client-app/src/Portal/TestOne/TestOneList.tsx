@@ -178,7 +178,7 @@ class ExcelToJSON {
               data={data as TestOne[]}
               columns={TableColumns as any}
               actions={TableActions as any}
-              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:10,  tableLayout: "auto"}}
+              options={{ sorting:true, search: true, paging: true, filtering: true, exportButton: true, pageSize:100,  tableLayout: "auto"}}
 
               editable={{
 
